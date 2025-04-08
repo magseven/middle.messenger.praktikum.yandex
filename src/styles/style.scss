@@ -1,0 +1,156 @@
+$theme-background: #6186b1;
+
+* {
+  box-sizing: border-box;
+} 
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+button {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+  font-size: 100%;
+  font-family: 'Courier New', Courier, monospace sans-serif;
+}
+
+body, html {
+  height: 100%;
+  background: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.a-main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  height: 720px;
+  width: 1280px;
+}
+
+.a-login-container {
+  background-color: #E4E2DF;
+  padding: 2rem;
+  border-radius: 12px;
+/*  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);*/
+  width: 558px;
+}
+
+.a-theme {
+  border-radius: 6px;
+  &-color {
+    background-color: $theme-background;
+    color: #fff;  
+  }
+  &-icon {
+    margin-left: 20px;
+    filter: invert(0.7);
+  }
+}
+
+.a-header {
+  display: flex; 
+  align-items: center;
+  height: 80px;
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.a-header-title {
+  margin: 0 0 0 20px;
+}
+
+.login-header {
+  height: 15%;
+}
+
+.register-container {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.a-form {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 0.2rem;
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+}
+
+.a-button {
+  height: 50px;
+  width: 100%;
+  margin-top: 10px;
+  border: none;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: #357ab8;
+  }
+
+  &-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+}
+
+.a-link {
+  margin-top: 10px;
+}
+
+.a-avatar {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  background: #f0f0f0;
+  margin: -80px 20px 20px auto;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  &:hover {
+    opacity: 0.8;
+  }  
+}
+  
+.a-special-page {
+  text-align: center;
+  font-family: Arial;
+  h1 {
+    font-size: 100px;
+    margin-bottom: 10px;
+  }
+  p {
+    font-size: 20px;
+    color: #666;
+  }  
+}

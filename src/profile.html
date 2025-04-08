@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://code.s3.yandex.net/web-code/fonts/fonts.css"/>
+  <link rel="stylesheet" href="styles/style.scss" />
+  <title>{{title_profile}}</title>
+</head>
+<body>
+  <main>
+  <section class="a-login-container">
+    {{>header label=title_profile theme_icon="static/cloud.png" theme_icon_descr="облако"}}
+    <form class="a-form">
+      {{>avatar}}
+      {{>form_input name="first_name" type="text" placeholder="Имя" required=true}}
+      {{>form_input name="second_name" type="text" placeholder="Фамилия" required=false}}
+      {{>form_input name="display_name" type="text" placeholder="Псевдоним" required=false}}
+      {{>form_input name="login" type="text" placeholder="Логин" required=true}}
+      {{>form_input name="email" type="text" placeholder="email" required=false}}
+      {{>form_input name="phone" type="text" placeholder="Телефон" required=false}}
+      {{>form_input name="oldPassword" type="password" placeholder="Пароль" required=true}}
+      {{>form_input name="newPassword" type="password" placeholder="Новый_пароль" required=true}}
+    {{>button label="Сохранить"}}
+    </form>
+  </section>
+  </main>
+</div>
+</body>
+</html>
+
+
