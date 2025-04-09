@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://code.s3.yandex.net/web-code/fonts/fonts.css"/>
+  <link rel="stylesheet" href="styles/style.scss" />
+  <title>{{title_auth}}</title>
+</head>
+<body>
+  <main>
+    <section class="a-login-container">
+      {{>header label=title_auth theme_icon="static/cloud.png" theme_icon_descr="облако"}}
+      <form class="a-form">
+        {{>form_input name="login" label="Имя пользователя" type="text" required=true}}
+        {{>form_input name="password" label="Пароль" type="password" required=true}}
+        {{>button type="submit" label="Вход"}}
+        <a class="a-link" href="./signin.html">Ещё не зарегистрированы?</a>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
