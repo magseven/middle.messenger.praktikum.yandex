@@ -5,11 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "tsc --noEmit",   
     "build": "vite build",
     "preview": "vite preview",
     "start": "vite build && vite preview"
   },
   "devDependencies": {
+    "@types/handlebars": "^4.0.40",
     "sass": "^1.86.3",
     "sass-embedded": "^1.86.3",
     "vite": "^6.2.0",
@@ -17,7 +19,8 @@
   },
   "dependencies": {
     "handlebars": "^4.7.8",
-    "hbs": "^4.2.0"
+    "hbs": "^4.2.0",
+    "vite-plugin-checker": "^0.9.1"
   },
   "engines": {
     "node": ">=12.0.0"
