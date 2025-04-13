@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="https://code.s3.yandex.net/web-code/fonts/fonts.css"/>
-  <link rel="stylesheet" href="styles/style.scss" />
-  <title>{{title_profile}}</title>
-</head>
-<body>
-  <main>
-  <section class="a-login-container">
-    {{>header label=title_profile theme_icon="static/cloud.png" theme_icon_descr="облако"}}
+// language=hbs
+
+export default `
+    <section class="a-login-container">
+    {{>header label=title_profile theme_icon="../static/images/cloud.png" theme_icon_descr="облако"}}
     <form class="a-form">
       {{>avatar}}
       {{>form_input name="first_name" type="text" placeholder="Имя" required=true}}
@@ -22,10 +15,5 @@
       {{>form_input name="newPassword" type="password" placeholder="Новый_пароль" required=true}}
     {{>button type="submit" label="Сохранить"}}
     </form>
-  </section>
-  </main>
-</div>
-</body>
-</html>
-
-
+    </section>
+`

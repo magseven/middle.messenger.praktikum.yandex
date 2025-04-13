@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="https://code.s3.yandex.net/web-code/fonts/fonts.css"/>
-  <link rel="stylesheet" href="styles/style.scss" />
-  <title>{{ title_reg }}</title>
-</head>
-<body>
-  <main>
-  <section class="a-login-container">
-    {{>header label=title_reg theme_icon="static/cloud.png" theme_icon_descr="облако"}}
+// language=hbs
+
+export default `
+    <section class="a-login-container">
+    {{>header label=title_reg theme_icon="../static/images/cloud.png" theme_icon_descr="облако"}}
     <form>
       {{>form_input name="first_name" type="text" placeholder="Имя" required=true}}
       {{>form_input name="second_name" type="text" placeholder="Фамилия" required=false}}
@@ -22,7 +15,5 @@
         {{>button type="button" label="Вход"}}
       </div>
     </form>
-  </section>
-  </main>
-</body>
-</html>
+    </section>
+`
