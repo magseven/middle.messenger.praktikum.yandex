@@ -1,9 +1,11 @@
-// modules/event-bus.js
-class EventBus {
+//modules/event-bus.js
+export class EventBus {
     static __instance: EventBus;
     __object: Map<string, Function[]> = new Map();
 
     constructor() {
+      // const eventBus = new EventBus();
+      // this.eventBus = () => eventBus;      
         if (EventBus.__instance) {
           return EventBus.__instance;
         }
@@ -36,5 +38,39 @@ class EventBus {
     }
 }
 
-  export default new EventBus(); 
- 
+  // export default new EventBus(); 
+
+
+// class EventBus {
+//   constructor() {
+//       this.listeners = {};
+//   }
+
+//   on(event, callback) {
+//       if (!this.listeners[event]) {
+//           this.listeners[event] = [];
+//       }
+
+//       this.listeners[event].push(callback);
+// }
+
+//   off(event, callback) {
+//       if (!this.listeners[event]) {
+//     throw new Error(`Нет события: ${event}`);
+//   }
+
+//   this.listeners[event] = this.listeners[event].filter(
+//     listener => listener !== callback
+//   );
+// }
+
+//   emit(event, ...args) {
+//       if (!this.listeners[event]) {
+//               throw new Error(`Нет события: ${event}`);
+//       }
+
+//       this.listeners[event].forEach(listener => {
+//           listener(...args);
+//       });
+//   }
+// }

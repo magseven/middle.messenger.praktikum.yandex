@@ -1,3 +1,16 @@
+.fa-input {
+  position: relative;
+}
+.fa-input .fa {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.fa-input input {
+  padding-left: 2em;
+}
+
 .a-chat {
     &-frame{
       display: flex;
@@ -21,13 +34,18 @@
         }
       } 
       &-search {
+        margin: 10px 10px 10px 10px;
         &-field {
             width: 100%;
             padding: 0.5rem;
-            border: 1px solid #ccc;
+            border: none;
             border-radius: 6px;
             font-size: 1rem;
-        }
+            color: green;
+            background-color: #efefef;
+            font-family: "Inter", sans-serif;
+            text-align: center;
+          }
   
       } 
       &-list {

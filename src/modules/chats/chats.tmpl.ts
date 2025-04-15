@@ -8,7 +8,8 @@ export default `
                     <a href=login>Профиль</a>
                 </div>
                 <div class="a-chat-bar-search">
-                    <input class="a-chat-bar-search-field" />
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" class="a-chat-bar-search-field" placeholder="Поиск" />
                 </div>
                 <div class="a-chat-bar-list">
                     {{#each chats}}{{>chats_bar_item }}{{/each}}

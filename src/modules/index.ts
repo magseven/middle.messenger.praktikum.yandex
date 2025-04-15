@@ -1,5 +1,5 @@
 import Handlebars from 'handlebars';
-import button from '../components/button'
+import button from '../components/button/button.tmpl'
 import form_input from '../components/form_input'
 import header from '../components/header'
 import chats_item from './chats/components/bar_item/chats_bar_item.tmpl'
@@ -9,7 +9,7 @@ import {getCurrentPage, printFormData} from './utils/common'
 import {pageData} from '../models/page_data'
 import { initFormValidation } from './utils/validation';
 
-import EventBus from './event_bus';
+//import EventBus from './event_bus';
 
 Handlebars.registerPartial( 'button', button);
 Handlebars.registerPartial( 'form_input', form_input);
@@ -30,7 +30,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
     if ( page.validate)
         initFormValidation();
 
-    window.bus = EventBus;
+//    window.bus = EventBus;
 
     printFormData();
 })
