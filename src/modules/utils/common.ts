@@ -3,17 +3,22 @@ export const getCurrentPage = () : string => {
     return !str.length ? "index" : str[str.length - 1];
 };
 
-export const printFormData = ( form_name: string) : void => {
-    const form : HTMLFormElement = document.getElementById( form_name) as HTMLFormElement;
-    form.addEventListener('submit', (event) => {
+export const printFormData = () : void => {
+    const form: HTMLFormElement = document.querySelector('form') as HTMLFormElement|| null; 
+    if ( !form)
+        return;
+
+    form.addEventListener('submit', (event: SubmitEvent) => {
         event.preventDefault();
   
-        const formData = new FormData(form);
-        const data: Record<string, unknown> = {};
+        const fd = new FormData(event.currentTarget as HTMLFormElement);
+        const data: Record<string, string> = {};
 
-        formData.forEach((value, key) => {
-            data[key] = value;
+        fd.forEach((value, key) => {
+            data[key] = value.toString();
         });
+
         console.log('Данные формы:', data);
     });
 };
+

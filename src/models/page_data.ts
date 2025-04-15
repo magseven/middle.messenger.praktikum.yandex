@@ -9,6 +9,7 @@ import chats from '../modules/chats/chats.tmpl'
 export const pageData: {[key: string]: {[key: string]: any}} = {
     index: {
         template: index,
+        validate: false,
         context: {
             menu : [
                 [ 'login', 'Авторизация'], 
@@ -22,16 +23,20 @@ export const pageData: {[key: string]: {[key: string]: any}} = {
     }, 
     login: {
         template: login,
+        validate: true,
         context: {
             page_title: 'Авторизация',
+            form_name: 'form',
         },
     }, 
     profile: {
         template: profile,
+        validate: true,
         context: {},
     }, 
     signin: {
         template: signin,
+        validate: true,
         context: {},
     }, 
     page_404: {
@@ -44,6 +49,7 @@ export const pageData: {[key: string]: {[key: string]: any}} = {
     }, 
     chats: {
         template: chats,
+        validate: true,
         context: {
             chats: [
                 {

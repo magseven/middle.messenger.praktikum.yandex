@@ -11,7 +11,7 @@ export default `
                     <input class="a-chat-bar-search-field" />
                 </div>
                 <div class="a-chat-bar-list">
-                    {{#each chats}}{{>chats_item }}{{/each}}
+                    {{#each chats}}{{>chats_bar_item }}{{/each}}
                 </div>
             </div>
             <div class="a-chat-content">

@@ -2,75 +2,25 @@
 export const validationList: {[key: string]: RegExp} = {
     first_name: /^[A-ZА-ЯЁ][a-zа-яё-]*$/,
     second_name: /^[A-ZА-ЯЁ][a-zа-яё-]*$/,
-    login: /^(?![0-9_-]+$)[a-zA-Z0-9_-]{3,20}$/,
-    email: /^$/,
-    password: /^(?=.*[A-Z])(?=.*\d)[a-zA-Z0-9_-]{8,40}$/,
-    phone: /^$/,
-    message: /^$/
+    login: /^[a-zA-Z_-]{3,20}$/,
+    email: /^[a-zA-Z0-9_-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/,
+    password: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/,
+    phone: /^\+?\d{10,15}$/,
+    message: /^.+$/
 };
 
-// латиница или кириллица, первая буква должна быть заглавной, без пробелов и без цифр, 
-// нет спецсимволов (допустим только дефис).
-
-// login — от 3 до 20 символов, латиница, может содержать цифры, но не состоять из них, 
-// без пробелов, без спецсимволов (допустимы дефис и нижнее подчёркивание).
-
-// email — латиница, может включать цифры и спецсимволы вроде дефиса и подчёркивания, 
-// обязательно должна быть «собака» (@) и точка после неё, но перед точкой обязательно должны быть буквы.
-
-// password — от 8 до 40 символов, обязательно хотя бы одна заглавная буква и цифра.
-
-// phone — от 10 до 15 символов, состоит из цифр, может начинается с плюса.
-
-// message — не должно быть пустым.
-/*// Типы для валидации
-type ValidationRule = {
-  pattern: RegExp;
-  errorMessage: string;
-};
-
-type FormValidationRules = Record<string, ValidationRule>;
-
-// Правила валидации для разных типов полей
-const VALIDATION_RULES: FormValidationRules = {
-  email: {
-    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    errorMessage: 'Введите корректный email'
-  },
-  password: {
-    pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-    errorMessage: 'Пароль должен содержать минимум 8 символов, буквы и цифры'
-  },
-  phone: {
-    pattern: /^\+?\d{10,15}$/,
-    errorMessage: 'Введите корректный номер телефона'
-  },
-  text: {
-    pattern: /^[a-zA-Zа-яА-ЯёЁ\s]{2,}$/,
-    errorMessage: 'Минимум 2 буквы'
-  }
-};
-
-// Получаем тип валидации для поля
-const getValidationType = (input: HTMLInputElement): string => {
-  return input.type === 'email' ? 'email' : 
-         input.type === 'tel' ? 'phone' : 
-         input.type === 'password' ? 'password' : 'text';
-};
-
-// Валидация одного поля
+/*
 const validateField = (input: HTMLInputElement): boolean => {
-  const validationType = getValidationType(input);
-  const rule = VALIDATION_RULES[validationType];
-  const isValid = rule.pattern.test(input.value);
+  const rule : RegExp = validationList[input.name];
+  console.log( 'validation rule for field', input.name, ":", rule);
+  const isValid = rule.test( input.value);
   
-  if (!isValid) {
+  if ( !isValid) {
     input.classList.add('invalid');
     const errorElement = document.createElement('div');
     errorElement.className = 'error-message';
-    errorElement.textContent = rule.errorMessage;
+    errorElement.textContent = 'Ошибка валидации' rule.errorMessage;
     
-    // Удаляем старые сообщения об ошибках
     const oldError = input.nextElementSibling as HTMLElement;
     if (oldError && oldError.classList.contains('error-message')) {
       oldError.remove();
@@ -88,6 +38,39 @@ const validateField = (input: HTMLInputElement): boolean => {
   return isValid;
 };
 
+const validateForm = ( form: HTMLFormElement): boolean => {
+  let isValid : boolean = true;
+  const fields = form.querySelectorAll<HTMLInputElement>('input');
+  
+  fields.forEach( input => {
+    if ( !validateField( input))
+      isValid = false;
+  });
+  
+  return isValid;
+};
+
+export const initFormValidation = (): void => {
+  const form : HTMLFormElement = document.querySelector('form') as HTMLFormElement;
+  if ( !form)
+    return;
+  
+  form.querySelectorAll<HTMLInputElement>( 'input').forEach( input => {
+    input.addEventListener('blur', () => validateField(input));
+  });
+  
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    
+    if ( validateForm(form)) {
+      console.log('Форма не содержит ошибок.');
+    } else {
+      console.log('Форма содержит ошибки.');
+    }
+  });
+};
+*/
+/*
 // Валидация всей формы
 const validateForm = (form: HTMLFormElement): boolean => {
   let isFormValid = true;
