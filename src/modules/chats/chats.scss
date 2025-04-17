@@ -1,3 +1,6 @@
+@use '../../styles/variables.scss' as vars;
+
+/*
 .fa-input {
   position: relative;
 }
@@ -9,7 +12,7 @@
 }
 .fa-input input {
   padding-left: 2em;
-}
+}*/
 
 .a-chat {
     &-frame{
@@ -27,10 +30,17 @@
       height: 100%;
       background: white;
       border-right: 2px solid grey;
+      vertical-align: center;
       &-title{
         text-align: right;
+        font-family: "Inter", sans-serif;
+        font-size: 11px;
+        margin-top: 10px;
+        margin-right: 10px;
         &-link {
           vertical-align: center;
+          text-decoration: none;
+          color: vars.$theme-grey;
         }
       } 
       &-search {
@@ -41,9 +51,10 @@
             border: none;
             border-radius: 6px;
             font-size: 1rem;
-            color: green;
+            color: red;
             background-color: #efefef;
-            font-family: "Inter", sans-serif;
+            font-family: "Inter", sans-serif, FontAwesome;
+            font-size: 13px;
             text-align: center;
           }
   
@@ -51,10 +62,18 @@
       &-list {
         &-item {
           display: flex;
+          border: 10px, solid, red;
           &-content {
             &-header {
+              display: flex !important;
+              justify-content: space-between;
+              align-items: center;
+              border: 1px solid #ddd;
+            }
+            &-message {
               display: flex;
               justify-content: space-between;
+              color: vars.$theme-grey;
             }
           }
         }
