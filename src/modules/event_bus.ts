@@ -1,76 +1,76 @@
 //modules/event-bus.js
 export class EventBus {
-    static __instance: EventBus;
-    __object: Map<string, Function[]> = new Map();
+  static __instance: EventBus;
+  __object: Map<string, Function[]> = new Map();
 
-    constructor() {
-      // const eventBus = new EventBus();
-      // this.eventBus = () => eventBus;      
-        if (EventBus.__instance) {
-          return EventBus.__instance;
-        }
-    
-        this.__object = new Map();
-        EventBus.__instance = this;
-    }
+  constructor() {
+    // const eventBus = new EventBus();
+    // this.eventBus = () => eventBus;      
+      if (EventBus.__instance) {
+        return EventBus.__instance;
+      }
+  
+      this.__object = new Map();
+      EventBus.__instance = this;
+  }
 
-    on( event: string, callback: Function): void { 
-      if ( !this.__object.has( event)) 
-        this.__object.set( event, [callback]);
-      else
-        this.__object.set( event, [...this.__object.get(event)!, callback]);
+  on( event: string, callback: Function): void { 
+    if ( !this.__object.has( event)) 
+      this.__object.set( event, [callback]);
+    else
+      this.__object.set( event, [...this.__object.get(event)!, callback]);
+    return;
+  }
+
+  off( event: string, callback: Function): void {
+    if ( !this.__object.has( event)) 
       return;
-    }
+    
+    this.__object.set( event, this.__object.get( event)!.filter((cb) => cb != callback));
+  }
 
-    off( event: string, callback: Function): void {
-      if ( !this.__object.has( event)) 
+  emit(event: string, eventData: {[key:string]:string} = {}) {
+      if ( !this.__object.has( event))
         return;
-      
-      this.__object.set( event, this.__object.get( event)!.filter((cb) => cb != callback));
-    }
 
-    emit(event: string, eventData: {[key:string]:string}) {
-        if ( !this.__object.has( event))
-          return;
-
-        for ( let cb of this.__object.get( event)!)
-          cb( eventData); 
-    }
+      for ( let cb of this.__object.get( event)!)
+        cb( eventData); 
+  }
 }
 
-  // export default new EventBus(); 
+// export default new EventBus(); 
+/*
+class EventBus {
+  constructor() {
+    this.listeners = {};
+  }
 
+  on(event, callback) {
+    if (!this.listeners[event]) {
+      this.listeners[event] = [];
+    }
 
-// class EventBus {
-//   constructor() {
-//       this.listeners = {};
-//   }
+    this.listeners[event].push(callback);
+  }
 
-//   on(event, callback) {
-//       if (!this.listeners[event]) {
-//           this.listeners[event] = [];
-//       }
+  off(event, callback) {
+		if (!this.listeners[event]) {
+      throw new Error(`Нет события: ${event}`);
+    }
 
-//       this.listeners[event].push(callback);
-// }
+    this.listeners[event] = this.listeners[event].filter(
+      listener => listener !== callback
+    );
+  }
 
-//   off(event, callback) {
-//       if (!this.listeners[event]) {
-//     throw new Error(`Нет события: ${event}`);
-//   }
-
-//   this.listeners[event] = this.listeners[event].filter(
-//     listener => listener !== callback
-//   );
-// }
-
-//   emit(event, ...args) {
-//       if (!this.listeners[event]) {
-//               throw new Error(`Нет события: ${event}`);
-//       }
-
-//       this.listeners[event].forEach(listener => {
-//           listener(...args);
-//       });
-//   }
-// }
+	emit(event, ...args) {
+    if (!this.listeners[event]) {
+      throw new Error(`Нет события: ${event}`);
+    }
+    
+    this.listeners[event].forEach(function(listener) {
+      listener(...args);
+    });
+  }
+}
+*/

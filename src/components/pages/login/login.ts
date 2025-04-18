@@ -1,22 +1,17 @@
 // components/button/Button.js
-import Handlebars from 'handlebars';
-
-import { Block } from "../../modules/block";
-//import { template } from "./template";
-
-
-import buttonTemplate from './button.tmpl';
-
-Handlebars.registerPartial( 'button', buttonTemplate);
+import {Block} from "../../../modules/block";
+// Ваш реализованный шаблонизатор
+//import { compile } from "../../utils/templator";
+import { template } from "./template";
 
 class Button extends Block {
     constructor(props: { [key: string]: unknown }) {
+          // Создаём враппер дом-элемент button
       super("button", props);
     }
   
     render() {
-//        const template = Handlebars.compile( buttonTemplate);
-//        return template({});        
+          // В проект должен быть ваш собственный шаблонизатор
       return `<div>${this.props.text}</div>`;
     }
   }
@@ -28,17 +23,17 @@ class Button extends Block {
   }
   
   const button = new Button({
-    text: 'Click me',
-    type: 'submit',
-    clas: "a-theme a-button a-theme-color",
+          text: 'Click me',
   });
+  
+  console.log('before render', button);
   // app — это class дива в корне DOM
   render(".app", button);
   
-//  // Через секунду контент изменится сам, достаточно обновить пропсы
+  // Через секунду контент изменится сам, достаточно обновить пропсы
   setTimeout(() => {
     button.setProps({
-        text: 'Click me, please',
+      text: 'Click me, please',
     });
   }, 1000);
 
