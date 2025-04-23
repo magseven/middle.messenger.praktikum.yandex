@@ -1,6 +1,6 @@
 // language=hbs
 
-export default `
+const indexTemplate: string = `
   <div>
     <nav class="a-login-container">
       <h1>Sprint_1</h1>
@@ -11,3 +11,4 @@ export default `
   </div>
 `;
 
+export default indexTemplate;

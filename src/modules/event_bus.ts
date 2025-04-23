@@ -6,9 +6,9 @@ export class EventBus {
   constructor() {
     // const eventBus = new EventBus();
     // this.eventBus = () => eventBus;      
-      if (EventBus.__instance) {
-        return EventBus.__instance;
-      }
+      // if (EventBus.__instance) {
+      //   return EventBus.__instance;
+      // }
   
       this.__object = new Map();
       EventBus.__instance = this;
@@ -29,12 +29,12 @@ export class EventBus {
     this.__object.set( event, this.__object.get( event)!.filter((cb) => cb != callback));
   }
 
-  emit(event: string, eventData: {[key:string]:string} = {}) {
+  emit(event: string, ...args: Record<string, unknown>[]) {
       if ( !this.__object.has( event))
         return;
 
       for ( let cb of this.__object.get( event)!)
-        cb( eventData); 
+        cb( ...args); 
   }
 }
 
@@ -55,7 +55,7 @@ class EventBus {
 
   off(event, callback) {
 		if (!this.listeners[event]) {
-      throw new Error(`Нет события: ${event}`);
+      throw new Error(`пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ${event}`);
     }
 
     this.listeners[event] = this.listeners[event].filter(
@@ -65,7 +65,7 @@ class EventBus {
 
 	emit(event, ...args) {
     if (!this.listeners[event]) {
-      throw new Error(`Нет события: ${event}`);
+      throw new Error(`пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ${event}`);
     }
     
     this.listeners[event].forEach(function(listener) {

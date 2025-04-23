@@ -2,7 +2,7 @@
 
 export default `
     <section class="a-login-container">
-    {{>header label=title_reg theme_icon="../static/images/cloud.png" theme_icon_descr="облако"}}
+    {{{ header }}}
     <form>
       {{>form_input name="first_name" type="text" placeholder="Имя" required=true}}
       {{>form_input name="second_name" type="text" placeholder="Фамилия" required=false}}
@@ -12,8 +12,9 @@ export default `
       {{>form_input name="password" type="password" placeholder="Пароль" required=true}}
       {{>button type="submit" label="Зарегистрировать"}}
       <div class="a-button-bar">
-        {{>button type="button" label="Вход"}}
+        {{{ button}}}
       </div>
     </form>
     </section>
 `
+//{{>header label=title_reg theme_icon="../static/images/cloud.png" theme_icon_descr="облако"}}

@@ -1,12 +1,16 @@
-import index from '../components/index'
-import login from '../components/login'
-import profile from '../components/profile'
-import signin from '../components/signin'
-import page_404 from '../components/page_404'
-import page_500 from '../components/page_500'
+import index from '../components/pages/templates/index.tmpl'
+import login from '../components/pages/login.tmpl'
+import profile from '../components/pages/templates/profile.tmpl'
+import signin from '../components/pages/templates/signin.tmpl'
+import page_404 from '../components/pages/templates/page_404.tmpl'
+import page_500 from '../components/pages/templates/page_500.templ'
 import chats from '../modules/chats/chats.tmpl'
 
-export const pageData: {[key: string]: {[key: string]: any}} = {
+import { BlockEntry } from "../modules/types"
+
+
+export const blockData: Record<string, BlockEntry> = {
+//export const pageData: {[key: string]: {[key: string]: any}} = {
     index: {
         template: index,
         validate: false,
@@ -27,6 +31,7 @@ export const pageData: {[key: string]: {[key: string]: any}} = {
         context: {
             page_title: 'Авторизация',
             form_name: 'form',
+            button_text: 'Войти'
         },
     }, 
     profile: {

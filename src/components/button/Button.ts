@@ -1,45 +1,39 @@
-// components/button/Button.js
 import Handlebars from 'handlebars';
-
-import { Block } from "../../modules/block";
-//import { template } from "./template";
-
-
+import { Block, BlockProps } from "../../modules/block";
 import buttonTemplate from './button.tmpl';
 
 Handlebars.registerPartial( 'button', buttonTemplate);
 
 class Button extends Block {
-    constructor(props: { [key: string]: unknown }) {
-      super("button", props);
+    constructor(props: BlockProps) {
+      super("button", {...props, className: 'a-theme'});
     }
   
-    render() {
-//        const template = Handlebars.compile( buttonTemplate);
-//        return template({});        
-      return `<div>${this.props.text}</div>`;
+    render() : DocumentFragment {
+      return this.compile(`${this.props.text}`, {});
     }
-  }
-  
-  function render(query: string, block: Block) {
-    const root = document.querySelector(query);
-    root!.appendChild(block.getContent());
-    return root;
-  }
-  
-  const button = new Button({
-    text: 'Click me',
-    type: 'submit',
-    clas: "a-theme a-button a-theme-color",
-  });
-  // app Ч это class дива в корне DOM
-  render(".app", button);
-  
-//  // „ерез секунду контент изменитс€ сам, достаточно обновить пропсы
-  setTimeout(() => {
-    button.setProps({
-        text: 'Click me, please',
-    });
-  }, 1000);
+ }
 
-  console.log('before render');
+export default Button;
+  
+  // function render(query: string, block: Block) {
+  //   const root = document.querySelector(query);
+  //   root!.appendChild(block.getContent());
+  //   return root;
+  // }
+  
+  // const button = new Button({
+  //   text: 'Click me',
+  //   type: 'submit',
+  //   class: "a-theme a-button a-theme-color",
+  // });
+
+  // render(".app", button);
+  
+  // setTimeout(() => {
+  //   button.setProps({
+  //       text: 'Click me, please',
+  //   });
+  // }, 1000);
+
+  
