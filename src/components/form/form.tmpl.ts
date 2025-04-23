@@ -1,2 +1,3 @@
 // language=hbs
-export default `<form class="a-form"></form>`;
+export default `{{{button}}}`;
+//export default `<form class="a-form"></form>`;

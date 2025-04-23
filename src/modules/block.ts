@@ -48,8 +48,8 @@ export class Block {
       const { children, props } = this._getChildren(propsAndChildren);
 
       this.tagName = tagName,  
-      this.props = this._makePropsProxy(props);
-      this.children = children;
+      this.props = this._makePropsProxy<BlockProps>(props);
+      this.children = this._makePropsProxy<Children>(children);
 
       this.data = blockData;
 
@@ -73,22 +73,22 @@ export class Block {
 
       return { children, props };
     }
-    
+   
     compile( template: string, props: BlockProps) : DocumentFragment {
-      console.log( "compile", this.constructor.name); 
-      const propsAndStubs = { ...props };
-      Object.entries(this.children).forEach(([key, child]) => {
-          propsAndStubs[key] = `<div data-id="${child.id}"></div>`
-      });
+        const propsAndStubs = { ...props };
+
+       Object.entries(this.children).forEach(([key, child]) => {
+           propsAndStubs[key] = `<div data-id="${child.id}"></div>`
+       });
 
       const fragment: HTMLTemplateElement = this._createDocumentElement('template') as HTMLTemplateElement;
+      fragment.innerHTML = Handlebars.compile(template)(propsAndStubs);
 
-      const templ = Handlebars.compile( template);
-      fragment.innerHTML = templ(propsAndStubs);  
       Object.values(this.children).forEach(child => {
           const stub = fragment.content.querySelector(`[data-id="${child.id}"]`);
-          if ( stub)
+          if ( stub) {
             stub!.replaceWith(child.getContent());
+          }
       });
 
       return fragment.content;      
@@ -102,16 +102,15 @@ export class Block {
     }
   
     _createResources() {
-      console.log('_createResources', this.constructor.name);
-      this._element = this._createDocumentElement(this.tagName);
+        this._element = this._createDocumentElement(this.tagName);
 
-      Object.keys(this.props).forEach( key => {
-        if ( key in HTMLElement.prototype) {
-          if ( typeof this.props[key] === 'string') {
-            this._element.setAttribute( key, String(this.props[key])); 
-          }
-        }
-      })    
+        Object.keys(this.props).forEach( key => {
+              if ( key in Object.getPrototypeOf(this._element)) {
+                if ( typeof this.props[key] === 'string') {
+                    this._element.setAttribute( key === 'className' ? 'class' : key, String(this.props[key])); 
+                }
+            }
+        })    
     }
 
     init() {
@@ -177,6 +176,31 @@ export class Block {
       return this.element;
     }
 
+    private _makePropsProxy<T extends BlockProps | Children>(obj: T): T {
+        const self = this;
+      
+        const handler: ProxyHandler<T> = {
+          get(target, prop: string) {
+            const value = target[prop];
+            return typeof value === "function" ? value.bind(target) : value;
+          },
+          set(target, prop: string, value: any) {
+            const oldValue = { ...target };
+            target[prop] = value;
+            
+            if ('eventBus' in self) {
+              self.eventBus.emit(Block.EVENTS.FLOW_CDU, oldValue, target);
+            }
+            return true;
+          },
+          deleteProperty() {
+            throw new Error("Удаление запрещено");
+          }
+        };
+      
+        return new Proxy(obj, handler);
+      }
+/*      
     _makePropsProxy(props: BlockProps) {
       const self = this;
   
@@ -197,7 +221,7 @@ export class Block {
         }
       });
     }
-  
+*/  
     _createDocumentElement(tagName: string) {
           return document.createElement(tagName);
     }

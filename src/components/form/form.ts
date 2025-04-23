@@ -2,6 +2,8 @@ import Handlebars from 'handlebars';
 import { Block, BlockProps } from "../../modules/block";
 import formTemplate from './form.tmpl';
 
+//import Button from '../button/Button';
+
 Handlebars.registerPartial( 'form', formTemplate);
 
 class Form extends Block {
@@ -10,7 +12,7 @@ class Form extends Block {
     }
   
     render() : DocumentFragment {
-      return this.compile(formTemplate, { page_title: this.props.text, theme_icon_descr: this.props.icon_descr, theme_icon: this.props.icon });
+      return this.compile(formTemplate, { page_title: this.props.text, theme_icon_descr: this.props.icon_descr, theme_icon: this.props.icon,  });
     }
  }
 

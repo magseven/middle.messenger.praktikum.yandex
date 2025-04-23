@@ -3,8 +3,8 @@ export default `
     <section class="a-login-container">
       {{{ header }}}
       {{{ form }}}
-        <a class="a-link" href=index>Еще не зарегистрирован?</a>
-      </form>
+      {{{ button }}}
+      <a class="a-link" href=index>Еще не зарегистрирован?</a>
     </section>
 `;
 
@@ -20,4 +20,4 @@ export default `
 //     </section>
 // `;
 
-// label=title_auth theme_icon="../static/images/cloud.png" theme_icon_descr="������"}}
+//label=title_auth theme_icon="../static/images/cloud.png" theme_icon_descr="облако"

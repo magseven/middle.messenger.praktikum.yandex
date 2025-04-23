@@ -1,4 +1,3 @@
-// language=hbs
 export default `<div class="form-group">
     {{#if label}} 
         <label for={{name}}>{{label}}</label>
