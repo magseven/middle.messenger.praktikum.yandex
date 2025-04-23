@@ -31,7 +31,13 @@ export const blockData: Record<string, BlockEntry> = {
         context: {
             page_title: 'Авторизация',
             form_name: 'form',
-            button_text: 'Войти'
+            button_text: 'Войти',
+            header: { title: "ssdf", className: 'a-header'},
+            form: {
+                name: { proto: 'Input', type: "text", placeholder: 'введите&nbspфамилию'},
+                fname: { proto: 'Input', type: "text", placeholder: 'введите&nbspфамилию'}, 
+                button: { proto: 'Button', type: "submit", text: 'Войти'}, 
+            },
         },
     }, 
     profile: {

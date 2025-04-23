@@ -6,11 +6,11 @@ Handlebars.registerPartial( 'header', headerTemplate);
 
 class Header extends Block {
     constructor(props: BlockProps) {
-      super("div", props);
+      super("div", {...props, className: 'a-theme a-header a-theme-color'});
     }
   
     render() : DocumentFragment {
-      return this.compile(headerTemplate, { page_title: this.props.text, theme_icon_descr: this.props.icon_descr, theme_icon: this.props.icon });
+      return this.compile(headerTemplate, { page_title: this.props.title, theme_icon_descr: this.props.icon_descr, theme_icon: this.props.icon });
     }
  }
 

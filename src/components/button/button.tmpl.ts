@@ -1,3 +1,3 @@
 // components/button/template.js
 // export default ``
-export default `{{{className}}}`;
+export default `{{text}}`;

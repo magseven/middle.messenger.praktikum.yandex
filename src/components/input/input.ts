@@ -6,11 +6,11 @@ Handlebars.registerPartial( 'input', inputTemplate);
 
 class Input extends Block {
     constructor(props: BlockProps) {
-      super("input", props);
+      super("div", props);
     }
   
     render() : DocumentFragment {
-      return this.compile( inputTemplate, {});
+      return this.compile( inputTemplate, this.props);
     }
  }
 

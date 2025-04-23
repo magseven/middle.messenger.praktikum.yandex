@@ -1,3 +1,4 @@
 // language=hbs
-export default `{{{button}}}`;
-//export default `<form class="a-form"></form>`;
+export default `{{#each children}}
+                    {{{lookup ../this @key}}}
+                {{/each}}`;

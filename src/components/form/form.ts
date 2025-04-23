@@ -12,7 +12,7 @@ class Form extends Block {
     }
   
     render() : DocumentFragment {
-      return this.compile(formTemplate, { page_title: this.props.text, theme_icon_descr: this.props.icon_descr, theme_icon: this.props.icon,  });
+      return this.compile(formTemplate, {children: this.children});
     }
  }
 

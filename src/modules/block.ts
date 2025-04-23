@@ -75,11 +75,12 @@ export class Block {
     }
    
     compile( template: string, props: BlockProps) : DocumentFragment {
-        const propsAndStubs = { ...props };
+      const propsAndStubs = { ...props };
 
-       Object.entries(this.children).forEach(([key, child]) => {
+      console.log(template);
+      Object.entries(this.children).forEach(([key, child]) => {
            propsAndStubs[key] = `<div data-id="${child.id}"></div>`
-       });
+      });
 
       const fragment: HTMLTemplateElement = this._createDocumentElement('template') as HTMLTemplateElement;
       fragment.innerHTML = Handlebars.compile(template)(propsAndStubs);
@@ -107,7 +108,7 @@ export class Block {
         Object.keys(this.props).forEach( key => {
               if ( key in Object.getPrototypeOf(this._element)) {
                 if ( typeof this.props[key] === 'string') {
-                    this._element.setAttribute( key === 'className' ? 'class' : key, String(this.props[key])); 
+                    this._element.setAttribute( key === 'className' ? 'class' : key, this.props[key]); 
                 }
             }
         })    

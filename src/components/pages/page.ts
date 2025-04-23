@@ -35,6 +35,7 @@
 
 import {getCurrentPage, printFormData} from '../../modules/utils/common'
 // import { initFormValidation } from '../../modules/utils/validation';
+import {pageData} from '../../modules/utils/form_funcs';
 
 import { Block, BlockProps } from "../../modules/block";
 import Input from '../input/input'
@@ -63,8 +64,7 @@ class Page extends Block {
     }
 
     render() : DocumentFragment {
-//        console.log( 'template:', this.data.template);
-        return this.compile( String(this.data.template), this.data.context);
+        return this.compile( String(this.data.template), this.props);
     }
 }
   
@@ -77,15 +77,8 @@ function render(query: string, block: Page) {
 const data = blockData[getCurrentPage()] || blockData.index;
 console.log( 'page', data);
 
-const page = new Page({ headerText: data.context.page_title, buttonText: data.context.button_text, buttonClass: "a-theme a-button a-theme-color",
-                        header: new Header({ type: 'submit', className: 'a-theme a-header a-theme-color', text: 'text'}),
-                        form: new Form({ type: 'submit', className: 'a-theme a-form a-theme-color', text: 'Button text',
-                            input: new Input({ className: 'a-theme a-input a-theme-color'}), 
-                            button: new Button({ type: 'submit', className: 'a-theme a-button a-theme-color', text: 'text'}) 
-                        },),
-                    }, data);       
+const page = new Page( pageData(data.context), data);       
 render(".app", page);
-
 //class="a-theme a-button a-theme-color
 setTimeout(() => {
     page.setProps({
@@ -93,8 +86,14 @@ setTimeout(() => {
     });
 }, 1000);
 
-// label=title_auth theme_icon="../static/images/cloud.png" theme_icon_descr="������"
+// label=title_auth theme_icon="../static/images/cloud.png" theme_icon_descr="������"
 // <div class="a-theme a-header a-theme-color">
 //     <img class="a-theme-icon" src={{ theme_icon }} width="32px" height="32px" alt="{{ theme_icon_descr}}">
 //     <h2 class="a-header-title">{{ label }}</h2>
 // </div>
+
+// header: new Header({ page_title: data.context.page_title, className: 'a-theme a-header a-theme-color', text: 'text'}),
+// form: new Form({ className: 'a-form',
+//     input: new Input({ className: 'a-input', type: 'text', name: "name", placeholder: 'введите&nbspфамилию'}), 
+//     button: new Button({ type: 'submit', className: 'a-theme a-button a-theme-color', text: 'Войти'}) 
+// },),
