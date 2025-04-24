@@ -40,6 +40,6 @@ export const pageData = ( context: BlockContext) => {
                   key, value: new classRegistry[value.proto](value) 
             })).reduce(( acc, item) => ({...acc, [item.key]: item.value})))
       }
-
+console.log(result);
       return result;
 }

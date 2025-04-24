@@ -25,8 +25,9 @@ export class Block {
       FLOW_CDM: "flow:component-did-mount",
       FLOW_CDU: "flow:component-did-update",
       FLOW_RENDER: "flow:render"
-    };  
-    
+  };  
+  
+  
     _element!: HTMLElement;
     
     id: string = '';
@@ -74,10 +75,18 @@ export class Block {
       return { children, props };
     }
    
+
+    // addAttribute() {
+    //   const { attr = {} } = this.props;
+    //   Object.entries(attr).forEach(([key, value])) => {
+    //     this._element.setAttribute( key, value);
+    //   }
+
+    // }
+
     compile( template: string, props: BlockProps) : DocumentFragment {
       const propsAndStubs = { ...props };
 
-      console.log(template);
       Object.entries(this.children).forEach(([key, child]) => {
            propsAndStubs[key] = `<div data-id="${child.id}"></div>`
       });
@@ -171,7 +180,30 @@ export class Block {
     render() : DocumentFragment /*| string*/ { return new DocumentFragment()}
   
     _removeEvents(){}
-    _addEvents(){}
+
+    _addEvents(){
+      //this.addEvents();
+    }
+
+    //_super.addEvents();
+  
+
+    addEvents() { 
+      const { events } = this.props;
+
+      if (events && typeof events === 'object') {
+        const links = this._element.querySelectorAll('a');
+  
+        links.forEach(a => {
+          Object.keys(events).forEach(eventName => {
+            const handler = (events as Record<string, (e: Event) => void>)[eventName];
+            if (typeof handler === 'function') {
+              a.addEventListener(eventName, handler);
+            }
+          });
+        });
+      }
+    }
 
     getContent() {
       return this.element;

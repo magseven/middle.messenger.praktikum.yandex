@@ -8,7 +8,7 @@ import Button from "../button/Button";
 // import Header from "../header/header";
 // import Form from "../form/form";
 // import Input from "../input/input";
-import loginTemplate from './login.tmpl';
+import loginTemplate from './templates/login.tmpl';
 
 import { blockData } from '../../models/page_data'
 
@@ -16,7 +16,7 @@ import { blockData } from '../../models/page_data'
 import form from '../form/form.tmpl'
 import input from '../input/input.tmpl'
 import header from '../header/header.tmpl'
-import avatar from '../avatar'
+import avatar from '../avatar/avatar.tmpl'
 import button from '../button/button.tmpl'
 
 import Handlebars from 'handlebars';
@@ -56,21 +56,15 @@ class Login extends Block {
     }
 }
   
+/*
 function render(query: string, block: Login) {
-      const root = document.querySelector(query);
-console.log( block.getContent());      
-      root!.appendChild(block.getContent());
-      return root;
+    const root = document.querySelector(query);
+    console.log( block.getContent());      
+    root!.appendChild(block.getContent());
+    return root;
 }
 
-//const name : string = getCurrentPage();    
-//console.log( 'currentPage', name);                
-// console.log( 'currentPage', getCurrentPage());
- const data = blockData['login'] || blockData.index;
-
-// console.log( 'page', data);
-
-//const page = new Login({}, data); 
+const data = blockData['login'] || blockData.index;
 const page = new Login({ headerText: data.context.page_title, buttonText: data.context.button_text, buttonClass: "a-theme a-button a-theme-color" }, data); 
 
 render(".app", page);

@@ -49,7 +49,7 @@ import { blockData } from '../../models/page_data'
 // //temporary
 import input from '../input/input.tmpl'
 import header from '../header/header.tmpl'
-import avatar from '../avatar'
+import avatar from '../avatar/avatar.tmpl'
 import button from '../button/button.tmpl'
 
 import Handlebars from 'handlebars';
