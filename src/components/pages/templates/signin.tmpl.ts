@@ -1,13 +1,9 @@
 // language=hbs
 export default `
-    <section class="a-login-container">
       {{{ header }}}
       {{{ form }}}
-      {{{ button }}}
        <div class="a-button-bar">
-         {{{ button}}}
        </div>
-    </section>
 `;
 
 // export default `

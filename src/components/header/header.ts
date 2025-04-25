@@ -1,12 +1,17 @@
-import Handlebars from 'handlebars';
+//import Handlebars from 'handlebars';
 import { Block, BlockProps } from "../../modules/block";
 import headerTemplate from './header.tmpl';
 
-Handlebars.registerPartial( 'header', headerTemplate);
+//Handlebars.registerPartial( 'header', headerTemplate);
 
 class Header extends Block {
     constructor(props: BlockProps) {
-      super("div", {...props, className: 'a-theme a-header a-theme-color'});
+      super("div", {...props, 
+                    attrs: {
+                      class: 'a-theme a-header a-theme-color', 
+                    },
+                    icon: '../static/images/cloud.png',
+                    icon_descr: 'облако'});
     }
   
     render() : DocumentFragment {
@@ -16,5 +21,3 @@ class Header extends Block {
 
 export default Header;
 
-//  class="a-theme a-header a-theme-color
-//  label=title_auth theme_icon="../static/images/cloud.png" theme_icon_descr="������"}}

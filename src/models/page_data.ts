@@ -30,11 +30,11 @@ export const blockData: Record<string, BlockEntry> = {
         context: {
             page_title: 'Авторизация',
             form_name: 'form',
-            header: { title: "Авторизация", className: 'a-header'},
+            header: { title: "Авторизация"},
             form: {
-                login: { proto: 'Input', type: "text", label: 'Логин', placeholder: 'Укажите&nbspлогин'},
+                login: { proto: 'Input', label: 'Логин', type: "text", placeholder: 'Укажите&nbspлогин'},
                 password: { proto: 'Input', type: "text", label: 'Пароль', placeholder: 'Укажите&nbspпароль'}, 
-                button: { proto: 'Button', type: "submit", text: 'Войти'}, 
+                button: { proto: 'Button', attrs: { type: "submit"}, text: 'Войти'}, 
             },
         },
     }, 
@@ -45,9 +45,10 @@ export const blockData: Record<string, BlockEntry> = {
             page_title: 'Профиль пользователя',
             form_name: 'form',
             header: { 
-                title: 'Профиль пользователя', className: 'a-header', theme_icon_descr: 'sdfds',
+                title: 'Профиль пользователя',
             },
             form: {
+                avatar: { proto: 'Avatar', type: "submit", text: 'Сохранить'},
                 first_name: { proto: 'Input', type: "text", placeholder: 'Имя'},
                 second_name: { proto: 'Input', type: "text", placeholder: 'Фамилия'}, 
                 display_name: { proto: 'Input', type: "text", placeholder: 'Псевдоним'}, 
@@ -66,7 +67,7 @@ export const blockData: Record<string, BlockEntry> = {
         context: {
             page_title: 'Регистрация пользователя',
             form_name: 'form',
-            header: { title: 'Регистрация пользователя', className: 'a-header'},
+            header: { title: 'Регистрация пользователя'},
             form: {
                 first_name: { proto: 'Input', type: "text", placeholder: 'Имя'},
                 second_name: { proto: 'Input', type: "text", placeholder: 'Фамилия'}, 
@@ -74,7 +75,8 @@ export const blockData: Record<string, BlockEntry> = {
                 email: { proto: 'Input', type: "text", placeholder: 'email'}, 
                 password: { proto: 'Input', type: "text", placeholder: 'Пароль'}, 
                 phone: { proto: 'Input', type: "text", placeholder: 'Телефон'}, 
-                button: { proto: 'Button', type: "submit", text: 'Войти'}, 
+                button: { proto: 'Button', attrs: { type: "submit"}, text: 'Зарегистрировать'}, 
+                button1: { proto: 'Button', attrs: { type: "button", name: 'button1'}, text: 'Войти'}, 
             },
         },
     }, 

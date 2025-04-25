@@ -6,7 +6,14 @@ Handlebars.registerPartial( 'input', inputTemplate);
 
 class Input extends Block {
     constructor(props: BlockProps) {
-      super("div", props);
+      super("div", { 
+        ...props, 
+        attrs: {
+          ...props.attrs || {},
+          class: 'a-input'
+        }
+      }
+      );
     }
   
     render() : DocumentFragment {

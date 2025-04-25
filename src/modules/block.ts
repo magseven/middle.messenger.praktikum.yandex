@@ -12,47 +12,43 @@ import { BlockEntry } from "./types";
  */
 
 export type BlockProps = {
-  [key: string]: unknown;
+  [key: string]: unknown;  
+  attr?: Record<string, string>;
+  events?: {[key: string]: (e: Event) => void};
 };
 
 export type Children = {
   [key: string]: Block;
 };
 
+type Events = {
+  [eventName: string]: (event: Event) => void;
+};
+
 export class Block {
-    static EVENTS = {
+  static EVENTS = {
       INIT: "init",
       FLOW_CDM: "flow:component-did-mount",
       FLOW_CDU: "flow:component-did-update",
       FLOW_RENDER: "flow:render"
   };  
   
+  id: string = '';
+  _element!: HTMLElement;
+  tagName: string;
+  props: BlockProps = {};
+  children: Children = {};
+  eventBus: EventBus;
+  events: Events ={};
   
-    _element!: HTMLElement;
-    
-    id: string = '';
-    tagName: string;
-    props: BlockProps = {};
-    children: Children = {};
-    eventBus: EventBus;
-    data: BlockEntry = {
-      template: '',
-      context: {}
-    };
-  
-    constructor(tagName = "div", propsAndChildren : BlockProps = {}, blockData: BlockEntry = {
-      template: '',
-      context: {}
-    }) {
+    constructor(tagName = "div", propsAndChildren : BlockProps = {}) {
+
       this.id = makeUUID();
 
-      const { children, props } = this._getChildren(propsAndChildren);
-
+      const { children, props, events} = this._getChildren(propsAndChildren);
       this.tagName = tagName,  
       this.props = this._makePropsProxy<BlockProps>(props);
       this.children = this._makePropsProxy<Children>(children);
-
-      this.data = blockData;
 
       this.eventBus = new EventBus();
   
@@ -63,26 +59,31 @@ export class Block {
     _getChildren( propsAndChildren: BlockProps) {
       const children: Children = {};
       const props: BlockProps = {};
+      const events: Events = {};
 
       Object.entries(propsAndChildren).forEach(([key, value]) => {
+//        console.log( value, typeof value);
         if (value instanceof Block) {
           children[key] = value;
+        }else if ( (typeof value === 'function' && value.length === 1)) {
+          console.log('value');
+          events[key] = value as (event: Event) => void;
         }else{
           props[key] = value;
         }
       });
 
-      return { children, props };
+      console.log(events);
+      return { children, props, events };
     }
    
 
-    // addAttribute() {
-    //   const { attr = {} } = this.props;
-    //   Object.entries(attr).forEach(([key, value])) => {
-    //     this._element.setAttribute( key, value);
-    //   }
-
-    // }
+    addAttribute() {
+      const { attrs = {} } = this.props as { attrs?: Record<string, string> };
+      Object.entries(attrs).forEach(([key, value]) => {
+        this._element.setAttribute(key, value);
+      });
+    }
 
     compile( template: string, props: BlockProps) : DocumentFragment {
       const propsAndStubs = { ...props };
@@ -114,13 +115,13 @@ export class Block {
     _createResources() {
         this._element = this._createDocumentElement(this.tagName);
 
-        Object.keys(this.props).forEach( key => {
-              if ( key in Object.getPrototypeOf(this._element)) {
-                if ( typeof this.props[key] === 'string') {
-                    this._element.setAttribute( key === 'className' ? 'class' : key, this.props[key]); 
-                }
-            }
-        })    
+        // Object.keys(this.props).forEach( key => {
+        //       if ( key in Object.getPrototypeOf(this._element)) {
+        //         if ( typeof this.props[key] === 'string') {
+        //             this._element.setAttribute( key === 'className' ? 'class' : key, this.props[key]); 
+        //         }
+        //     }
+        // })    
     }
 
     init() {
@@ -174,35 +175,29 @@ export class Block {
       this._element.innerHTML = '';
 
       this._element.appendChild(block);
+      this.addAttribute();
       this._addEvents();
     }
   
     render() : DocumentFragment /*| string*/ { return new DocumentFragment()}
   
-    _removeEvents(){}
-
-    _addEvents(){
-      //this.addEvents();
+    protected _removeEvents(): void {
+      const { events = {} } = this.props;
+      if (!events) return;
+      
+      Object.entries( events).forEach(([eventName, handler]) => {
+        this._element?.removeEventListener(eventName, handler as EventListener);
+      });
     }
 
-    //_super.addEvents();
-  
-
-    addEvents() { 
+    protected _addEvents(): void {
       const { events } = this.props;
 
-      if (events && typeof events === 'object') {
-        const links = this._element.querySelectorAll('a');
+      if (!events) return;
   
-        links.forEach(a => {
-          Object.keys(events).forEach(eventName => {
-            const handler = (events as Record<string, (e: Event) => void>)[eventName];
-            if (typeof handler === 'function') {
-              a.addEventListener(eventName, handler);
-            }
-          });
-        });
-      }
+      Object.entries(events).forEach(([eventName, handler]) => {
+        this._element.addEventListener(eventName, handler as EventListener);
+      });
     }
 
     getContent() {
@@ -265,5 +260,5 @@ export class Block {
   
     hide() {
       this.getContent().style.display = "none";
-    }
+    }  
   }

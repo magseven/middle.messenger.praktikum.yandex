@@ -6,7 +6,13 @@ Handlebars.registerPartial( 'button', buttonTemplate);
 
 class Button extends Block {
     constructor(props: BlockProps) {
-      super("button", {...props, className: 'a-theme a-button a-theme-color'});
+      super("button", {
+        ...props, 
+        attrs: {
+          ...props.attrs || {},
+          class: 'a-theme a-button a-theme-color'
+        }
+      });
     }
   
     render() : DocumentFragment {

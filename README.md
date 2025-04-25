@@ -12,4 +12,4 @@ Chats -     https://www.figma.com/design/hkvazc0efpXGmAwfFvoVXg/Chats?node-id=0-
 
 для сборки и запуска проекта выполните: start
 
-deploy: https://effulgent-cascaron-098aa9.netlify.app
+dep loy: https://effulgent-cascaron-098aa9.netlify.app

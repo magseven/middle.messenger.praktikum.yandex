@@ -1,5 +1,21 @@
 export type ContextHeader = Record<string, string>;
-export type ContextForm = Record<string, Record<string, string>>;
+
+type FormField = {
+    proto: 'Input' | 'Button' | 'Avatar';
+    type?: string;
+    placeholder?: string;
+    attrs?: Record<string, string>;
+    text?: string;
+    label?: string;
+  };
+  
+  // Тип для формы
+  type ContextForm = {
+    [fieldName: string]: FormField;
+  };
+  
+//export type ContextForm = Record<string, Record<string, string>>;
+
 export type ChatEntry = Record<string, string|number>;
 
 export type ContextChat = Array<{

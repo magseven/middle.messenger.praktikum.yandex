@@ -1,10 +1,8 @@
 // components/button/template.js
 export default `
-    <section class="a-login-container">
       {{{ header }}}
       {{{ form }}}
       {{{ button }}}
-      <a class="a-link" href=index>Еще не зарегистрирован?</a>
     </section>
 `;
 

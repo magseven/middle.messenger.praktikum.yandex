@@ -4,11 +4,6 @@ import {pageData} from '../../modules/utils/form_funcs';
 
 import { Block, BlockProps } from "../../modules/block";
 
-// import Input from '../input/input'
-// import Button from '../button/Button'
-// import Header from '../header/header'
-// import Form from '../form/form'
-
 import { BlockEntry } from '../../modules/types'
 import { blockData } from '../../models/page_data'
 
@@ -23,10 +18,9 @@ Handlebars.registerPartial( 'input', input);
 Handlebars.registerPartial( 'header', header);
 Handlebars.registerPartial( 'avatar', avatar);
 Handlebars.registerPartial( 'button', button);
-
 class Index extends Block {
     constructor(props: BlockProps, data: BlockEntry) {
-        super("div", {...props, 
+        super("section", {...props, 
             class: 'a-login-container',
             events: {
                 click: (e: MouseEvent) => {
@@ -36,22 +30,22 @@ class Index extends Block {
                 }
               }            
 
-        }, data); 
+        }); 
     }
 
     render() : DocumentFragment {
-        return this.compile( String(this.data.template), {menu: data.context.menu});
+        const page = blockData[getCurrentPage()] || blockData.index;
+        return this.compile( page.template, {menu: data.context.menu});
     }
 }
   
 function render(query: string, block: Index) {
-      const root = document.querySelector(query);
-      root!.appendChild(block.getContent());
-      return root;
+    const root = document.querySelector(query);
+    root!.replaceWith( block.getContent());
+    return root;
 }
 
 const data = blockData[getCurrentPage()] || blockData.index;
-console.log( 'page', data);
 
 const page = new Index( pageData(data.context), data);       
 render(".app", page);

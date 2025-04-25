@@ -1,11 +1,7 @@
 // language=hbs
 export default `
-    <section class="a-login-container">
       {{{ header }}}
       {{{ form }}}
-      {{{ button }}}
-      <a class="a-link" href=index>Еще не зарегистрирован?</a>
-    </section>
 `;
 
 //  const profileTemplate: string = `<div>
