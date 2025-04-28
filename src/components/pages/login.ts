@@ -28,7 +28,7 @@ Handlebars.registerPartial( 'form', form);
 
 class Login extends Block {
     constructor(props: BlockProps, data: BlockEntry) {
-        super("section", {...props, button: new Button({})}, data);       
+        super("section", {...props, button: new Button({})});       
         
         //this.children.button = new Button({});
         

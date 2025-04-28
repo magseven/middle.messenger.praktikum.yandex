@@ -1,6 +1,7 @@
 import { validationList } from "../../models/validation_data";
 
-const validateField = (input: HTMLInputElement): boolean => {
+export const validateField = (input: HTMLInputElement): boolean => {
+  console.log('validateField');
     const rule : RegExp = validationList[input.name];
     if ( !rule)
         return true;
@@ -11,7 +12,7 @@ const validateField = (input: HTMLInputElement): boolean => {
       input.classList.add('invalid');
       const errorElement = document.createElement('div');
       errorElement.className = 'error-message';
-      errorElement.textContent = 'Ошибка валидации'/*rule.errorMessage*/;
+      errorElement.textContent = 'Ошибка валидации';
       
       const oldError = input.nextElementSibling as HTMLElement;
       if (oldError && oldError.classList.contains('error-message')) {
@@ -30,7 +31,7 @@ const validateField = (input: HTMLInputElement): boolean => {
     return isValid;
   };
   
-  const validateForm = ( form: HTMLFormElement): boolean => {
+  export const validateForm = ( form: HTMLFormElement): boolean => {
     let isValid : boolean = true;
     const fields = form.querySelectorAll<HTMLInputElement>('input');
     

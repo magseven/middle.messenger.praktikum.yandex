@@ -1,8 +1,5 @@
-import Handlebars from 'handlebars';
 import { Block, BlockProps } from "../../modules/block";
 import buttonTemplate from './button.tmpl';
-
-Handlebars.registerPartial( 'button', buttonTemplate);
 
 class Button extends Block {
     constructor(props: BlockProps) {
@@ -17,7 +14,6 @@ class Button extends Block {
   
     render() : DocumentFragment {
       return this.compile( buttonTemplate, this.props);
-//      return this.compile(`${this.props.text}`, {});
     }
  }
 

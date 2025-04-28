@@ -14,7 +14,8 @@ import { BlockEntry } from "./types";
 export type BlockProps = {
   [key: string]: unknown;  
   attr?: Record<string, string>;
-  events?: {[key: string]: (e: Event) => void};
+  events?: Record<string, (e: Event) => void>;
+  //{[key: string]: (e: Event) => void};
 };
 
 export type Children = {
@@ -22,8 +23,8 @@ export type Children = {
 };
 
 type Events = {
-  [eventName: string]: (event: Event) => void;
-};
+   [eventName: string]: (e: Event) => void;
+ };
 
 export class Block {
   static EVENTS = {
@@ -39,7 +40,7 @@ export class Block {
   props: BlockProps = {};
   children: Children = {};
   eventBus: EventBus;
-  events: Events ={};
+  events: Events = {};
   
     constructor(tagName = "div", propsAndChildren : BlockProps = {}) {
 
@@ -49,6 +50,7 @@ export class Block {
       this.tagName = tagName,  
       this.props = this._makePropsProxy<BlockProps>(props);
       this.children = this._makePropsProxy<Children>(children);
+      this.events = this._makePropsProxy<Events>(events);
 
       this.eventBus = new EventBus();
   
@@ -62,21 +64,20 @@ export class Block {
       const events: Events = {};
 
       Object.entries(propsAndChildren).forEach(([key, value]) => {
-//        console.log( value, typeof value);
+//        console.log( this.constructor.name, 'value', key, value, typeof value);
         if (value instanceof Block) {
           children[key] = value;
-        }else if ( (typeof value === 'function' && value.length === 1)) {
-          console.log('value');
-          events[key] = value as (event: Event) => void;
+      //  }else if ( value instanceof 'Events') {
+      //    console.log('valuegdsfgggggggggggggggggggggggggggggggggggggggggggggggggggssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss');
+      //    events[key] = value as (event: Event) => void;
         }else{
           props[key] = value;
         }
       });
 
-      console.log(events);
+//      console.log(events);
       return { children, props, events };
     }
-   
 
     addAttribute() {
       const { attrs = {} } = this.props as { attrs?: Record<string, string> };
@@ -191,12 +192,13 @@ export class Block {
     }
 
     protected _addEvents(): void {
-      const { events } = this.props;
+      const { events = {}} = this.props;
 
       if (!events) return;
   
       Object.entries(events).forEach(([eventName, handler]) => {
         this._element.addEventListener(eventName, handler as EventListener);
+       // console.log('fdfdfgddgdsgfsdggdfgdsggsggdsgdfsgdsddfs');
       });
     }
 

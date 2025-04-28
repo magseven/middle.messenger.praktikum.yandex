@@ -1,8 +1,9 @@
-import Handlebars from 'handlebars';
+//import Handlebars from 'handlebars';
 import { Block, BlockProps } from "../../modules/block";
 import inputTemplate from './input.tmpl';
+import {validateField} from '../../modules/utils/validation'
 
-Handlebars.registerPartial( 'input', inputTemplate);
+//Handlebars.registerPartial( 'input', inputTemplate);
 
 class Input extends Block {
     constructor(props: BlockProps) {
@@ -10,10 +11,17 @@ class Input extends Block {
         ...props, 
         attrs: {
           ...props.attrs || {},
-          class: 'a-input'
+          class: 'form-group',
+        },
+        events: {
+          focusout: (e:Event) => {
+            e.preventDefault();
+            e.stopPropagation();
+            validateField(e.target as HTMLInputElement)
+            return true;
+          },        
         }
-      }
-      );
+      });
     }
   
     render() : DocumentFragment {
