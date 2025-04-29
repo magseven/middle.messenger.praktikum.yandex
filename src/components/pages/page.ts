@@ -7,9 +7,9 @@ import { blockData } from '../../models/page_data'
 class Page extends Block {
     constructor(props: BlockProps) {
         super("section", {...props,
-                            attrs: {
-                               class: 'a-login-container',
-                            },
+                            // attrs: {
+                            //    class: 'a-login-container',
+                            // },
                             // events: {
                             //     click: (e: MouseEvent) => {
                             //       console.log('A Clicked');
@@ -24,13 +24,13 @@ class Page extends Block {
                             //     },
                             // },
                         }); 
-        console.log( 'props', props);
+        //console.log( 'props', props);
     }
 
     render() : DocumentFragment {
         const page = blockData[getCurrentPage()] || blockData.index;
-        console.log('page', page);
-        return this.compile( page.template, {...this.props, nav: data.context.nav});
+        //console.log('page', page);
+        return this.compile( page.template, {...this.props, /*nav: data.context.nav*/});
     }
 }
   

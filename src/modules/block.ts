@@ -2,7 +2,7 @@ import {v4 as makeUUID} from 'uuid';
 
 import Handlebars from 'handlebars';
 import { EventBus } from "./event_bus";
-import { BlockEntry } from "./types";
+import { defEventList } from "./types";
 
 /** JSDoc
  * @param {string} tagName
@@ -51,7 +51,6 @@ export class Block {
       this.props = this._makePropsProxy<BlockProps>(props);
       this.children = this._makePropsProxy<Children>(children);
       this.events = this._makePropsProxy<Events>(events);
-
       this.eventBus = new EventBus();
   
       this._registerEvents( this.eventBus);
@@ -64,18 +63,21 @@ export class Block {
       const events: Events = {};
 
       Object.entries(propsAndChildren).forEach(([key, value]) => {
-//        console.log( this.constructor.name, 'value', key, value, typeof value);
         if (value instanceof Block) {
           children[key] = value;
-      //  }else if ( value instanceof 'Events') {
-      //    console.log('valuegdsfgggggggggggggggggggggggggggggggggggggggggggggggggggssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss');
-      //    events[key] = value as (event: Event) => void;
-        }else{
+          
+       }else if (key === 'events' && typeof value === 'object') {
+        Object.entries( value as object).forEach(([ekey, evalue]) => {
+          if ( defEventList.hasOwnProperty( ekey) && typeof evalue === 'function') {
+            events[ekey] = evalue as (event: Event) => void;
+          }
+        })
+
+      }else{
           props[key] = value;
-        }
+       }
       });
 
-//      console.log(events);
       return { children, props, events };
     }
 
@@ -93,9 +95,9 @@ export class Block {
            propsAndStubs[key] = `<div data-id="${child.id}"></div>`
       });
 
+      console.log('template', props);
       const fragment: HTMLTemplateElement = this._createDocumentElement('template') as HTMLTemplateElement;
       fragment.innerHTML = Handlebars.compile(template)(propsAndStubs);
-
       Object.values(this.children).forEach(child => {
           const stub = fragment.content.querySelector(`[data-id="${child.id}"]`);
           if ( stub) {
@@ -115,14 +117,6 @@ export class Block {
   
     _createResources() {
         this._element = this._createDocumentElement(this.tagName);
-
-        // Object.keys(this.props).forEach( key => {
-        //       if ( key in Object.getPrototypeOf(this._element)) {
-        //         if ( typeof this.props[key] === 'string') {
-        //             this._element.setAttribute( key === 'className' ? 'class' : key, this.props[key]); 
-        //         }
-        //     }
-        // })    
     }
 
     init() {
@@ -192,13 +186,10 @@ export class Block {
     }
 
     protected _addEvents(): void {
-      const { events = {}} = this.props;
-
-      if (!events) return;
+      if (!this.events) return;
   
-      Object.entries(events).forEach(([eventName, handler]) => {
-        this._element.addEventListener(eventName, handler as EventListener);
-       // console.log('fdfdfgddgdsgfsdggdfgdsggsggdsgdfsgdsddfs');
+      Object.entries(this.events).forEach(([eventName, handler]) => {
+        this._element.addEventListener(defEventList[eventName as keyof typeof defEventList], handler as EventListener);
       });
     }
 
@@ -206,7 +197,7 @@ export class Block {
       return this.element;
     }
 
-    private _makePropsProxy<T extends BlockProps | Children>(obj: T): T {
+    private _makePropsProxy<T extends BlockProps | Children | Events>(obj: T): T {
         const self = this;
       
         const handler: ProxyHandler<T> = {
@@ -230,29 +221,8 @@ export class Block {
       
         return new Proxy(obj, handler);
       }
-/*      
-    _makePropsProxy(props: BlockProps) {
-      const self = this;
-  
-      return new Proxy(props, {
-        get(target, prop: string) {
-          const value = target[prop];
-          return typeof value === "function" ? value.bind(target) : value;
-        },
-        set(target, prop: string, value) {
-          const target_old = {...target};
-          target[prop] = value;
-          
-          self.eventBus.emit(Block.EVENTS.FLOW_CDU, target_old, target);
-          return true;
-        },
-        deleteProperty() {
-          throw new Error("��� �������");
-        }
-      });
-    }
-*/  
-    _createDocumentElement(tagName: string) {
+
+      _createDocumentElement(tagName: string) {
           return document.createElement(tagName);
     }
   

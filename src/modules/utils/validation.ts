@@ -1,15 +1,14 @@
 import { validationList } from "../../models/validation_data";
 
 export const validateField = (input: HTMLInputElement): boolean => {
-  console.log('validateField');
-    const rule : RegExp = validationList[input.name];
+  const rule : RegExp = validationList[input.name];
     if ( !rule)
         return true;
 
     const isValid : boolean = rule.test( input.value);
     
     if ( !isValid) {
-      input.classList.add('invalid');
+//      input.classList.add('invalid');
       const errorElement = document.createElement('div');
       errorElement.className = 'error-message';
       errorElement.textContent = 'Ошибка валидации';
@@ -21,7 +20,7 @@ export const validateField = (input: HTMLInputElement): boolean => {
       
       input.insertAdjacentElement('afterend', errorElement);
     } else {
-      input.classList.remove('invalid');
+//      input.classList.remove('invalid');
       const errorElement = input.nextElementSibling as HTMLElement;
       if (errorElement && errorElement.classList.contains('error-message')) {
         errorElement.remove();
@@ -43,6 +42,7 @@ export const validateField = (input: HTMLInputElement): boolean => {
     return isValid;
   };
   
+  /*
   export const initFormValidation = (): void => {
     const form : HTMLFormElement = document.querySelector('form') as HTMLFormElement;
     if ( !form)
@@ -62,4 +62,4 @@ export const validateField = (input: HTMLInputElement): boolean => {
       }
     });
   };
-  
+  */

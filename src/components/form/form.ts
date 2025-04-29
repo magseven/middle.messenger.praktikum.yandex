@@ -10,7 +10,8 @@ class Form extends Block {
                         class: 'a-form',
                       },
                       events: {
-                        submit: (e: Event) => {
+                        OnSubmit: (e: Event) => {
+                          console.log('submit');
                           e.preventDefault();
                           e.stopPropagation();
                           if (e instanceof SubmitEvent) {
