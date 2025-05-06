@@ -1,4 +1,4 @@
-import { defChatData, defContent, defContentRecord } from '../types';
+import { defContentRecord } from '../types';
 import { BlockProps, Block } from '../block';
 import Nav from '../../components/nav/nav';
 import Header from '../../components/header/header';
@@ -10,13 +10,12 @@ import Heading from '../../components/heading/heading';
 import Link from '../../components/link/link';
 import Div from '../../components/div/div';
 import Paragraph from '../../components/paragraph/paragraph';
-import {Chat, ChatFrame, ChatBar, ChatBarTitle, ChatBarSearch, ChatBarList, ChatBarListItem, 
-        ChatBarListItemContent, ChatBarListItemContentHeader, ChatBarListItemContentMessage, ChatContent} from '../../components/chat/chat';
+import {Chat, ChatFrame, ChatBar, ChatBarTitle, ChatBarSearch, ChatBarList, ChatBarListItem, ChatContent} from '../../components/chat/chat';
+//ChatBarListItemContent, ChatBarListItemContentHeader, ChatBarListItemContentMessage
 
 type BlockClass = typeof Div | typeof Input | typeof Input_F | typeof Button | typeof Avatar | typeof Paragraph | typeof Heading | 
                   typeof Link | typeof Nav | typeof Header | typeof Form | typeof Chat | typeof ChatFrame | typeof ChatBar |
-                  typeof ChatBarTitle | typeof ChatBarSearch | typeof ChatBarList | typeof ChatBarListItem  | 
-                  typeof ChatBarListItemContent | typeof ChatBarListItemContent  | typeof ChatBarListItemContentHeader | typeof ChatBarListItemContentMessage | typeof ChatContent;
+                  typeof ChatBarTitle | typeof ChatBarSearch | typeof ChatBarList | typeof ChatBarListItem  | typeof ChatContent;
                   
 const classRegistry: Record<string, BlockClass> = {
       Div,
@@ -37,9 +36,6 @@ const classRegistry: Record<string, BlockClass> = {
       ChatBarSearch,
       ChatBarList,
       ChatBarListItem,
-      ChatBarListItemContent,
-      ChatBarListItemContentHeader,
-      ChatBarListItemContentMessage,
       ChatContent,
 }; 
   

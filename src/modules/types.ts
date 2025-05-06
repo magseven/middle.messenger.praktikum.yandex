@@ -9,6 +9,7 @@ export type ContextHeader = Record<string, string>;
 export type ChatEntry = Record<string, string|number>;
 
 export type ContextChat = Array<{
+    id?:     string,
     title:  string,
     date:   string,
     message: string,
@@ -27,15 +28,13 @@ type ExcludeProtoKeys = Exclude<string, 'proto'>;
 
 export type defProto = 'Button' | 'Link' | 'Paragraph' | 'Heading' | 'Nav' | 'Header' | 'Form' | 'Nav' | 'Chat' |
                         'ChatFrame' | 'ChatBar' | 'ChatBarTitle' | 'ChatBarSearch' | 'ChatBarList' | 'ChatBarListItem' |
-                        'ChatBarListItemContent' | 'ChatBarListItemContentHeader' | 'ChatBarListItemContentMessage' |
-                        'ChatContent' | 
-                        'Input' | 'Input_F' | 'Div';
+                        'ChatContent' | 'Input' | 'Input_F' | 'Div';
 
 export type defChatData = { [key: string]: string | number | defContent | defContentRecord}[];
 export interface defContent {
   proto?: defProto;          
   attrs?: Record<string, string>;         
-  data?: defContentRecord[];         
+  data?: defContentRecord[];  
   [key: ExcludeProtoKeys]: ValueType; 
  }
 

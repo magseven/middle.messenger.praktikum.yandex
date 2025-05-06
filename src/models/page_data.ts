@@ -115,93 +115,48 @@ export const blockData: Record<string, BlockEntry> = {
         context: {
             chat: {
                 proto: 'Chat',
-                    frame: { 
-                        proto: 'ChatFrame', 
-                        bar: { 
-                                proto: 'ChatBar',
-                                btitle: { 
-                                    proto: 'ChatBarTitle',
-                                    link: { proto: 'Link', attrs: { class: 'a-chat-bar-title-link', href: '#'}, text: 'Профиль&nbsp;&nbsp;'}
-                                },
-                                bsearch: { 
-                                    proto: 'ChatBarSearch', 
-                                    searchField: { proto: 'Input', 
-                                        attrs: { 
-                                            type: 'text', class: 'a-chat-bar-search-field f-inter fa-search', placeholder: 'Поиск'
-                                        },
-                                    },
-                                },
-                                blist: { 
-                                     proto: 'ChatBarList',
-                                     data: [{ title: 'chat1', date:  '15.04.25', message: 'message1', unread: '18'},    
-                                            { title: 'chat2', date:  '25.03.25', message: 'message2', unread: '28'}],    
-                                    //  data: [
-                                    //         {item: { proto: 'Heading', text: 'Чат1'}},
-                                    //         {item: { proto: 'Heading', text: 'Чат1'}},
-                                    //  ],
-                                //     item: {
-                                //         proto: 'ChatBarListItem',
-                                //         content: {
-                                //             proto: 'ChatBarListItemContent',
-                                //             header: {
-                                //                 proto: 'ChatBarListItemContentHeader',
-                                //                 caption: { proto: 'Heading', text: 'Чат1'},
-                                //                 date: { proto: 'Paragraph', text: '15.04.25'},
-                                //             },
-                                //             message: {
-                                //                 proto: 'ChatBarListItemContentMessage',
-                                //                 message: { proto: 'Paragraph', text: 'message1'},
-                                //                 unread: { proto: 'Paragraph', text: '18'},
-                                //             }
-                                //         }
-                                //     }
+                frame: { 
+                    proto: 'ChatFrame', 
+//                    contentFrame: { 
+//                        proto: 'ChatContentFrame',
 
-                                },            
-                    },
-                    },
-                content: { proto: 'ChatContent'},
-    // export default `
-//     <section class="a-chat">
-//         <div class="a-chat-frame">
-//             <div class="a-chat-bar">
-//                 <div class="a-chat-bar-title">
-//                     <a class="a-chat-bar-title-link" href=#>Профиль&nbsp;>&nbsp;<a>
-//                 </div>
-//                 <div class="a-chat-bar-search">
-//                     <Input_F type="text" class="a-chat-bar-search-field f-inter fa-search" placeholder="&#xf002;&nbspПоиск"/>
-//                 </div>
-//                 <div class="a-chat-bar-list">
-//                     {{#each chats}}{{>chats_bar_item }}{{/each}}
-//                 </div>
-//             </div>
-//             <div class="a-chat-content">
-//             </div>
-//         </div>
-//     </section>
-// `;
 
-            //     data:
-            //     [
-            //     {
-            //         title:  'Чат1',
-            //         date:   '15.04.25',
-            //         message:'message1',
-            //         unread: 23,
-            //     },
-            //     {
-            //         title:  'Чат2',
-            //         date:   '05.04.25',
-            //         message:'message7',
-            //         unread: 2,
-            //     },
-            //     {
-            //         title:  'Чат2',
-            //         date:   '10.03.25',
-            //         message:'message10',
-            //         unread: 13,
-            //     },
-            // ]
-            }
+                            content: { 
+                                proto: 'ChatContent',
+                                data: [
+                                    { dir: '0', message: 'У меня есть предложение'},    
+                                    { dir: '1', message: 'Огромное количество'},    
+                                    { dir: '0', message: 'Оптовая продажа пылесосов и микроволновых печей'}
+                                ],    
+                            },
+//                    },
+
+
+                    bar: { 
+                        proto: 'ChatBar',
+                        btitle: { 
+                            proto: 'ChatBarTitle',
+                            link: { proto: 'Link', attrs: { class: 'a-chat-bar-title-link', href: '#'}, text: 'Профиль&nbsp;&nbsp;>'}
+                        },
+                        bsearch: { 
+                            proto: 'ChatBarSearch', 
+                            searchField: { proto: 'Input', 
+                                attrs: { 
+                                    type: 'text', class: 'a-chat-bar-search-field', placeholder: 'Поиск'
+                                },
+                            },
+                        },
+                        blist: { 
+                            proto: 'ChatBarList',
+                            data: [
+                                { id: '1', title: 'Игорь', date:  '15.04.25', message: 'У меня есть предложение', unread: '18'},    
+                                { id: '2', title: 'Светлана', date:  '25.03.25', message: 'Огромное количество', unread: '28'},    
+                                { id: '3', title: 'Василий', date:  '25.03.25', message: 'Оптовая продажа пылесосов и микроволновых печей', unread: '28'},
+                            ],    
+                        },            
+                    },
+                },
+            }            
         }
     }
 };

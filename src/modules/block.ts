@@ -2,7 +2,7 @@ import {v4 as makeUUID} from 'uuid';
 
 import Handlebars from 'handlebars';
 import { EventBus } from "./event_bus";
-import { defEventList, defContentRecord } from "./types";
+import { defEventList } from "./types";
 
 /** JSDoc
  * @param {string} tagName

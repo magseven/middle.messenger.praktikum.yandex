@@ -1,10 +1,6 @@
 import { Block, BlockProps } from "../../modules/block";
 import chatTemplate from '../pages/templates/chat.tmpl';
-import {chatBarList, chatBarListItem, chatBarListItemContent, chatBarListItemContentHeader, chatBarListItemContentMessage} from '../pages/templates/chat.tmpl'
-import Div from '../div/div'
-import Button from '../button/Button'
-import {validateField} from '../../modules/utils/validation'
-import {pageData} from '../../modules/utils/form_funcs';
+import {chatBarList, chatBarListItem, chatContent, chatContentItem} from '../pages/templates/chat.tmpl'
 
 export class Chat extends Block {
     constructor(props: BlockProps) {
@@ -32,7 +28,7 @@ export class Chat extends Block {
     }
   
     render() : DocumentFragment {
-      return this.compile( `{{{ bar }}}`, this.props);
+      return this.compile( `{{{ bar }}}{{{ content }}}`, this.props);
     }
  }
 
@@ -111,102 +107,72 @@ export class ChatBarListItem extends Block {
     return this.compile( chatBarListItem, this.props);
   }
 }
-
-export class ChatBarListItemContent extends Block {
+export class ChatContentHeader extends Block {
   constructor(props: BlockProps) {
     super("div", { 
-      ...props,
-      attrs: {
-        class: 'a-chat-bar-list-item-content',
-      },
+      ...props, attrs: {class: 'a-chat-content'},
     });
   }
 
   render() : DocumentFragment {
-    return this.compile( chatBarListItemContent, this.props);
+    return this.compile( chatContentHeader, this.props);
   }
 }
 
-export class ChatBarListItemContentHeader extends Block {
+export class ChatContentFooter extends Block {
   constructor(props: BlockProps) {
     super("div", { 
-      ...props,
-      attrs: {
-        class: 'a-chat-bar-list-item-content-header',
-      },
+      ...props, attrs: {class: 'a-chat-content'},
     });
   }
 
   render() : DocumentFragment {
-    return this.compile( chatBarListItemContentHeader, this.props);
-  }
-}
-
-export class ChatBarListItemContentMessage extends Block {
-  constructor(props: BlockProps) {
-    super("div", { 
-      ...props,
-      attrs: {
-        class: 'a-chat-bar-list-item-content-message',
-      },
-    });
-  }
-
-  render() : DocumentFragment {
-    return this.compile( chatBarListItemContentMessage, this.props);
+    return this.compile( chatContentFooter, this.props);
   }
 }
 
 export class ChatContent extends Block {
   constructor(props: BlockProps) {
     super("div", { 
-      ...props, 
-      attrs: {
-        class: 'a-chat-content',
-      },
+      ...props, attrs: {class: 'a-chat-content'},
     });
   }
 
   render() : DocumentFragment {
-    return this.compile( 'chatContent', this.props);
+    return this.compile( chatContent, this.props);
+  }
+}
+
+export class ChatContentItem extends Block {
+  constructor(props: BlockProps) {
+    console.log('props', props);
+    super("div", { 
+      ...props, attrs: { class: (props.dir === '1' ?  'a-chat-content-frame-itemlist-item-received' : 'a-chat-content-frame-itemlist-item-sent')},
+    });
+  }
+
+  render() : DocumentFragment {
+    return this.compile( chatContentItem, this.props);
   }
 }
 
 import Handlebars from 'handlebars';
 
 Handlebars.registerHelper('processItem', function(item, options) {
-  // item - текущий элемент массива
-  // options - содержит контекст и другие параметры
-  
-  return myProcessingFunction(item);
+  return processItem(item);
 });
 
-function myProcessingFunction(item: BlockProps) {
-  // Ваша логика обработки элемента
-  console.log('handlebars', item);
+Handlebars.registerHelper('processContentItem', function(item, options) {
+  return processContentItem(item);
+});
+
+function processItem(item: BlockProps) {
   let it = new ChatBarListItem(item);
   return it.getContent().outerHTML;
 }
- //export default Chat;
 
-// export default `
-//     <section class="a-chat">
-//         <div class="a-chat-frame">
-//             <div class="a-chat-bar">
-//                 <div class="a-chat-bar-title">
-//                     <a class="a-chat-bar-title-link" href=#>Профиль&nbsp;>&nbsp;<a>
-//                 </div>
-//                 <div class="a-chat-bar-search">
-//                     <input type="text" class="a-chat-bar-search-field f-inter fa-search" placeholder="&#xf002;&nbspПоиск"/>
-//                 </div>
-//                 <div class="a-chat-bar-list">
-//                     {{#each chats}}{{>chats_bar_item }}{{/each}}
-//                 </div>
-//             </div>
-//             <div class="a-chat-content">
-//             </div>
-//         </div>
-//     </section>
-// `;
-
-// <div class="a-link>href="./{{this.[0]}}">{{this.[1]}}</div>
+function processContentItem(item: BlockProps) {
+  console.log('handlebars', item);
+  
+  return new ChatContentItem(item).getContent().outerHTML;
+}
