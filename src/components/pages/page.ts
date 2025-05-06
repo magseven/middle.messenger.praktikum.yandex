@@ -30,7 +30,7 @@ class Page extends Block {
     render() : DocumentFragment {
         const page = blockData[getCurrentPage()] || blockData.index;
         //console.log('page', page);
-        return this.compile( page.template, {...this.props, /*nav: data.context.nav*/});
+        return this.compile( page.template, {...this.props});
     }
 }
   

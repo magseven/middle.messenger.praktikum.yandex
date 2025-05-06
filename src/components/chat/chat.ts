@@ -1,6 +1,10 @@
 import { Block, BlockProps } from "../../modules/block";
 import chatTemplate from '../pages/templates/chat.tmpl';
+import {chatBarList, chatBarListItem, chatBarListItemContent, chatBarListItemContentHeader, chatBarListItemContentMessage} from '../pages/templates/chat.tmpl'
+import Div from '../div/div'
+import Button from '../button/Button'
 import {validateField} from '../../modules/utils/validation'
+import {pageData} from '../../modules/utils/form_funcs';
 
 export class Chat extends Block {
     constructor(props: BlockProps) {
@@ -43,13 +47,13 @@ export class Chat extends Block {
   }
 
   render() : DocumentFragment {
-    return this.compile( '{{{ btitle }}} {{{ searchField }}} {{{ blist }}}', this.props);
+    return this.compile( '{{{ btitle }}} {{{ bsearch }}} {{{ blist }}}', this.props);
   }
 }
 
 export class ChatBarTitle extends Block {
   constructor(props: BlockProps) {
-    super('a', { 
+    super('div', { 
       ...props, 
       attrs: {
         class: 'a-chat-bar-title',
@@ -64,7 +68,7 @@ export class ChatBarTitle extends Block {
 
 export class ChatBarSearch extends Block {
   constructor(props: BlockProps) {
-    super('Input', { 
+    super('Div', { 
       ...props, 
       attrs: {
         class: 'a-chat-bar-search',
@@ -80,7 +84,7 @@ export class ChatBarSearch extends Block {
 export class ChatBarList extends Block {
   constructor(props: BlockProps) {
     super("div", { 
-      ...props, 
+      ...props,
       attrs: {
         class: 'a-chat-bar-list',
       },
@@ -88,7 +92,68 @@ export class ChatBarList extends Block {
   }
 
   render() : DocumentFragment {
-    return this.compile( '', this.props);
+    console.log('ChatBarList', this.props);
+    return this.compile( chatBarList, this.props);
+  }
+}
+
+export class ChatBarListItem extends Block {
+  constructor(props: BlockProps) {
+    super("div", { 
+      ...props,
+      attrs: {
+        class: 'a-chat-bar-list-item',
+      },
+    });
+  }
+
+  render() : DocumentFragment {
+    return this.compile( chatBarListItem, this.props);
+  }
+}
+
+export class ChatBarListItemContent extends Block {
+  constructor(props: BlockProps) {
+    super("div", { 
+      ...props,
+      attrs: {
+        class: 'a-chat-bar-list-item-content',
+      },
+    });
+  }
+
+  render() : DocumentFragment {
+    return this.compile( chatBarListItemContent, this.props);
+  }
+}
+
+export class ChatBarListItemContentHeader extends Block {
+  constructor(props: BlockProps) {
+    super("div", { 
+      ...props,
+      attrs: {
+        class: 'a-chat-bar-list-item-content-header',
+      },
+    });
+  }
+
+  render() : DocumentFragment {
+    return this.compile( chatBarListItemContentHeader, this.props);
+  }
+}
+
+export class ChatBarListItemContentMessage extends Block {
+  constructor(props: BlockProps) {
+    super("div", { 
+      ...props,
+      attrs: {
+        class: 'a-chat-bar-list-item-content-message',
+      },
+    });
+  }
+
+  render() : DocumentFragment {
+    return this.compile( chatBarListItemContentMessage, this.props);
   }
 }
 
@@ -107,6 +172,21 @@ export class ChatContent extends Block {
   }
 }
 
+import Handlebars from 'handlebars';
+
+Handlebars.registerHelper('processItem', function(item, options) {
+  // item - текущий элемент массива
+  // options - содержит контекст и другие параметры
+  
+  return myProcessingFunction(item);
+});
+
+function myProcessingFunction(item: BlockProps) {
+  // Ваша логика обработки элемента
+  console.log('handlebars', item);
+  let it = new ChatBarListItem(item);
+  return it.getContent().outerHTML;
+}
  //export default Chat;
 
 // export default `

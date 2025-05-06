@@ -45,25 +45,29 @@
       } 
       &-search {
         margin: 10px 10px 10px 10px;
+        border: none;
         &-field {
             width: 100%;
             padding: 0.5rem;
             border: none;
             border-radius: 6px;
             font-size: 1rem;
-            color: red;
             background-color: #efefef;
             font-family: "Inter", sans-serif, FontAwesome;
             font-size: 13px;
             text-align: center;
-          }
-  
+            outline: none;
+          &:focus {
+              border: 3px solid vars.$theme-grey;
+            }
+        }
       } 
       &-list {
         &-item {
           display: flex;
           border: 10px, solid, red;
           &-content {
+            width: 100%;
             &-header {
               display: flex !important;
               justify-content: space-between;

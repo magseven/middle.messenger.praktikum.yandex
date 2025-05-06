@@ -21,20 +21,24 @@ export type BlockEntry = {
     context: defContentRecord;
 };
 
-type ValueType = string | number | boolean | defContent | Record<string, string> | string[][] |undefined | defChatData | defContent;
+type ValueType = string | number | boolean | defContent | Record<string, string> | string[][] |undefined | defContentRecord[];
 type ExcludeProtoKeys = Exclude<string, 'proto'>;
 
 
 export type defProto = 'Button' | 'Link' | 'Paragraph' | 'Heading' | 'Nav' | 'Header' | 'Form' | 'Nav' | 'Chat' |
-                        'ChatFrame' | 'ChatBar' | 'ChatBarTitle' | 'ChatBarSearch' | 'ChatBarList' | 'ChatContent' | 'Input' | 'Input_F';
+                        'ChatFrame' | 'ChatBar' | 'ChatBarTitle' | 'ChatBarSearch' | 'ChatBarList' | 'ChatBarListItem' |
+                        'ChatBarListItemContent' | 'ChatBarListItemContentHeader' | 'ChatBarListItemContentMessage' |
+                        'ChatContent' | 
+                        'Input' | 'Input_F' | 'Div';
 
-export type defChatData = { [key: string]: string | number }[];
+export type defChatData = { [key: string]: string | number | defContent | defContentRecord}[];
 export interface defContent {
   proto?: defProto;          
-  attrs?: Record<string, string>;                  
+  attrs?: Record<string, string>;         
+  data?: defContentRecord[];         
   [key: ExcludeProtoKeys]: ValueType; 
  }
 
  
-export type defContentRecord = Record<string, defContent|string|string[][]>;
+export type defContentRecord = Record<string, defContent|defContentRecord[]|string|string[][]>;
 

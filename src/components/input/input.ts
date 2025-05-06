@@ -1,11 +1,10 @@
 //import Handlebars from 'handlebars';
 import { Block, BlockProps } from "../../modules/block";
-import inputTemplate from './input.tmpl';
+import inputFTemplate from './input.tmpl';
+import {inputTemplate} from './input.tmpl';
 import {validateField} from '../../modules/utils/validation'
 
-//Handlebars.registerPartial( 'input', inputTemplate);
-
-class Input_F extends Block {
+export class Input_F extends Block {
     constructor(props: BlockProps) {
       super("div", { 
         ...props, 
@@ -25,7 +24,7 @@ class Input_F extends Block {
     }
   
     render() : DocumentFragment {
-      return this.compile( inputTemplate, this.props);
+      return this.compile( inputFTemplate, this.props);
     }
  }
 
@@ -53,4 +52,4 @@ export class Input extends Block {
   }
 }
 
-export default Input_F;
+

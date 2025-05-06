@@ -123,13 +123,41 @@ export const blockData: Record<string, BlockEntry> = {
                                     proto: 'ChatBarTitle',
                                     link: { proto: 'Link', attrs: { class: 'a-chat-bar-title-link', href: '#'}, text: 'Профиль&nbsp;&nbsp;'}
                                 },
-                                searchField: { proto: 'Input_F', 
-                                    attrs: { 
-                                        type: 'text', class: 'a-chat-bar-search-field f-inter fa-search', placeholder: '&nbsp&nbspПоиск'
+                                bsearch: { 
+                                    proto: 'ChatBarSearch', 
+                                    searchField: { proto: 'Input', 
+                                        attrs: { 
+                                            type: 'text', class: 'a-chat-bar-search-field f-inter fa-search', placeholder: 'Поиск'
+                                        },
                                     },
                                 },
-                                blist: { proto: 'ChatBarList'},            
-                        },
+                                blist: { 
+                                     proto: 'ChatBarList',
+                                     data: [{ title: 'chat1', date:  '15.04.25', message: 'message1', unread: '18'},    
+                                            { title: 'chat2', date:  '25.03.25', message: 'message2', unread: '28'}],    
+                                    //  data: [
+                                    //         {item: { proto: 'Heading', text: 'Чат1'}},
+                                    //         {item: { proto: 'Heading', text: 'Чат1'}},
+                                    //  ],
+                                //     item: {
+                                //         proto: 'ChatBarListItem',
+                                //         content: {
+                                //             proto: 'ChatBarListItemContent',
+                                //             header: {
+                                //                 proto: 'ChatBarListItemContentHeader',
+                                //                 caption: { proto: 'Heading', text: 'Чат1'},
+                                //                 date: { proto: 'Paragraph', text: '15.04.25'},
+                                //             },
+                                //             message: {
+                                //                 proto: 'ChatBarListItemContentMessage',
+                                //                 message: { proto: 'Paragraph', text: 'message1'},
+                                //                 unread: { proto: 'Paragraph', text: '18'},
+                                //             }
+                                //         }
+                                //     }
+
+                                },            
+                    },
                     },
                 content: { proto: 'ChatContent'},
     // export default `

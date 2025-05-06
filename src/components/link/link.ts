@@ -12,7 +12,7 @@ class Link extends Block {
     }
   
     render() : DocumentFragment {
-      console.log( 'link', this.props);
+      // console.log( 'link', this.props);
       return this.compile( template, this.props);
     }
  }

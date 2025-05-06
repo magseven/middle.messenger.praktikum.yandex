@@ -2,7 +2,7 @@ import {v4 as makeUUID} from 'uuid';
 
 import Handlebars from 'handlebars';
 import { EventBus } from "./event_bus";
-import { defEventList } from "./types";
+import { defEventList, defContentRecord } from "./types";
 
 /** JSDoc
  * @param {string} tagName
@@ -95,7 +95,7 @@ export class Block {
            propsAndStubs[key] = `<div data-id="${child.id}"></div>`
       });
 
-      console.log('template', props);
+      // console.log('template', props);
       const fragment: HTMLTemplateElement = this._createDocumentElement('template') as HTMLTemplateElement;
       fragment.innerHTML = Handlebars.compile(template)(propsAndStubs);
       Object.values(this.children).forEach(child => {
@@ -104,7 +104,6 @@ export class Block {
             stub!.replaceWith(child.getContent());
           }
       });
-
       return fragment.content;      
     }
 

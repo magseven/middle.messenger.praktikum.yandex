@@ -5,14 +5,13 @@ import template from './heading.tmpl';
 
 class Heading extends Block {
     constructor( props: BlockProps) {
-      console.log('HEADING constructor');
       super( 'h1', {
         ...props, 
       });
     }
   
     render() : DocumentFragment {
-      console.log('HEADING render');
+      console.log('HEADING render', this.props);
       return this.compile( template, this.props);
     }
  }
