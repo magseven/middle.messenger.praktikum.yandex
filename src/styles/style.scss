@@ -1,32 +1,13 @@
-$theme-background: #E4E2DF;;
-$theme-highlight: #6186b1;
-$theme-header-color: #fff;
-$theme-button-color-hover: #357ab8;
-$theme-body-background: #f0f2f5;
-$error-text-color: #666;
-$avatar-background: #f0f0f0;
-
-* {
-  box-sizing: border-box;
-} 
-
-body,
-h1,
-h2,
-h3,
-h4,
-p,
-button {
-  margin: 0;
-  padding: 0;
-  font-weight: normal;
-  font-size: 100%;
-  font-family: 'Courier New', Courier, monospace sans-serif;
-}
+@use './reset';
+@use './fonts';
+@use './errors';
+@use './usefull';
+@use './variables' as vars;
+@use '../components/chat/chats.scss';
 
 body, html {
   height: 100%;
-  background: $theme-body-background;
+  background: vars.$theme-body-background;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,18 +25,22 @@ body, html {
 }
 
 .a-login-container {
-  background-color: $theme-background;
+  background-color: vars.$theme-background;
   padding: 2rem;
   border-radius: 12px;
-/*  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);*/
   width: 558px;
+  h1 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
 }
 
 .a-theme {
   border-radius: 6px;
   &-color {
-    background-color: $theme-highlight;
-    color: $theme-header-color;  
+    background-color: vars.$theme-highlight;
+    color: vars.$theme-header-color;  
   }
   &-icon {
     margin-left: 20px;
@@ -114,7 +99,7 @@ body, html {
   border: none;
   transition: background-color 0.3s ease;
   &:hover {
-    background-color: $theme-button-color-hover;
+    background-color: vars.$theme-button-color-hover;
   }
 
   &-bar {
@@ -135,7 +120,7 @@ body, html {
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
-  background: $avatar_background;
+  background: vars.$avatar_background;
   margin: -80px 20px 20px auto;
   img {
     width: 100%;
@@ -156,6 +141,9 @@ body, html {
   }
   p {
     font-size: 20px;
-    color: $error-text-color;
+    color: vars.$error-text-color;
   }  
 }
+
+
+

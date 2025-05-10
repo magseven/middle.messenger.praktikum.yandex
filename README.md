@@ -10,6 +10,11 @@ Page_404 -  https://www.figma.com/design/JhQqIQ49v0lOdHCK4yA9Jj/Page_404?node-id
 Page_500 -  https://www.figma.com/design/qhDDl6FmvwEfgsvI51i9m1/Page_500?node-id=0-1&p=f&t=NV1RI1HmKWez5tDg-0
 Chats -     https://www.figma.com/design/hkvazc0efpXGmAwfFvoVXg/Chats?node-id=0-1&p=f&t=NV1RI1HmKWez5tDg-0
 
+Используемые технологии:
+  Stylelint - анализатор стилей
+  EsLint - анализатор кода
+  EventBus - реализация архитектурного шаблона
+
 для сборки и запуска проекта выполните: start
 
 deploy: https://effulgent-cascaron-098aa9.netlify.app
