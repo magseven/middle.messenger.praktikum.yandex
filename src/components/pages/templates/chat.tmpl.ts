@@ -4,42 +4,53 @@ export default `
         {{{ frame }}}
 `;
 
-
-export const chatBarList = `{{#each data}}{{{processItem this}}}{{/each}}`;
-
-
 export const chatBarListItem = `
      <div class="a-chat-bar-list-item-avatar">
-        <img src='../../../static/images/blank_circle.png' alt="Аватар" width=36px">
+        {{{ avatar}}}
      </div>
      <div class="a-chat-bar-list-item-content">
          <div class="a-chat-bar-list-item-content-header">
-             <h3 class="a-chat-bar-list-item-content-header-title">{{ title}}</h3>
-             <h3 class="a-chat-bar-list-item-content-header-date">{{ date }}</h3>
+             <h3 class="a-chat-bar-list-item-content-header-title f-inter">{{ title}}</h3>
+             <h3 class="a-chat-bar-list-item-content-header-date f-inter">{{ date }}</h3>
          </div>
          <div class="a-chat-bar-list-item-content-message">
-             <h3 class="a-chat-bar-list-item-content-message-message">{{ message }}</h3>
-             <h3 class="a-chat-bar-list-item-content-message-unread a-chat-bar-list-item-content-message-circle">{{ unread }}</h3>
+             <h3 class="a-chat-bar-list-item-content-message-message f-inter">{{ message }}</h3>
+             <h3 class="a-chat-bar-list-item-content-message-unread a-chat-bar-list-item-content-message-circle f-inter">{{ unread }}</h3>
          </div>
      </div>
  `;
 
  
-export const chatContentFrame = `
-    <div class="a-chat-content-frame">
-        <div class="a-chat-content_header">
-        </div>
-        <div class="a-chat-content_itemlist">
-        </div>
-        <div class="a-chat-content_footer">
-        </div>
+export const chatContent = `{{{ header }}}{{{ content }}}{{{ footer }}}`;
+
+export const chatContentHeader = `
+    <div class="a-chat-content-header-avatar">
+        {{{ avatar }}}
     </div>
-`;
+    <div class="a-chat-content-header-title">
+        <h3 class="a-chat-content-header-title-text f-inter">Вадим{{title}}</h3>
+    </div>
+    <div class="a-chat-content-header-menu">
+    {{{ button }}}
+    </div>
+ `;
 
+export const chatContentFooter = `
+    <div class="a-chat-content-footer-menu">
+        <label>
+        {{{ clip }}}
+         {{{input}}}
+         </label>
+    </div>
+    <div class="a-chat-content-footer-message">
+        {{{ message }}}
+    </div>
+    <div class="a-chat-content-footer-button">
+        {{{ button }}}
+    </div>
+ `;
 
- export const chatContent = `{{#each data}}{{{processContentItem this}}}{{/each}}`;
-
+ export const chatContentItems = `{{#each data}}{{{processContentItem this}}}{{/each}}`;
  export const chatContentItem = `
      {{{ message }}} {{{ image}}}
  `;
-

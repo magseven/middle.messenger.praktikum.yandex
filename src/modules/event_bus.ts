@@ -1,76 +1,36 @@
-//modules/event-bus.js
 export class EventBus {
   static __instance: EventBus;
+  // eslint-disable-next-line
   __object: Map<string, Function[]> = new Map();
 
   constructor() {
-    // const eventBus = new EventBus();
-    // this.eventBus = () => eventBus;      
-      // if (EventBus.__instance) {
-      //   return EventBus.__instance;
-      // }
-  
       this.__object = new Map();
       EventBus.__instance = this;
   }
-
+  // eslint-disable-next-line
   on( event: string, callback: Function): void { 
-    if ( !this.__object.has( event)) 
+    if ( !this.__object.has( event)) {
       this.__object.set( event, [callback]);
-    else
+      }else
       this.__object.set( event, [...this.__object.get(event)!, callback]);
     return;
   }
-
+  
+  // eslint-disable-next-line
   off( event: string, callback: Function): void {
     if ( !this.__object.has( event)) 
       return;
     
     this.__object.set( event, this.__object.get( event)!.filter((cb) => cb != callback));
   }
-
+                                                           
   emit(event: string, ...args: Record<string, unknown>[]) {
-      if ( !this.__object.has( event))
+    if ( !this.__object.has( event))
         return;
 
-      for ( let cb of this.__object.get( event)!)
+    // eslint-disable-next-line
+    for ( let cb of this.__object.get( event)!)
         cb( ...args); 
   }
 }
 
-// export default new EventBus(); 
-/*
-class EventBus {
-  constructor() {
-    this.listeners = {};
-  }
-
-  on(event, callback) {
-    if (!this.listeners[event]) {
-      this.listeners[event] = [];
-    }
-
-    this.listeners[event].push(callback);
-  }
-
-  off(event, callback) {
-		if (!this.listeners[event]) {
-      throw new Error(`��� �������: ${event}`);
-    }
-
-    this.listeners[event] = this.listeners[event].filter(
-      listener => listener !== callback
-    );
-  }
-
-	emit(event, ...args) {
-    if (!this.listeners[event]) {
-      throw new Error(`��� �������: ${event}`);
-    }
-    
-    this.listeners[event].forEach(function(listener) {
-      listener(...args);
-    });
-  }
-}
-*/

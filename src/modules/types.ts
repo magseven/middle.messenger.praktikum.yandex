@@ -2,7 +2,6 @@ export const defEventList = {
     OnClick: 'click',
     OnBlur: 'blur',
     OnSubmit: 'submit',
-    OnFocusout: 'focusout'
 } as const;
 
 export type ContextHeader = Record<string, string>;  
@@ -28,7 +27,7 @@ type ExcludeProtoKeys = Exclude<string, 'proto'>;
 
 export type defProto = 'Button' | 'Link' | 'Paragraph' | 'Heading' | 'Nav' | 'Header' | 'Form' | 'Nav' | 'Chat' |
                         'ChatFrame' | 'ChatBar' | 'ChatBarTitle' | 'ChatBarSearch' | 'ChatBarList' | 'ChatBarListItem' |
-                        'ChatContent' | 'Input' | 'Input_F' | 'Div';
+                        'ChatContent' | 'ChatContentItems' | 'ChatContentHeader' | 'ChatContentHeader' |'Input' | 'Input_F' | 'Div' | 'Img';
 
 export type defChatData = { [key: string]: string | number | defContent | defContentRecord}[];
 export interface defContent {
@@ -41,3 +40,10 @@ export interface defContent {
  
 export type defContentRecord = Record<string, defContent|defContentRecord[]|string|string[][]>;
 
+import {EventBus} from './event_bus';
+
+declare global {
+    interface Window {
+      eventBus: EventBus;
+    }
+}

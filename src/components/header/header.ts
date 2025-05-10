@@ -1,8 +1,6 @@
-//import Handlebars from 'handlebars';
 import { Block, BlockProps } from "../../modules/block";
 import headerTemplate from './header.tmpl';
-
-//Handlebars.registerPartial( 'header', headerTemplate);
+import imgCloud from '../../static/images/cloud.png'
 
 class Header extends Block {
     constructor(props: BlockProps) {
@@ -10,7 +8,7 @@ class Header extends Block {
                     attrs: {
                       class: 'a-theme a-header a-theme-color', 
                     },
-                    icon: '../static/images/cloud.png',
+                    icon: imgCloud,
                     icon_descr: 'облако'});
     }
   

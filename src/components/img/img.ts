@@ -1,14 +1,9 @@
 import { Block, BlockProps } from "../../modules/block";
-import template from './div.tmpl';
+import template from './img.tmpl';
 
-class Div extends Block {
+class Img extends Block {
     constructor(props: BlockProps) {
-      super('div', {
-        ...props, 
-        attrs: {
-          ...props.attrs || {},
-        }
-      });
+      super('img', props);
     }
   
     render() : DocumentFragment {
@@ -16,4 +11,4 @@ class Div extends Block {
     }
  }
 
-export default Div;
+export default Img;

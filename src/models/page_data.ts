@@ -39,9 +39,9 @@ export const blockData: Record<string, BlockEntry> = {
             attrs: {class: 'a-login-container'},
             form: {
                 proto: 'Form',
-                login: { proto: 'Input_F', label: 'Логин', type: "text", placeholder: 'Укажите&nbspлогин'},
-                password: { proto: 'Input_F', type: "text", label: 'Пароль', placeholder: 'Укажите&nbspпароль'}, 
-                button: { proto: 'Button', attrs: { type: "submit"}, text: 'Войти'}, 
+                login: { proto: 'Input_F', label: 'Логин', type: "text", placeholder: 'Укажите логин'},
+                password: { proto: 'Input_F', type: "password", label: 'Пароль', placeholder: 'Укажите пароль'}, 
+                button: { proto: 'Button', attrs: { type: "submit", class: 'a-button'}, text: 'Войти'}, 
             },
         },
     }, 
@@ -63,9 +63,9 @@ export const blockData: Record<string, BlockEntry> = {
                 login: { proto: 'Input_F', type: "text", name: 'login', placeholder: 'Логин'}, 
                 email: { proto: 'Input_F', type: "text", name: 'email', placeholder: 'email'}, 
                 phone: { proto: 'Input_F', type: "text", name: 'phone', placeholder: 'Телефон'}, 
-                oldPassword: { proto: 'Input_F', type: "text", name: 'oldPassword', placeholder: 'Старый&nbspпароль'}, 
-                newPassword: { proto: 'Input_F', type: "text", name: 'newPassword', placeholder: 'Новый&nbspпароль'}, 
-                button: { proto: 'Button', attrs: {type: "submit"}, text: 'Сохранить'},
+                oldPassword: { proto: 'Input_F', type: "password", name: 'oldPassword', placeholder: 'Старый пароль'}, 
+                newPassword: { proto: 'Input_F', type: "password", name: 'newPassword', placeholder: 'Новый пароль'}, 
+                button: { proto: 'Button', attrs: {type: "submit", class: 'a-button'}, text: 'Сохранить'},
             },
         },
     }, 
@@ -84,10 +84,10 @@ export const blockData: Record<string, BlockEntry> = {
                 second_name: { proto: 'Input_F', type: "text", name: 'second_name', placeholder: 'Фамилия'}, 
                 login: { proto: 'Input_F', type: "text", name: 'login', placeholder: 'Логин'}, 
                 email: { proto: 'Input_F', type: "text", name: 'email', placeholder: 'email'}, 
-                password: { proto: 'Input_F', type: "text", name: 'password', placeholder: 'Пароль'}, 
+                password: { proto: 'Input_F', type: "password", name: 'password', placeholder: 'Пароль'}, 
                 phone: { proto: 'Input_F', type: "text", name: 'phone', placeholder: 'Телефон'}, 
-                button: { proto: 'Button', attrs: { type: "submit"},text: 'Зарегистрировать'}, 
-                button1: { proto: 'Button', /*attrs: { type: "button", name: 'button2'},*/ text: 'Войти'}, 
+                button: { proto: 'Button', attrs: { type: "submit", class: 'a-button'},text: 'Зарегистрировать'}, 
+                button1: { proto: 'Button', attrs: { class: 'a-button'}, text: 'Войти'}, 
             },
         },
     }, 
@@ -117,19 +117,23 @@ export const blockData: Record<string, BlockEntry> = {
                 proto: 'Chat',
                 frame: { 
                     proto: 'ChatFrame', 
-//                    contentFrame: { 
-//                        proto: 'ChatContentFrame',
-
-
-                            content: { 
-                                proto: 'ChatContent',
-                                data: [
-                                    { dir: '0', message: 'У меня есть предложение'},    
-                                    { dir: '1', message: 'Огромное количество'},    
-                                    { dir: '0', message: 'Оптовая продажа пылесосов и микроволновых печей'}
-                                ],    
-                            },
-//                    },
+                    content: { 
+                        proto: 'ChatContent',
+                        header: { 
+                            proto: 'ChatContentHeader',
+                        },
+                        content: { 
+                            proto: 'ChatContentItems',
+                            data: [
+                                { dir: '0', message: 'У меня есть предложение'},    
+                                { dir: '1', message: 'Огромное количество'},    
+                                { dir: '0', message: 'Оптовая продажа пылесосов и микроволновых печей'}
+                            ],    
+                        },
+                        footer: { 
+                            proto: 'ChatContentFooter',
+                        },
+                    },
 
 
                     bar: { 

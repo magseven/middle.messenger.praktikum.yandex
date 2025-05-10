@@ -19,8 +19,6 @@
       display: flex;
       height: 100vh;
       width: 100vw;
-    //   justify-content: center;
-    //   align-items: center;    
     }
     
     &-bar{
@@ -33,7 +31,6 @@
       vertical-align: center;
       &-title{
         text-align: right;
-        font-family: "Inter", sans-serif;
         font-size: 11px;
         margin-top: 10px;
         margin-right: 10px;
@@ -53,7 +50,6 @@
             border-radius: 6px;
             font-size: 1rem;
             background-color: #efefef;
-            font-family: "Inter", sans-serif, FontAwesome;
             font-size: 13px;
             text-align: center;
             outline: none;
@@ -65,8 +61,8 @@
       &-list {
         &-item {
           display: flex;
-          // border: 2px, solid, red;
           margin-bottom: 2px;
+          cursor: pointer;
           &-avatar {
             width: 25%;
             display: grid;
@@ -77,7 +73,6 @@
           }
           &-content {
             width: 75%;
-            // height: 60px;
             padding-top: 2px;
             padding-bottom: 5px;
             margin-right: 5px;
@@ -100,15 +95,11 @@
             }
             &-message {
               display: flex;
-              align-items: center;
-              position: relative;
               min-height: 40px;
               color: vars.$theme-grey;
-              // display: flex;
-              // justify-content: space-between;
-              // color: vars.$theme-grey;
               height: 40px;
               &-message {
+                flex: 1;
                 display: -webkit-box;
                 -webkit-line-clamp: 3;
                 line-clamp: 3;
@@ -123,60 +114,114 @@
                 font-family: 'Times New Roman', Times, serif;
               }
               &-circle {
+                flex: 0 0 20px;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                aspect-ratio: 1/1;          /* Главное: соотношение сторон 1:1 */
-                width: 16px;                /* Фиксированная ширина (можно использовать em/rem) */
+                aspect-ratio: 1/1;      
+                width: 16px;               
 
-                /* Визуальный стиль */
                 border-radius: 50%;
                 background: #1e90ff;
                 color: white;
 
-                /* Текст */
-                font-size: 0.6rem;          /* Относительный размер шрифта */
+                font-size: 0.6rem;         
                 font-weight: bold;
-                line-height: 1;             /* Убираем лишнее пространство */
-                padding: 1px;               /* Минимальный отступ */
+                line-height: 1;            
+                padding: 1px;              
 
-                /* Защита от деформации */
-                box-sizing: content-box;    /* padding не влияет на размер */
+                box-sizing: content-box;    
                 flex-shrink: 0;              
               }     
-              .perfect-circle.small {
-                width: 16px;
-                font-size: 0.6rem;
-              }
-              
-              /* Средний (24px) */
-              .perfect-circle.medium {
-                width: 24px;
-                font-size: 0.8rem;
-              }
-              
-              /* Большой (32px) */
-              .perfect-circle.large {
-                width: 32px;
-                font-size: 1rem;
-              }                       
+
               &-unread {
                 align-self: flex-end;
                 font-size: 10px;
               }
             }
           }
-        }
-      }  
+          &-selected {
+            background-color: vars.$theme-superhighlight;
+          }
+          }
+    }  
     }
-    &-content-frame {
+
+
+    
+    &-content {
       display: flex;
       flex-direction: column;
+      width: 100%;
+      background: white;   
+      padding: 10px;
       &-header {
-        background: red;    
+        display:flex;
+        border-bottom: 2px solid vars.$theme-lightgrey;
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        &-avatar {
+          flex: 0 0 50px;
+          display: flex;
+          align-items: center;
+          margin: 5px;
+          &-image {
+          }
+        } 
+        &-title {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          width: 90%;
+          &-text {
+            margin-right: auto;
+            margin-left: 10px;
+            font-weight: bold;
+            color: grey;
+          }
+        } 
+        &-menu {
+          flex: 0 0 30px;
+          display: flex;
+          align-items: center;
+          &-button {
+            margin-right: auto;
+            margin-left: auto;
+            font-weight: bold;
+            cursor: pointer;
+          }
+          .a-chat-content-header-dropdown {
+            position: absolute;
+            left:auto;
+            margin: 0;
+            right: 0;
+            background-color: #fff;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+            border-color: vars.$theme-superhighlight;
+            border-radius: 4px;
+          }
+          .dropdown-item {
+            width: 100%;
+            text-align: left;
+            padding: 8px 12px;
+            border: none;
+            background: none;
+            cursor: pointer;
+          }
+          .dropdown-item:hover {
+            background-color: vars.$theme-superhighlight;
+          }
+          
+          .show {
+            display: block;
+          }         
+        } 
       }
-      &-itemlist {
-        width: 75%;
+      &-items {
+        flex: 1;
         background: white;    
         display: flex;
         align-items: center;
@@ -185,7 +230,10 @@
         &-item {
           &-received {
             margin-right: auto;
-            color: red;
+            margin-top: 5px;
+            margin-bottom: 10px; 
+            color: black;
+            background-color: vars.$theme-lightgrey;
           }
     
           &-sent {
@@ -203,7 +251,40 @@
         } 
       }
       &-footer {
-        background: red;    
+        display:flex;
+        &-menu {
+          flex: 0 0 30px;
+          display: flex;
+          align-items: center;
+          margin: 5px;
+          &-text {
+            margin-right: auto;
+            margin-left: 10px;
+          }
+        } 
+        &-message {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          &-text {
+            width: 100%;
+            height: 35px;
+            margin-left: 10px;
+            margin-right: 10px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            background-color: vars.$theme-lightgrey;
+            font-size: 18px;
+            padding-left: 10px;
+          }
+        } 
+        &-button {
+          flex: 0 0 35px;
+          display: flex;
+          align-items: center;
+          width: 3%;
+        } 
       }
     }
   } 

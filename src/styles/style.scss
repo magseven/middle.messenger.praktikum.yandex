@@ -1,27 +1,9 @@
 @use './reset';
 @use './fonts';
 @use './errors';
+@use './usefull';
 @use './variables' as vars;
-@use '../modules/chats/chats' as *;
-
-
-// * {
-//   box-sizing: border-box;
-// } 
-
-// body,
-// h1,
-// h2,
-// h3,
-// h4,
-// p,
-// button {
-//   margin: 0;
-//   padding: 0;
-//   font-weight: normal;
-//   font-size: 100%;
-//   font-family: 'Courier New', Courier, monospace sans-serif;
-// }
+@use '../components/chat/chats.scss';
 
 body, html {
   height: 100%;
@@ -164,53 +146,4 @@ body, html {
 }
 
 
-// .a-chat {
-//   &-frame{
-//     display: flex;
-//     height: 100vh;
-//     width: 100vw;
-//   //   justify-content: center;
-//   //   align-items: center;
-//   }
-
-//   &-bar{
-//     display: flex;
-//     flex-direction: column;
-//     width: 25%;
-//     height: 100%;
-//     background: white;
-//     border-right: 2px solid grey;
-//     &-title{
-//       text-align: right;
-//       &-link {
-//         vertical-align: center;
-//       }
-//     } 
-//     &-search {
-//       &-field {
-//           width: 100%;
-//           padding: 0.5rem;
-//           border: 1px solid #ccc;
-//           border-radius: 6px;
-//           font-size: 1rem;
-//       }
-
-//     } 
-//     &-list {
-//       &-item {
-//         display: flex;
-//         &-content {
-//           &-header {
-//             display: flex;
-//             justify-content: space-between;
-//           }
-//         }
-//       }
-//     }  
-//   }
-//   &-content{
-//     width: 75%;
-//     background: white;    
-//   }
-// }
 

@@ -1,4 +1,3 @@
-//import Handlebars from 'handlebars';
 import { Block, BlockProps } from "../../modules/block";
 import formTemplate from './form.tmpl';
 import {validateForm} from '../../modules/utils/validation';
@@ -11,7 +10,6 @@ class Form extends Block {
                       },
                       events: {
                         OnSubmit: (e: Event) => {
-                          console.log('submit');
                           e.preventDefault();
                           e.stopPropagation();
                           if (e instanceof SubmitEvent) {

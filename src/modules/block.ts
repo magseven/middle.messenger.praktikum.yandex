@@ -15,8 +15,10 @@ export type BlockProps = {
   [key: string]: unknown;  
   attr?: Record<string, string>;
   events?: Record<string, (e: Event) => void>;
-  //{[key: string]: (e: Event) => void};
-};
+  data?: Record<string, string|number|unknown>[];
+  menu?: string[]; 
+}
+  
 
 export type Children = {
   [key: string]: Block;
@@ -32,6 +34,7 @@ export class Block {
       FLOW_CDM: "flow:component-did-mount",
       FLOW_CDU: "flow:component-did-update",
       FLOW_RENDER: "flow:render"
+      
   };  
   
   id: string = '';
@@ -47,10 +50,10 @@ export class Block {
       this.id = makeUUID();
 
       const { children, props, events} = this._getChildren(propsAndChildren);
-      this.tagName = tagName,  
+      this.tagName = tagName;
       this.props = this._makePropsProxy<BlockProps>(props);
       this.children = this._makePropsProxy<Children>(children);
-      this.events = this._makePropsProxy<Events>(events);
+      this.events = events;
       this.eventBus = new EventBus();
   
       this._registerEvents( this.eventBus);
@@ -68,7 +71,7 @@ export class Block {
           
        }else if (key === 'events' && typeof value === 'object') {
         Object.entries( value as object).forEach(([ekey, evalue]) => {
-          if ( defEventList.hasOwnProperty( ekey) && typeof evalue === 'function') {
+            if (Object.hasOwn(defEventList, ekey) && typeof evalue === 'function') {
             events[ekey] = evalue as (event: Event) => void;
           }
         })
@@ -95,7 +98,6 @@ export class Block {
            propsAndStubs[key] = `<div data-id="${child.id}"></div>`
       });
 
-      // console.log('template', props);
       const fragment: HTMLTemplateElement = this._createDocumentElement('template') as HTMLTemplateElement;
       fragment.innerHTML = Handlebars.compile(template)(propsAndStubs);
       Object.values(this.children).forEach(child => {
@@ -131,7 +133,7 @@ export class Block {
       });
     }
   
-    componentDidMount( oldProps: Record<string, unknown> = {}) : void {}
+    componentDidMount() : void {}
     
     dispatchComponentDidMount() {
           this.eventBus.emit(Block.EVENTS.FLOW_CDM);
@@ -145,9 +147,13 @@ export class Block {
         }
         this._render();
     }
-  
-    componentDidUpdate( oldProps: Record<string, unknown>,
-                        newProps: Record<string, unknown>): boolean {
+    
+    componentDidUpdate( 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _oldProps: Record<string, unknown>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _newProps: Record<string, unknown>
+      ): boolean {
       return true;
     }
   
@@ -176,11 +182,10 @@ export class Block {
     render() : DocumentFragment /*| string*/ { return new DocumentFragment()}
   
     protected _removeEvents(): void {
-      const { events = {} } = this.props;
-      if (!events) return;
-      
-      Object.entries( events).forEach(([eventName, handler]) => {
-        this._element?.removeEventListener(eventName, handler as EventListener);
+      if (!this.events) return;
+
+      Object.entries( this.events).forEach(([eventName, handler]) => {
+        this._element.removeEventListener(defEventList[eventName as keyof typeof defEventList], handler as EventListener);
       });
     }
 
@@ -197,19 +202,20 @@ export class Block {
     }
 
     private _makePropsProxy<T extends BlockProps | Children | Events>(obj: T): T {
-        const self = this;
+      // eslint-disable-next-line
+        const _self = this;
       
         const handler: ProxyHandler<T> = {
           get(target, prop: string) {
             const value = target[prop];
             return typeof value === "function" ? value.bind(target) : value;
           },
-          set(target, prop: string, value: any) {
+          set(target, prop: string, value: unknown) {
             const oldValue = { ...target };
             target[prop] = value;
             
-            if ('eventBus' in self) {
-              self.eventBus.emit(Block.EVENTS.FLOW_CDU, oldValue, target);
+            if ('eventBus' in _self) {
+              _self.eventBus.emit(Block.EVENTS.FLOW_CDU, oldValue, target);
             }
             return true;
           },

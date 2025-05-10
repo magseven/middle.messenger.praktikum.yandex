@@ -1,0 +1,9 @@
+{
+  "rules": {
+    "color-hex-length": "short"
+  },
+  "ignoreFiles": [
+    "build/*, **/*.min.js, /node_modules"
+  ]
+}
+

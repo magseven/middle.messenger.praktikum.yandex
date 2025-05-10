@@ -8,4 +8,6 @@ export default defineConfig([
   { files: ["**/*.{js,mjs,cjs,ts}"], plugins: { js }, extends: ["js/recommended"] },
   { files: ["**/*.{js,mjs,cjs,ts}"], languageOptions: { globals: globals.browser } },
   tseslint.configs.recommended,
+  {ignores: ["/build",  "**/*.min.js", "/node_modules", "dist/*"]},  
 ]);
+
