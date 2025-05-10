@@ -53,6 +53,3 @@ export class ButtonMenu extends Block {
     return this.compile( menuButton( this.props.menu!.reduce(( acc, item)=>`${acc}{{{${item}}}}`,'') ), {...this.props, ...this.children});
   }
 }
-
-
-  
