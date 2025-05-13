@@ -4,29 +4,31 @@ import {pageData} from '../../modules/utils/form_funcs';
 import { Block, BlockProps } from "../../modules/block";
 
 import { blockData } from '../../models/page_data'
-import { BlockEntry, defContentRecord } from '../../modules/types'
+import {EventBus} from '../../modules/event_bus'
 
-//, pageData( be.context) as BlockProps}
 export class Page extends Block {
-    _template: string = '';
-    _context: defContentRecord = {};
-
-    constructor( be: BlockEntry) {
-        this._template = be.template;
-        this._context = be.context;
-        super("section", {});         
-        console.log('page1.render', blockData.index);
+    constructor(props: BlockProps) {
+        super("section", {...props,
+                        }); 
     }
 
     render() : DocumentFragment {
-        console.log('page.render', this._context);
-        return this.compile( this._template, pageData(this._context) as BlockProps);
+        const page = blockData[getCurrentPage()] || blockData.index;
+        return this.compile( page.template, {...this.props});
     }
 }
 
-export class Index extends Page {
-    constructor() {
-        super( blockData.index); 
+export class Index extends Block {
+    constructor(props: BlockProps) {
+        super("section", {...props,}); 
+        console.log('page Index constructor');
+    }
+
+    render() : DocumentFragment {
+        console.log('RENDER');
+        const page = blockData.index;
+        console.log('page Index', page);
+        return this.compile( page.template, {...this.props});
     }
 }
 
@@ -95,21 +97,3 @@ export class Page_500 extends Block {
         return this.compile( page.template, {...this.props});
     }
 }
-
-/*
-
-function render(query: string, block: Page) {
-      const root = document.querySelector(query);
-      root!.replaceWith(block.getContent());
-      return root;
-}
-
-if (!window.eventBus) {
-    window.eventBus = new EventBus();
-}
-
-const data = blockData[getCurrentPage()] || blockData.index;
-const page = new Page( pageData( data.context) as BlockProps);   
-
-render(".app", page);
-*/

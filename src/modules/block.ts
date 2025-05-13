@@ -170,6 +170,7 @@ export class Block {
     }
   
     _render() {
+      console.log('block render');
       const block = this.render();
       this._removeEvents();
       this._element.innerHTML = '';
