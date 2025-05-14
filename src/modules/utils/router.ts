@@ -76,11 +76,10 @@ export default Router;
 history.pushState({}, '', '/');
 
 const router = new Router(".app");
-
 // Можно обновиться на /user и получить сразу пользователя
 router
   .use("/", Index)
-//   .use("/login", Login)
+  .use("/login", Login)
 //   .use("/login", Profile)
   .start();
 

@@ -6,7 +6,6 @@ export class Route {
     private _blockClass: new (props: BlockProps) => Block;
     private _block: Block | null;
     private _props: BlockProps = {};
-    private _params: Record<string, string> = {};
 
     constructor(pathname: string, blockClass: new (props: BlockProps) => Block, props: Record<string, string>) {
         this._pathname = pathname;
@@ -43,8 +42,9 @@ export class Route {
     render() {
 
         if (!this._block) {
-        this._block = new this._blockClass( this._props);
-        render(this._params.rootQuery, this._block);
+            this._block = new this._blockClass( this._props);
+            console.log(this._props.rootQuery);
+            render(this._props.rootQuery as string, this._block);
             return;
         }
 

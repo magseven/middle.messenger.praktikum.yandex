@@ -1,26 +1,19 @@
-import {getCurrentPage} from '../../modules/utils/common'
 import {pageData} from '../../modules/utils/form_funcs';
-
 import { Block, BlockProps } from "../../modules/block";
-
 import { blockData } from '../../models/page_data'
 import { BlockEntry, defContentRecord } from '../../modules/types'
 
-//, pageData( be.context) as BlockProps}
 export class Page extends Block {
     _template: string = '';
     _context: defContentRecord = {};
 
     constructor( be: BlockEntry) {
-        this._template = be.template;
-        this._context = be.context;
         super("section", {});         
-        console.log('page1.render', blockData.index);
     }
 
     render() : DocumentFragment {
-        console.log('page.render', this._context);
-        return this.compile( this._template, pageData(this._context) as BlockProps);
+        console.log('page.render', blockData.index.context);
+        return this.compile( blockData.index.template, pageData(blockData.index.context) as BlockProps);
     }
 }
 
@@ -37,7 +30,7 @@ export class Login extends Block {
 
     render() : DocumentFragment {
         const page = blockData.login;
-        return this.compile( page.template, {...this.props});
+        return this.compile( blockData.login.template, pageData(blockData.login.context) as BlockProps);
     }
 }
 
