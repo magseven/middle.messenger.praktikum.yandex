@@ -93,7 +93,6 @@ export class Block {
 
     compile( template: string, props: BlockProps) : DocumentFragment {
       const propsAndStubs = { ...props };
-
       Object.entries(this.children).forEach(([key, child]) => {
            propsAndStubs[key] = `<div data-id="${child.id}"></div>`
       });
@@ -106,6 +105,7 @@ export class Block {
             stub!.replaceWith(child.getContent());
           }
       });
+      console.log(fragment.innerHTML);      
       return fragment.content;      
     }
 

@@ -7,12 +7,12 @@ export class Page extends Block {
     _template: string = '';
     _context: defContentRecord = {};
 
-    constructor( be: BlockEntry) {
-        super("section", {});         
+    constructor(props: BlockProps) {
+        super("section", props);         
     }
 
     render() : DocumentFragment {
-        console.log('page.render', blockData.index.context);
+        console.log('page.render1', blockData.index.context);
         return this.compile( blockData.index.template, pageData(blockData.index.context) as BlockProps);
     }
 }
@@ -29,7 +29,6 @@ export class Login extends Block {
     }
 
     render() : DocumentFragment {
-        const page = blockData.login;
         return this.compile( blockData.login.template, pageData(blockData.login.context) as BlockProps);
     }
 }

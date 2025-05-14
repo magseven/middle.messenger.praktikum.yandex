@@ -12,10 +12,9 @@ export function isEqual(lhs: string, rhs: string) {
 export function render(query: string, block: Block) : HTMLElement | null {
     const root: HTMLElement | null = document.querySelector(query);
   
-    console.log('render', query, block);
-    if ( root) {
+    console.log('render', root, query, block);
+    if ( root)
         root.replaceWith( block.getContent());
-    }
 
     return root;
 }
