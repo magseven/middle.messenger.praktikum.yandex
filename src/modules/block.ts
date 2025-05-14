@@ -105,7 +105,7 @@ export class Block {
             stub!.replaceWith(child.getContent());
           }
       });
-      console.log(fragment.innerHTML);      
+      //console.log(fragment.innerHTML);      
       return fragment.content;      
     }
 
@@ -170,7 +170,7 @@ export class Block {
     }
   
     _render() {
-      console.log('block render');
+      //'block render');
       const block = this.render();
       this._removeEvents();
       this._element.innerHTML = '';

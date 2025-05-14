@@ -55,7 +55,7 @@ export const pageData = ( item: defContentRecord): BlockProps | string | Block |
             return new classRegistry[item.proto]( pageData( Object.entries( item).reduce(( acc, it) => ({...acc,...it[0] != 'proto' && {[it[0]]: it[1]}}), {})) as BlockProps);
       
       Object.entries( item).forEach(([key, value]) => {
-            if ( typeof value === 'object' && !Array.isArray( value) && key != 'attrs') {
+            if ( typeof value === 'object' && !Array.isArray( value) && key != 'attrs' && key != 'events') {
                   value.name = key;
             }
             result[key] = pageData( value as defContentRecord);

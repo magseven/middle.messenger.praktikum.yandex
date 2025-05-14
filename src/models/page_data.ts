@@ -87,7 +87,15 @@ export const blockData: Record<string, BlockEntry> = {
                 password: { proto: 'Input_F', type: "password", name: 'password', placeholder: 'Пароль'}, 
                 phone: { proto: 'Input_F', type: "text", name: 'phone', placeholder: 'Телефон'}, 
                 button: { proto: 'Button', attrs: { type: "submit", class: 'a-button'},text: 'Зарегистрировать'}, 
-                button1: { proto: 'Button', attrs: { class: 'a-button'}, text: 'Войти'}, 
+                button1: { 
+                    proto: 'Button', 
+                    attrs: { class: 'a-button'},  
+                    events: {
+                        OnClick: () => {
+                            console.log('Создать пользователя');
+                        }
+                    },
+                    text: 'Войти'}, 
             },
         },
     }, 

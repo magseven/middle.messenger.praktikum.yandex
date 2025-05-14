@@ -21,7 +21,7 @@ export type BlockEntry = {
     context: defContentRecord;
 };
 
-type ValueType = string | number | boolean | defContent | Record<string, string> | string[][] |undefined | defContentRecord[];
+type ValueType = string | number | boolean | defContent | Record<string, string> | string[][] |undefined | defContentRecord[] | Events;
 type ExcludeProtoKeys = Exclude<string, 'proto'>;
 
 
@@ -29,10 +29,15 @@ export type defProto = 'Button' | 'Link' | 'Paragraph' | 'Heading' | 'Nav' | 'He
                         'ChatFrame' | 'ChatBar' | 'ChatBarTitle' | 'ChatBarSearch' | 'ChatBarList' | 'ChatBarListItem' |
                         'ChatContent' | 'ChatContentItems' | 'ChatContentHeader' | 'ChatContentHeader' |'Input' | 'Input_F' | 'Div' | 'Img';
 
+type Events = {
+   [eventName: string]: (e: Event) => void;
+};
+
 export type defChatData = { [key: string]: string | number | defContent | defContentRecord}[];
 export interface defContent {
   proto?: defProto;          
-  attrs?: Record<string, string>;         
+  attrs?: Record<string, string>;   
+  events?: Events;       
   data?: defContentRecord[];  
   [key: ExcludeProtoKeys]: ValueType; 
  }

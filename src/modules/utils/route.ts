@@ -1,16 +1,22 @@
 import { isEqual, render } from './common';
 import {Block, BlockProps} from '../block'
+import {BlockEntry, defContentRecord} from '../types'
+import {pageData} from './form_funcs'
 
 export class Route {
     private _pathname: string = '';
     private _blockClass: new (props: BlockProps) => Block;
     private _block: Block | null;
-    private _props: BlockProps = {};
+    private _blockcontext: defContentRecord = {};
+    private _blocktemplate: string;
+    private _props: Record<string, string> = {};
 
-    constructor(pathname: string, blockClass: new (props: BlockProps) => Block, props: Record<string, string>) {
+    constructor(pathname: string, blockClass: new (props: BlockProps) => Block, blockentry: BlockEntry, props: Record<string, string>) {
         this._pathname = pathname;
         this._blockClass = blockClass;
         this._block = null;
+        this._blockcontext = blockentry.context;
+        this._blocktemplate = blockentry.template;
         this._props = props;
     }
 
@@ -42,8 +48,7 @@ export class Route {
     render() {
 
         if (!this._block) {
-            this._block = new this._blockClass( this._props);
-            console.log(this._props.rootQuery);
+            this._block = new this._blockClass( pageData( {...this._blockcontext, 'template': this._blocktemplate}) as BlockProps);
             render(this._props.rootQuery as string, this._block);
             return;
         }

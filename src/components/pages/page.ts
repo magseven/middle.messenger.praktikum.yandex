@@ -1,93 +1,14 @@
-import {pageData} from '../../modules/utils/form_funcs';
 import { Block, BlockProps } from "../../modules/block";
-import { blockData } from '../../models/page_data'
-import { BlockEntry, defContentRecord } from '../../modules/types'
 
 export class Page extends Block {
-    _template: string = '';
-    _context: defContentRecord = {};
-
     constructor(props: BlockProps) {
         super("section", props);         
     }
 
     render() : DocumentFragment {
-        console.log('page.render1', blockData.index.context);
-        return this.compile( blockData.index.template, pageData(blockData.index.context) as BlockProps);
+        return this.compile( this.props.template as string, this.props);
     }
 }
-
-export class Index extends Page {
-    constructor() {
-        super( blockData.index); 
-    }
-}
-
-export class Login extends Block {
-    constructor(props: BlockProps) {
-        super("section", {...props,}); 
-    }
-
-    render() : DocumentFragment {
-        return this.compile( blockData.login.template, pageData(blockData.login.context) as BlockProps);
-    }
-}
-
-export class Profile extends Block {
-    constructor(props: BlockProps) {
-        super("section", {...props,}); 
-    }
-
-    render() : DocumentFragment {
-        const page = blockData.profile;
-        return this.compile( page.template, {...this.props});
-    }
-}
-
-export class Chats extends Block {
-    constructor(props: BlockProps) {
-        super("section", {...props,}); 
-    }
-
-    render() : DocumentFragment {
-        const page = blockData.chat;
-        return this.compile( page.template, {...this.props});
-    }
-}
-
-export class Signin extends Block {
-    constructor(props: BlockProps) {
-        super("section", {...props,}); 
-    }
-
-    render() : DocumentFragment {
-        const page = blockData.signin;
-        return this.compile( page.template, {...this.props});
-    }
-}
-
-export class Page_404 extends Block {
-    constructor(props: BlockProps) {
-        super("section", {...props,}); 
-    }
-
-    render() : DocumentFragment {
-        const page = blockData.page_404;
-        return this.compile( page.template, {...this.props});
-    }
-}
-
-export class Page_500 extends Block {
-    constructor(props: BlockProps) {
-        super("section", {...props,}); 
-    }
-
-    render() : DocumentFragment {
-        const page = blockData.page_500;
-        return this.compile( page.template, {...this.props});
-    }
-}
-
 /*
 
 function render(query: string, block: Page) {

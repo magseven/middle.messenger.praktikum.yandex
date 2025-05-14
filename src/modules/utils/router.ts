@@ -1,8 +1,11 @@
 import {Chat} from '../../components/chat/chat'
-import {Index, Login, Profile, Signin, Page_404, Page_500} from '../../components/pages/page'
+import {Page, Login, Profile, Signin, Page_404, Page_500} from '../../components/pages/page'
+import { blockData } from '../../models/page_data';
 
 import {Block, BlockProps} from '../block'
 import {Route} from './route'
+import {BlockEntry} from '../types'
+import {pageData} from '../utils/form_funcs'
 
 class Router {
     private static __instance: Router;
@@ -20,8 +23,8 @@ class Router {
         Router.__instance = this;
     }
 
-    use(pathname: string, block: new (props: BlockProps) => Block/*, params: Record<string, string>*/ ) {
-        const route = new Route(pathname, block, {rootQuery: this._rootQuery,});
+    use(pathname: string, block: new (props: BlockProps) => Block, blockprops: BlockEntry ) {
+        const route = new Route(pathname, block,  blockprops, {rootQuery: this._rootQuery});
 
         this.routes.push(route);
 
@@ -30,6 +33,7 @@ class Router {
 
     start() {
         window.onpopstate = ((event: PopStateEvent) => {
+            console.log('onpopstate');
             if (event /*&& event.state*/) {
                 this._onRoute(window.location.pathname);
             }        
@@ -39,6 +43,7 @@ class Router {
     }
 
     _onRoute(pathname: string) {
+        console.log('pathname', pathname);
         const route = this.getRoute(pathname);
         if (!route) {
             return;
@@ -48,8 +53,9 @@ class Router {
             this._currentRoute.leave();
         }
 
+        console.log(route);
         this._currentRoute = route;
-        route.render(/*route, pathname*/);
+        route.render();
     }
 
     go(pathname: string) {
@@ -73,22 +79,23 @@ class Router {
 export default Router;
 
 // Необходимо оставить в силу особенностей тренажёра
-history.pushState({}, '', '/');
+//history.pushState({}, '', '/');
 
 const router = new Router(".app");
 // Можно обновиться на /user и получить сразу пользователя
 router
-  .use("/", Index)
-  .use("/login", Login)
-//   .use("/login", Profile)
-  .start();
+  .use("/", Page, blockData.index)
+  .use("/login", Page, blockData.login)
+  .use("/profile", Page, blockData.profile)
+  .use("/signin", Page, blockData.signin)
+  .start()
 
-// // Через секунду контент изменится сам, достаточно дёрнуть переход
+// Через секунду контент изменится сам, достаточно дёрнуть переход
 // setTimeout(() => {
 //   router.go("/login");
 // }, 1000);
 
-// // А можно и назад
+// А можно и назад
 // setTimeout(() => {
 //   router.back();
 // }, 3000);
