@@ -1,9 +1,9 @@
 import { isEqual, render } from './common';
 import {Block, BlockProps} from '../block'
 import {BlockEntry, defContentRecord} from '../types'
-import {pageData} from './form_funcs'
+import pageData from './form_funcs'
 
-export class Route {
+export default class Route {
     private _pathname: string = '';
     private _blockClass: new (props: BlockProps) => Block;
     private _block: Block | null;

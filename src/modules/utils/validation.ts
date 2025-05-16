@@ -1,6 +1,8 @@
 import { validationList } from "../../models/validation_data";
 
 export const validateField = (input: HTMLInputElement): boolean => {
+return true;    
+
   const rule : RegExp = validationList[input.name];
     if ( !rule)
         return true;
@@ -28,6 +30,7 @@ export const validateField = (input: HTMLInputElement): boolean => {
   };
   
   export const validateForm = ( form: HTMLFormElement): boolean => {
+return true;    
     let isValid : boolean = true;
     const fields = form.querySelectorAll<HTMLInputElement>('input');
     

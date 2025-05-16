@@ -19,6 +19,7 @@ export type BlockEntry = {
     template: string; 
     validate?: boolean;
     context: defContentRecord;
+    name?: string; 
 };
 
 type ValueType = string | number | boolean | defContent | Record<string, string> | string[][] |undefined | defContentRecord[] | Events;

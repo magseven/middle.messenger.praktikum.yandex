@@ -1,13 +1,24 @@
-import {Chat} from '../../components/chat/chat'
-import {Page, Login, Profile, Signin, Page_404, Page_500} from '../../components/pages/page'
+//import {Chat} from '../../components/chat/chat'
+import Page from '../../components/pages/page'
 import { blockData } from '../../models/page_data';
-
 import {Block, BlockProps} from '../block'
-import {Route} from './route'
+import Route from './route'
 import {BlockEntry} from '../types'
-import {pageData} from '../utils/form_funcs'
+//import pageData from '../utils/form_funcs'
 
-class Router {
+export enum stdRoutes {
+    Index = '/',
+    Login = '/login',
+    Profile = '/profile',
+    SignUp = '/signup',
+    Chat = '/messenger',
+    Error404 = '/404',
+    Error500 = '/500',
+    // EditProfile = '/settings/edit',
+    // PasswordProfile = '/settings/password'
+}
+
+export class Router {
     private static __instance: Router;
     routes: Route[] = [];
     private _currentRoute: Route | null = null;
@@ -76,18 +87,14 @@ class Router {
     }
 }
   
-export default Router;
 
-// Необходимо оставить в силу особенностей тренажёра
-//history.pushState({}, '', '/');
+export const router = new Router(".app");
 
-const router = new Router(".app");
-// Можно обновиться на /user и получить сразу пользователя
 router
-  .use("/", Page, blockData.index)
-  .use("/login", Page, blockData.login)
-  .use("/profile", Page, blockData.profile)
-  .use("/signin", Page, blockData.signin)
+  .use( stdRoutes.Index, Page, blockData.index)
+  .use( stdRoutes.Login, Page, blockData.login)
+  .use( stdRoutes.Profile, Page, blockData.profile)
+  .use( stdRoutes.SignUp, Page, blockData.signup)
   .start()
 
 // Через секунду контент изменится сам, достаточно дёрнуть переход

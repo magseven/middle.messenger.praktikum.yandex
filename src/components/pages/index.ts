@@ -1,10 +1,9 @@
 import {getCurrentPage} from '../../modules/utils/common'
-import {pageData} from '../../modules/utils/form_funcs';
+//import pageData from '../../modules/utils/form_funcs';
 
 import { Block, BlockProps } from "../../modules/block";
 
 import { blockData } from '../../models/page_data'
-import {EventBus} from '../../modules/event_bus'
 
 export class Page extends Block {
     constructor(props: BlockProps) {
@@ -65,13 +64,13 @@ export class Chats extends Block {
     }
 }
 
-export class Signin extends Block {
+export class Signup extends Block {
     constructor(props: BlockProps) {
         super("section", {...props,}); 
     }
 
     render() : DocumentFragment {
-        const page = blockData.signin;
+        const page = blockData.signup;
         return this.compile( page.template, {...this.props});
     }
 }

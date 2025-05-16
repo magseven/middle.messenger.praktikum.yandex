@@ -1,7 +1,7 @@
 import index from '../components/pages/templates/index.tmpl'
 import login from '../components/pages/templates/login.tmpl'
 import profile from '../components/pages/templates/profile.tmpl'
-import signin from '../components/pages/templates/signin.tmpl'
+import signup from '../components/pages/templates/signup.tmpl'
 import error_page from '../components/pages/templates/error_page.tmpl'
 import chats from '../components/pages/templates/chat.tmpl'
 
@@ -22,7 +22,7 @@ export const blockData: Record<string, BlockEntry> = {
                 [
                     [ 'login', 'Авторизация'], 
                     [ 'profile', 'Профиль'], 
-                    [ 'signin', 'Регистрация'], 
+                    [ 'signup', 'Регистрация'], 
                     [ 'chats', 'Список чатов'],
                     [ 'page_404', 'Страница 404'],
                     [ 'page_500', 'Страница 500'],
@@ -32,6 +32,7 @@ export const blockData: Record<string, BlockEntry> = {
         }
     }, 
     login: {
+        name: 'Auth',
         template: login,
         validate: true,
         context: {
@@ -69,8 +70,8 @@ export const blockData: Record<string, BlockEntry> = {
             },
         },
     }, 
-    signin: {
-        template: signin,
+    signup: {
+        template: signup,
         validate: true,
         context: {
             header: { 

@@ -18,32 +18,37 @@ function queryStringify(data: Record<string, undefined>) {
   }, '?');
 }
 
-type typeOptions = {
+type transportOptions = {
   headers: Record<string, string>;         
   method?: METHOD;          
-  data?: undefined; 
+  data?: unknown; 
   timeout?:number; 
  }
 
-// eslint-disable-next-line
-class HTTPTransport {
-  get = (url: string, options: typeOptions = { headers: {} }) => {
+ interface RequestOptions {
+  headers?: Record<string, string>;
+  data?: any;
+  timeout?: number;
+}
+
+export class HTTPTransport { 
+  get = (url: string, options: transportOptions = { headers: {} }) => {
     return this.request(url, {...options, method: METHODS.GET}, options.timeout);
   };
 
-  post = (url: string, options: typeOptions = { headers: {} }) => {
+  post = (url: string, options: transportOptions = { headers: {} }) => {
     return this.request(url, {...options, method: METHODS.POST}, options.timeout);
   };
 
-  put = (url: string, options: typeOptions = { headers: {} }) => {
+  put = (url: string, options: transportOptions = { headers: {} }) => {
     return this.request(url, {...options, method: METHODS.PUT}, options.timeout);
   };
 
-  delete = (url: string,options: typeOptions = { headers: {} }) => { 
+  delete = (url: string,options: transportOptions = { headers: {} }) => { 
     return this.request(url, {...options, method: METHODS.DELETE}, options.timeout);
   };
 
-  request = (url: string, options: typeOptions = { headers: {}}, timeout = 5000) => {
+  request = (url: string, options: transportOptions = { headers: {}}, timeout = 5000) => {
     const {headers = {}, method, data} = options;
 
     return new Promise(function(resolve, reject) {
@@ -53,6 +58,7 @@ class HTTPTransport {
       }
 
       const xhr = new XMLHttpRequest();
+       xhr.withCredentials = true; 
       const isGet = method === METHODS.GET;
 
       xhr.open(
@@ -61,6 +67,9 @@ class HTTPTransport {
         ? `${url}${queryStringify(data)}`
         : url,
       );
+
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('Accept', 'application/json');
 
       Object.keys(headers).forEach(key => {
         xhr.setRequestHeader(key, headers[key]);

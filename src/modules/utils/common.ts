@@ -21,4 +21,22 @@ export function render(query: string, block: Block) : HTMLElement | null {
     return root;
 }
 
+function trim(string, chars) {
+    let str = ' ' + string + ' ';
 
+    if (str && chars === undefined) {
+        return string.trim();
+    }
+
+    if (!str || !chars) {
+        return (string || '');
+    }
+
+    const regFirst = new RegExp(` ${chars}`, 'gi');
+    const regSecond = new RegExp(`${chars} `, 'gi');
+
+    return str
+      .replace(regFirst, '')
+      .replace(regSecond, '')
+      .trim();
+}
