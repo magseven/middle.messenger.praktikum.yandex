@@ -48,14 +48,14 @@ const classRegistry: Record<string, BlockClass> = {
 const pageData = ( item: defContentRecord): BlockProps | string | Block | BlockProps[] => {
       const result: BlockProps = {};
 
-      if ( typeof item === 'string' || Array.isArray(item))
+      if ( typeof item === 'string' || Array.isArray(item) || typeof item === 'function')
             return item;
 
       if ( Object.hasOwn( item, 'proto') && ( typeof item.proto === 'string'))
             return new classRegistry[item.proto]( pageData( Object.entries( item).reduce(( acc, it) => ({...acc,...it[0] != 'proto' && {[it[0]]: it[1]}}), {})) as BlockProps);
       
       Object.entries( item).forEach(([key, value]) => {
-            if ( typeof value === 'object' && !Array.isArray( value) && key != 'attrs' && key != 'events') {
+            if ( typeof value === 'object' && !Array.isArray( value) && key != 'attrs') {
                   value.name = key;
             }
             result[key] = pageData( value as defContentRecord);

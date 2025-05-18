@@ -12,7 +12,6 @@ export function isEqual(lhs: string, rhs: string) {
 export function render(query: string, block: Block) : HTMLElement | null {
     const root: HTMLElement | null = document.querySelector(query);
   
-    console.log('render', query);
     if ( root) {
         root.innerHTML = '';
         root.appendChild( block.getContent());

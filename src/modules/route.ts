@@ -1,7 +1,7 @@
-import { isEqual, render } from './common';
-import {Block, BlockProps} from '../block'
-import {BlockEntry, defContentRecord} from '../types'
-import pageData from './form_funcs'
+import { isEqual, render } from './utils/common';
+import {Block, BlockProps} from './block'
+import {BlockEntry, defContentRecord} from './types'
+import pageData from './utils/form_funcs'
 
 export default class Route {
     private _pathname: string = '';
@@ -36,9 +36,9 @@ export default class Route {
     }
 
     leave() {
-        if (this._block) {
-            this._block.hide();
-        }
+        // if (this._block) {
+        //     this._block.hide();
+        // }
     }
 
     match(pathname: string) {
@@ -47,13 +47,13 @@ export default class Route {
 
     render() {
 
-        if (!this._block) {
+        if (!this._block)
             this._block = new this._blockClass( pageData( {...this._blockcontext, 'template': this._blocktemplate}) as BlockProps);
-            render(this._props.rootQuery as string, this._block);
-            return;
-        }
 
-        this._block.show();
+        render(this._props.rootQuery as string, this._block);
+        return;
+
+//        this._block.show();
     }
 }
 

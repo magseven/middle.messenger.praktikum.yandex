@@ -231,7 +231,20 @@ export class Block {
       _createDocumentElement(tagName: string) {
           return document.createElement(tagName);
     }
-  
+
+    public getFormData(): Record<string, string | Blob> {
+      if (!this._element) return {};
+      
+      const formData = new FormData(this._element as HTMLFormElement);
+      const result: Record<string, string | Blob> = {};
+
+      formData.forEach((value, key) => {
+        result[key] = value;
+      });
+
+      return result;
+    };
+
     show() {
       this.getContent().style.display = "block";
     }

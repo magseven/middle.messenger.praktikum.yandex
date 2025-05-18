@@ -1,32 +1,36 @@
-import AuthAPI from '../api/auth-api.js';
-import Routes from '../modules/utils/route.js';
-import {Router, stdRoutes} from '../modules/utils/router.js';
-import { router } from '../modules/utils/router.js';
-//import { Store } from '../utils/Store.ts';
+import AuthAPI from '../api/auth-api';
+import {Router, stdRoutes} from '../modules/router';
+import { router } from '../modules/router';
+import Store from '../modules/store';
 
 export class AuthController {
     private _authApi: AuthAPI;
-    private _store: Store;
+    private _store: typeof Store;
     private _router: Router;
 
     constructor() {
         this._authApi = new AuthAPI();
-        this._store = Store.getInstance();
+        this._store = Store;
         this._router = router;
     };                  
 
-    async login(data: Record<string, string>) {
+    async signIn(data: Record<string, string>) {
         try {
-            console.log('auth-api login');
-            await this._authApi.signIn(data);
-            const user = await this.fetchUser();
+            const response = await this._authApi.signIn(data);
+            console.log( 'promise', response);    
 
+            const user = await this.fetchUser();
             if (user) {
                 this._router.go(stdRoutes.Chat);
             }
+
+
         } catch (error) {
+            console.error('Sign in error:', error);
             // @ts-ignore
-            if (JSON.parse(error.responseText)['reason'] === 'User already in system') router.go(Routes.Messenger);
+            if ( JSON.parse(error.responseText)['reason'] === 'User already in system') 
+                router.go( stdRoutes.Chat);
+            
             console.error('Sign in error:', error);
             throw error;
         }
@@ -36,7 +40,7 @@ export class AuthController {
         try {
             await this._authApi.signUp(data);
             const user = await this.fetchUser();
-
+            console.log( 'valid user:', user);    
             if (user) {
                 this._router.go(stdRoutes.Chat);
             }
@@ -49,7 +53,7 @@ export class AuthController {
     async logout() {
         try {
             await this._authApi.logout();
-            this.store.set('user', null);
+            this._store.set('user', null);
             this._router.go(stdRoutes.Index);
         } catch (error) {
             console.error('Logout error:', error);
@@ -61,17 +65,17 @@ export class AuthController {
         try {
             const user = await this._authApi.getUser();
             if (user) {
-                this.store.set('user', user);
+                this._store.set('user', user);
+                console.log('user after login', this._store.getState());
             };
             return user;
         } catch (error) {
-            // @ts-ignore
-            if (JSON.parse(error.responseText)['reason'] === 'Cookie is not valid') router.go(Routes.Index);
+            // @ts-ignore            
             console.error('Fetch user error:', error);
-            this.store.set('user', null);
+            this._store.set('user', null);
+
+            router.go( stdRoutes.Index);
             return null;
         };
     };
 };
-
-export default new AuthController();

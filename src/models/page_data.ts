@@ -4,6 +4,7 @@ import profile from '../components/pages/templates/profile.tmpl'
 import signup from '../components/pages/templates/signup.tmpl'
 import error_page from '../components/pages/templates/error_page.tmpl'
 import chats from '../components/pages/templates/chat.tmpl'
+import {stdEvents} from '../modules/types'
 
 import { BlockEntry } from "../modules/types"
 
@@ -32,14 +33,15 @@ export const blockData: Record<string, BlockEntry> = {
         }
     }, 
     login: {
-        name: 'Auth',
         template: login,
         validate: true,
         context: {
+            name: 'SignIn',
             header: { proto: 'Header', title: "Авторизация"},
             attrs: {class: 'a-login-container'},
             form: {
                 proto: 'Form',
+                name: 'form',
                 login: { proto: 'Input_F', label: 'Логин', type: "text", placeholder: 'Укажите логин'},
                 password: { proto: 'Input_F', type: "password", label: 'Пароль', placeholder: 'Укажите пароль'}, 
                 button: { proto: 'Button', attrs: { type: "submit", class: 'a-button'}, text: 'Войти'}, 
@@ -50,6 +52,7 @@ export const blockData: Record<string, BlockEntry> = {
         template: profile,
         validate: true,
         context: {
+            name: 'Profile',
             header: { 
                 proto: 'Header',
                 title: 'Профиль пользователя',
@@ -66,14 +69,28 @@ export const blockData: Record<string, BlockEntry> = {
                 phone: { proto: 'Input_F', type: "text", name: 'phone', placeholder: 'Телефон'}, 
                 oldPassword: { proto: 'Input_F', type: "password", name: 'oldPassword', placeholder: 'Старый пароль'}, 
                 newPassword: { proto: 'Input_F', type: "password", name: 'newPassword', placeholder: 'Новый пароль'}, 
-                button: { proto: 'Button', attrs: {type: "submit", class: 'a-button'}, text: 'Сохранить'},
+                button: { proto: 'Button', attrs: {type: "submit", class: 'a-button'}, text: 'Сохранить', 
+                    events: {
+                        OnSubmit: () => {
+                            window.eventBus.emit( stdEvents.updateProfile);
+                        }
+                    },
+
+
+                },
             },
+                logout: { proto: 'Button', attrs: {type: "submit", class: 'a-button'}, text: 'Logout', events: {
+                        OnClick: () => {
+                                window.eventBus.emit( stdEvents.logout);
+                        }
+                    },},
         },
     }, 
     signup: {
         template: signup,
         validate: true,
         context: {
+            name: 'SignUp',
             header: { 
                 proto: 'Header',
                 title: 'Регистрация пользователя'
@@ -96,7 +113,8 @@ export const blockData: Record<string, BlockEntry> = {
                             console.log('Создать пользователя');
                         }
                     },
-                    text: 'Войти'}, 
+                    text: 'Войти'
+                }, 
             },
         },
     }, 

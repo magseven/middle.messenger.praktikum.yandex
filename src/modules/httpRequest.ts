@@ -7,7 +7,7 @@ const METHODS = {
 
 type METHOD = typeof METHODS[keyof typeof METHODS];
 
-function queryStringify(data: Record<string, undefined>) {
+function queryStringify(data: Record<string, string | Blob>) {
   if (typeof data !== 'object') {
     throw new Error('Data must be object');
   }
@@ -19,28 +19,30 @@ function queryStringify(data: Record<string, undefined>) {
 }
 
 type transportOptions = {
-  headers: Record<string, string>;         
+  headers?: Record<string, string>;         
   method?: METHOD;          
-  data?: unknown; 
+  data?: Record<string, string | Blob> | FormData; 
   timeout?:number; 
  }
 
- interface RequestOptions {
-  headers?: Record<string, string>;
-  data?: any;
-  timeout?: number;
-}
+const baseApiUrl: string = 'https://ya-praktikum.tech/api/v2';
+
+//  interface RequestOptions {
+//   headers?: Record<string, string>;
+//   data?: any;
+//   timeout?: number;
+// }
 
 export class HTTPTransport { 
-  get = (url: string, options: transportOptions = { headers: {} }) => {
+  get = (url: string, options: transportOptions) => {
     return this.request(url, {...options, method: METHODS.GET}, options.timeout);
   };
 
-  post = (url: string, options: transportOptions = { headers: {} }) => {
+  post = (url: string, options: transportOptions) => {
     return this.request(url, {...options, method: METHODS.POST}, options.timeout);
   };
 
-  put = (url: string, options: transportOptions = { headers: {} }) => {
+  put = (url: string, options: transportOptions) =>  {
     return this.request(url, {...options, method: METHODS.PUT}, options.timeout);
   };
 
@@ -48,12 +50,14 @@ export class HTTPTransport {
     return this.request(url, {...options, method: METHODS.DELETE}, options.timeout);
   };
 
-  request = (url: string, options: transportOptions = { headers: {}}, timeout = 5000) => {
+  request = (url: string, options: transportOptions = { headers: {}}, timeout = 5000): Promise<XMLHttpRequest> => {
     const {headers = {}, method, data} = options;
+    console.log('request params', options);
 
     return new Promise(function(resolve, reject) {
       if (!method) {
         reject('No method');
+        console.log( 'no method');
         return;
       }
 
@@ -63,9 +67,9 @@ export class HTTPTransport {
 
       xhr.open(
         method, 
-        isGet && !!data
-        ? `${url}${queryStringify(data)}`
-        : url,
+        isGet && data && !(data instanceof FormData) 
+        ? `${baseApiUrl}${url}${queryStringify(data)}`
+        : `${baseApiUrl}${url}`,
       );
 
       xhr.setRequestHeader('Content-Type', 'application/json');
@@ -88,7 +92,7 @@ export class HTTPTransport {
       if (isGet || !data) {
         xhr.send();
       } else {
-        xhr.send(data);
+        xhr.send(JSON.stringify(data));
       }
     });
   };

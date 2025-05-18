@@ -1,17 +1,17 @@
 //import {Chat} from '../../components/chat/chat'
-import Page from '../../components/pages/page'
-import { blockData } from '../../models/page_data';
-import {Block, BlockProps} from '../block'
+import Page from '../components/pages/page'
+import { blockData } from '../models/page_data';
+import {Block, BlockProps} from './block'
 import Route from './route'
-import {BlockEntry} from '../types'
-//import pageData from '../utils/form_funcs'
+import {BlockEntry, stdEvents} from './types'
+import { EventBus } from './event_bus';
 
 export enum stdRoutes {
     Index = '/',
     Login = '/login',
     Profile = '/profile',
     SignUp = '/signup',
-    Chat = '/messenger',
+    Chat = '/chats',
     Error404 = '/404',
     Error500 = '/500',
     // EditProfile = '/settings/edit',
@@ -54,7 +54,6 @@ export class Router {
     }
 
     _onRoute(pathname: string) {
-        console.log('pathname', pathname);
         const route = this.getRoute(pathname);
         if (!route) {
             return;
@@ -64,7 +63,6 @@ export class Router {
             this._currentRoute.leave();
         }
 
-        console.log(route);
         this._currentRoute = route;
         route.render();
     }
@@ -89,12 +87,17 @@ export class Router {
   
 
 export const router = new Router(".app");
+window.eventBus = new EventBus();
+window.onload = () => { window.eventBus.emit( stdEvents.pageLoaded);}
 
 router
   .use( stdRoutes.Index, Page, blockData.index)
   .use( stdRoutes.Login, Page, blockData.login)
   .use( stdRoutes.Profile, Page, blockData.profile)
   .use( stdRoutes.SignUp, Page, blockData.signup)
+  .use( stdRoutes.Chat, Page, blockData.chats)
+  .use( stdRoutes.Error404, Page, blockData.page_404)
+  .use( stdRoutes.Error500, Page, blockData.page_500)
   .start()
 
 // Через секунду контент изменится сам, достаточно дёрнуть переход

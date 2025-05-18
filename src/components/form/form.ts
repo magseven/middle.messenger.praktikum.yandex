@@ -1,7 +1,6 @@
 import { Block, BlockProps } from "../../modules/block";
 import formTemplate from './form.tmpl';
 import {validateForm} from '../../modules/utils/validation';
-import {EventBus} from '../../modules/event_bus';
 
 class Form extends Block {
     constructor(props: BlockProps) {
@@ -16,10 +15,6 @@ class Form extends Block {
                             if ( validateForm(e.target as HTMLFormElement))
                               this.printFormData(e);
 
-                            if ( !window.eventBus)
-                              window.eventBus = new EventBus();
-
-                            console.log('emitted onFormSubmit');
                             window.eventBus.emit( 'onFormSubmit', this.props);
                           }
                         },
@@ -27,18 +22,6 @@ class Form extends Block {
       });
     }
     
-    public getFormData(): Record<string, string | Blob> {
-      if (!this._element) return {};
-      
-      const formData = new FormData(this._element as HTMLFormElement);
-      const result: Record<string, string | Blob> = {};
-
-      formData.forEach((value, key) => {
-        result[key] = value; // value автоматически будет string | File (File наследует Blob)
-      });
-
-      return result;
-    };
 
     printFormData( event: SubmitEvent) {
       event.preventDefault();

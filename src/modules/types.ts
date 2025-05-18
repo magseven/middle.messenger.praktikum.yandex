@@ -2,6 +2,8 @@ export const defEventList = {
     OnClick: 'click',
     OnBlur: 'blur',
     OnSubmit: 'submit',
+    OnLoad: 'load',
+    OnContentLoaded: 'DOMContentLoaded'
 } as const;
 
 export type ContextHeader = Record<string, string>;  
@@ -44,7 +46,7 @@ export interface defContent {
  }
 
  
-export type defContentRecord = Record<string, defContent|defContentRecord[]|string|string[][]>;
+export type defContentRecord = Record<string, defContent|defContentRecord[]|string|string[][]|Events>;
 
 import {EventBus} from './event_bus';
 
@@ -54,3 +56,8 @@ declare global {
     }
 }
 
+export enum stdEvents {
+    updateProfile = 'updateProfile',
+    pageLoaded = 'pageLoaded',
+    logout = 'Logout',
+}
