@@ -15,6 +15,7 @@ export function render(query: string, block: Block) : HTMLElement | null {
     if ( root) {
         root.innerHTML = '';
         root.appendChild( block.getContent());
+        block.dispatchComponentDidMount();
     }
     
     return root;

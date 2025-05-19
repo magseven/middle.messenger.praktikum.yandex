@@ -9,8 +9,7 @@ class userAPI {
     };
 
     async update(data: Record<string, string>) {
-        const response = await this._httpTransport.put('/user/profile', {data});
-        return JSON.parse(response.responseText);
+        return await this._httpTransport.put('/user/profile', {data});
     };
 
     async updateAvatar(formData: FormData) {
@@ -18,8 +17,9 @@ class userAPI {
         return JSON.parse(response.responseText);
     };
 
-    async changePassword( data: { oldPass: string, newPass: string}) {
-        await this._httpTransport.post('/user/password', {data});
+    async changePassword( data: { oldPassword: string, newPassword: string}) {
+        console.log( 'api', data);
+        return await this._httpTransport.put('/user/password', {data});
     };
 
     async search(data: Record<string, string>) {

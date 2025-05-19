@@ -6,7 +6,7 @@ import {validateField} from '../../modules/utils/validation'
 export class Input_F extends Block {
     constructor(props: BlockProps) {
       super("div", { 
-        ...props, 
+        ...props,
         attrs: {
           ...props.attrs || {},
           class: 'form-group',
@@ -26,6 +26,13 @@ export class Input_F extends Block {
       });
     }
   
+    componentDidUpdate( oldProps: Record<string, unknown>, newProps: Record<string, unknown>): boolean {
+      if ( oldProps.text !== newProps.text) {
+          this.children.input._element.setAttribute( 'value', newProps.text as string) 
+      }
+      return true;
+    }
+
     render() : DocumentFragment {
       return this.compile( inputFTemplate, this.props);
     }
@@ -58,6 +65,7 @@ export class Input extends Block {
   render() : DocumentFragment {
     return this.compile( inputTemplate, this.props);
   }
+
 }
 
 

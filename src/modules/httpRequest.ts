@@ -38,7 +38,7 @@ export class HTTPTransport {
     return this.request(url, {...options, method: METHODS.GET}, options.timeout);
   };
 
-  post = (url: string, options: transportOptions) => {
+  post = (url: string, options: transportOptions): Promise<XMLHttpRequest> => {
     return this.request(url, {...options, method: METHODS.POST}, options.timeout);
   };
 
@@ -52,7 +52,6 @@ export class HTTPTransport {
 
   request = (url: string, options: transportOptions = { headers: {}}, timeout = 5000): Promise<XMLHttpRequest> => {
     const {headers = {}, method, data} = options;
-    console.log('request params', options);
 
     return new Promise(function(resolve, reject) {
       if (!method) {

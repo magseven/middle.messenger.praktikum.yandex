@@ -22,11 +22,14 @@ export default class AuthAPI {
     };
 
     async logout() {
-        await this._httpTransport.post('/auth/logout', {});
+        return await this._httpTransport.post('/auth/logout', {});
     };
 
     async getUser() {
         const response = await this._httpTransport.get('/auth/user', {});
+        if ( response.status >= 400)
+            throw new Error( JSON.parse(response.responseText).reason);
+        
         return JSON.parse(response.responseText);
     };
 };

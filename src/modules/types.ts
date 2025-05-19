@@ -58,6 +58,13 @@ declare global {
 
 export enum stdEvents {
     updateProfile = 'updateProfile',
-    pageLoaded = 'pageLoaded',
+    pageLoad = 'pageLoaded',
     logout = 'Logout',
+    popstate = 'PopState',
+    login = 'Login'
+}
+
+export const stdReasons: Record<number, string> = {
+    400: 'User already in system',
+    401: 'Login or password is incorrect'
 }

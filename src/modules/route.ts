@@ -36,9 +36,10 @@ export default class Route {
     }
 
     leave() {
-        // if (this._block) {
-        //     this._block.hide();
-        // }
+        if (this._block) {
+            this._block.dispatchComponentDidUnMount();
+            this._block = null;
+        }
     }
 
     match(pathname: string) {
@@ -52,8 +53,6 @@ export default class Route {
 
         render(this._props.rootQuery as string, this._block);
         return;
-
-//        this._block.show();
     }
 }
 

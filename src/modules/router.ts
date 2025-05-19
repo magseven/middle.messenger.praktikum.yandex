@@ -5,6 +5,7 @@ import {Block, BlockProps} from './block'
 import Route from './route'
 import {BlockEntry, stdEvents} from './types'
 import { EventBus } from './event_bus';
+import store from './store';
 
 export enum stdRoutes {
     Index = '/',
@@ -44,7 +45,7 @@ export class Router {
 
     start() {
         window.onpopstate = ((event: PopStateEvent) => {
-            console.log('onpopstate');
+            //console.log('onpopstate');
             if (event /*&& event.state*/) {
                 this._onRoute(window.location.pathname);
             }        
@@ -65,6 +66,7 @@ export class Router {
 
         this._currentRoute = route;
         route.render();
+        window.eventBus.emit( stdEvents.popstate);
     }
 
     go(pathname: string) {
@@ -88,7 +90,7 @@ export class Router {
 
 export const router = new Router(".app");
 window.eventBus = new EventBus();
-window.onload = () => { window.eventBus.emit( stdEvents.pageLoaded);}
+//window.onload = () => { console.log('onload');window.eventBus.emit( stdEvents.pageLoad);}
 
 router
   .use( stdRoutes.Index, Page, blockData.index)

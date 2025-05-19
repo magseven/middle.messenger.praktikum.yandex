@@ -2,6 +2,7 @@ import AuthAPI from '../api/auth-api';
 import {Router, stdRoutes} from '../modules/router';
 import { router } from '../modules/router';
 import Store from '../modules/store';
+import {stdReasons} from '../modules/types';
 
 export class AuthController {
     private _authApi: AuthAPI;
@@ -17,14 +18,13 @@ export class AuthController {
     async signIn(data: Record<string, string>) {
         try {
             const response = await this._authApi.signIn(data);
-            console.log( 'promise', response);    
-
-            const user = await this.fetchUser();
-            if (user) {
+            console.log( response.responseText, response.status, Store.getState().user);
+            if (( response.status === 400) || ( response.status === 200)) {
+                if ( !Store.getState().user){
+                    const user = await this.fetchUser();
+                }
                 this._router.go(stdRoutes.Chat);
             }
-
-
         } catch (error) {
             console.error('Sign in error:', error);
             // @ts-ignore
@@ -54,7 +54,7 @@ export class AuthController {
         try {
             await this._authApi.logout();
             this._store.set('user', null);
-            this._router.go(stdRoutes.Index);
+            this._router.go(stdRoutes.Login);
         } catch (error) {
             console.error('Logout error:', error);
             throw error;
@@ -66,7 +66,6 @@ export class AuthController {
             const user = await this._authApi.getUser();
             if (user) {
                 this._store.set('user', user);
-                console.log('user after login', this._store.getState());
             };
             return user;
         } catch (error) {
@@ -74,7 +73,7 @@ export class AuthController {
             console.error('Fetch user error:', error);
             this._store.set('user', null);
 
-            router.go( stdRoutes.Index);
+            //router.go( stdRoutes.Index);
             return null;
         };
     };

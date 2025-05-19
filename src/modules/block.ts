@@ -33,8 +33,8 @@ export class Block {
       INIT: "init",
       FLOW_CDM: "flow:component-did-mount",
       FLOW_CDU: "flow:component-did-update",
-      FLOW_RENDER: "flow:render"
-      
+      FLOW_RENDER: "flow:render",
+      FLOW_CDUM: "flow:component-did-unmount",      
   };  
   
   id: string = '';
@@ -114,6 +114,7 @@ export class Block {
       eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
       eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
       eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+      eventBus.on(Block.EVENTS.FLOW_CDUM, this._componentDidUnMount.bind(this));
     }
   
     _createResources() {
@@ -132,13 +133,26 @@ export class Block {
         child.dispatchComponentDidMount();
       });
     }
-  
+
+    _componentDidUnMount() {
+      Object.values(this.children).forEach(child => {
+        child.dispatchComponentDidUnMount();
+      });
+
+      this.componentDidUnMount();
+    }
+
     componentDidMount() : void {}
+    componentDidUnMount() : void {}
     
     dispatchComponentDidMount() {
-          this.eventBus.emit(Block.EVENTS.FLOW_CDM);
+        this.eventBus.emit(Block.EVENTS.FLOW_CDM);
     }
-  
+
+    dispatchComponentDidUnMount() {
+        this.eventBus.emit(Block.EVENTS.FLOW_CDUM);
+    }
+
     _componentDidUpdate( oldProps: Record<string, unknown>,
                            newProps: Record<string, unknown>): void {
         const response = this.componentDidUpdate(oldProps, newProps);
@@ -163,6 +177,16 @@ export class Block {
       }
   
       Object.assign(this.props, nextProps);
+    };
+  
+    setEvents(nextEvent: Events): void {
+      if (!nextEvent) {
+        return;
+      }
+      Object.assign(this.events, nextEvent);
+      this._removeEvents();
+      this._addEvents();
+      //console.log( this.events);
     };
   
     get element() {
@@ -194,6 +218,7 @@ export class Block {
       if (!this.events) return;
   
       Object.entries(this.events).forEach(([eventName, handler]) => {
+        console.log( eventName);
         this._element.addEventListener(defEventList[eventName as keyof typeof defEventList], handler as EventListener);
       });
     }

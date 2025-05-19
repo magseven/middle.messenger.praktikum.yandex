@@ -20,13 +20,10 @@ export class Page extends Block {
 export class Index extends Block {
     constructor(props: BlockProps) {
         super("section", {...props,}); 
-        console.log('page Index constructor');
     }
 
     render() : DocumentFragment {
-        console.log('RENDER');
         const page = blockData.index;
-        console.log('page Index', page);
         return this.compile( page.template, {...this.props});
     }
 }

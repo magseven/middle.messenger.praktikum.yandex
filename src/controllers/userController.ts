@@ -16,14 +16,22 @@ export class userController {
 
     async update(data: Record<string, string>) {
         try {
-            console.log( 'store:', this._store.getState());
-            await this._userApi.update(data);
+            const response = await this._userApi.update(data);
+            console.log('update', response.status, response.responseText);
+            if ( response.status !== 200) {
+                console.log(response.responseText);
+            }else{
+                console.log('password:', data.oldPassword, data.newPassword);
+                const response = await this._userApi.changePassword({ oldPassword: data.oldPassword, newPassword: data.newPassword});
+                if ( response.status !== 200) {
+                    console.log(response.responseText);
+                }
+            }
         } catch (error) {
             console.error('Update profile error:', error);
             throw error;
         }
     }
-
     // async get() {
     //     try {
     //         await this._userApi.get();

@@ -5,6 +5,7 @@ import signup from '../components/pages/templates/signup.tmpl'
 import error_page from '../components/pages/templates/error_page.tmpl'
 import chats from '../components/pages/templates/chat.tmpl'
 import {stdEvents} from '../modules/types'
+import {router, stdRoutes} from '../modules/router'
 
 import { BlockEntry } from "../modules/types"
 
@@ -44,10 +45,17 @@ export const blockData: Record<string, BlockEntry> = {
                 name: 'form',
                 login: { proto: 'Input_F', label: 'Логин', type: "text", placeholder: 'Укажите логин'},
                 password: { proto: 'Input_F', type: "password", label: 'Пароль', placeholder: 'Укажите пароль'}, 
-                button: { proto: 'Button', attrs: { type: "submit", class: 'a-button'}, text: 'Войти'}, 
+                button: { 
+                    proto: 'Button', 
+                    text: 'Войти', 
+                    attrs: { 
+                        type: 'button', 
+                        class: 'a-button'
+                    }, 
+                },
             },
-        },
-    }, 
+        }, 
+    },
     profile: {
         template: profile,
         validate: true,
@@ -69,14 +77,13 @@ export const blockData: Record<string, BlockEntry> = {
                 phone: { proto: 'Input_F', type: "text", name: 'phone', placeholder: 'Телефон'}, 
                 oldPassword: { proto: 'Input_F', type: "password", name: 'oldPassword', placeholder: 'Старый пароль'}, 
                 newPassword: { proto: 'Input_F', type: "password", name: 'newPassword', placeholder: 'Новый пароль'}, 
-                button: { proto: 'Button', attrs: {type: "submit", class: 'a-button'}, text: 'Сохранить', 
+                button: { proto: 'Button', text: 'Сохранить', attrs: {class: 'a-button', type:'button'}, 
                     events: {
-                        OnSubmit: () => {
+                        OnClick: () => {
+                            console.log( 'profile button click');
                             window.eventBus.emit( stdEvents.updateProfile);
                         }
                     },
-
-
                 },
             },
                 logout: { proto: 'Button', attrs: {type: "submit", class: 'a-button'}, text: 'Logout', events: {
@@ -167,8 +174,22 @@ export const blockData: Record<string, BlockEntry> = {
                         proto: 'ChatBar',
                         btitle: { 
                             proto: 'ChatBarTitle',
-                            link: { proto: 'Link', attrs: { class: 'a-chat-bar-title-link', href: '#'}, text: 'Профиль&nbsp;&nbsp;>'}
+                            link: {
+                                proto: 'Div', 
+                                    attrs: { class: 'a-chat-bar-title-link'}, content: 'Профиль&nbsp;&nbsp;>'},
+                                    events: { OnClick: () => {router.go( stdRoutes.Profile)}
+                            }
+                            // link: { 
+                            // proto: 'Link', 
+                            //         attrs: { class: 'a-chat-bar-title-link', href: '/profile'}, text: 'Профиль&nbsp;&nbsp;>'},
+                            //         events: { OnClick: () => {router.go( stdRoutes.Profile)}
+                            // },
                         },
+
+
+                            // link: { proto: 'Link', attrs: { class: 'a-chat-bar-title-link', href: '#'}, text: 'Профиль&nbsp;&nbsp;>'}
+
+
                         bsearch: { 
                             proto: 'ChatBarSearch', 
                             searchField: { proto: 'Input', 
