@@ -14,17 +14,27 @@ export class userController {
         this._router = router;
     };                  
 
-    async update(data: Record<string, string>) {
+    async update(data: Record<string, string>, form?: FormData) {
         try {
             const response = await this._userApi.update(data);
             console.log('update', response.status, response.responseText);
             if ( response.status !== 200) {
                 console.log(response.responseText);
             }else{
-                console.log('password:', data.oldPassword, data.newPassword);
-                const response = await this._userApi.changePassword({ oldPassword: data.oldPassword, newPassword: data.newPassword});
-                if ( response.status !== 200) {
-                    console.log(response.responseText);
+                console.log('password:', data.oldPassword, data.newPassword);                
+                if ( data.oldPassword && data.newPassword) {
+                    const response = await this._userApi.changePassword({ oldPassword: data.oldPassword, newPassword: data.newPassword});
+                    if ( response.status !== 200) {
+                        console.log(response.responseText);
+                    }
+                }
+                if ( form) {
+                    console.log('update avatar:', form);                
+                    const response = await this._userApi.updateAvatar(form);
+                    console.log(response);
+                    if ( response.status !== 200) {
+                        console.log(response.responseText);
+                    }
                 }
             }
         } catch (error) {

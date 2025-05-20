@@ -3,6 +3,7 @@ export const defEventList = {
     OnBlur: 'blur',
     OnSubmit: 'submit',
     OnLoad: 'load',
+    OnChange: 'change',
     OnContentLoaded: 'DOMContentLoaded'
 } as const;
 
@@ -28,7 +29,7 @@ type ValueType = string | number | boolean | defContent | Record<string, string>
 type ExcludeProtoKeys = Exclude<string, 'proto'>;
 
 
-export type defProto = 'Button' | 'Link' | 'Paragraph' | 'Heading' | 'Nav' | 'Header' | 'Form' | 'Nav' | 'Chat' |
+export type defProto = 'Button' | 'Link' | 'Paragraph' | 'Heading' | 'Nav' | 'Header' | 'Form' | 'Nav' | 'Chat' | 'Events' | 'Avatar' |
                         'ChatFrame' | 'ChatBar' | 'ChatBarTitle' | 'ChatBarSearch' | 'ChatBarList' | 'ChatBarListItem' |
                         'ChatContent' | 'ChatContentItems' | 'ChatContentHeader' | 'ChatContentHeader' |'Input' | 'Input_F' | 'Div' | 'Img';
 
@@ -61,7 +62,8 @@ export enum stdEvents {
     pageLoad = 'pageLoaded',
     logout = 'Logout',
     popstate = 'PopState',
-    login = 'Login'
+    login = 'Login',
+    changeAvatar = 'changeAvatar',
 }
 
 export const stdReasons: Record<number, string> = {

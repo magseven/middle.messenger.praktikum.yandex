@@ -45,18 +45,18 @@ export class Input extends Block {
       attrs: {
         ...props.attrs || {},
       },
-      events: {
-        OnBlur: (e:Event) => {
-          e.preventDefault();
-          e.stopPropagation();
-          if ( !validateField(e.target as HTMLInputElement)) {
-            this.element.focus();
-            return false;
-          }
+      // events: {
+      //   OnBlur: (e:Event) => {
+      //     e.preventDefault();
+      //     e.stopPropagation();
+      //     if ( !validateField(e.target as HTMLInputElement)) {
+      //       this.element.focus();
+      //       return false;
+      //     }
 
-          return true;
-        },        
-      }
+      //     return true;
+      //   },        
+      // }
     });
   }
 

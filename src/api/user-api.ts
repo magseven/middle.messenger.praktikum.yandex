@@ -12,14 +12,17 @@ class userAPI {
         return await this._httpTransport.put('/user/profile', {data});
     };
 
-    async updateAvatar(formData: FormData) {
-        const response = await this._httpTransport.put('/user/profile/avatar', {data: formData})                                
-        return JSON.parse(response.responseText);
-    };
-
     async changePassword( data: { oldPassword: string, newPassword: string}) {
         console.log( 'api', data);
         return await this._httpTransport.put('/user/password', {data});
+    };
+
+    async updateAvatar(formData: FormData) {
+        const response = await this._httpTransport.put('/user/profile/avatar', {data: formData});
+        if ( response.status >= 400)
+            throw new Error( JSON.parse(response.responseText).reason);
+        
+        return JSON.parse(response.responseText);
     };
 
     async search(data: Record<string, string>) {

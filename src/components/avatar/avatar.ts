@@ -12,20 +12,30 @@ class Avatar extends Block {
           ...props.attrs || {},
           class: 'a-avatar'
         },
-        image: new Img({
-          attrs: {
-            src: imgAvatar,
-            alt: "Аватар",
-          }
-        }), 
-        input: new Input({
-          attrs: {
-            type: 'file',
-            accept: 'image/*',
-            name: 'avatar',
-            hidden: true,
-          }
-        }),
+//         image: new Img({
+//           attrs: {
+//             src: imgAvatar,
+//             alt: "Аватар",
+//           }          
+//         }), 
+//         input: new Input({
+//           attrs: {
+//             type: 'file',
+//             accept: 'image/*',
+//             name: 'avatar',
+//             width: '200px',
+//             height: '200px',
+// //            hidden: true,
+//           },
+//           events: {
+//             OnClick: (e: Event) => {
+//               e.preventDefault();
+//               e.stopPropagation();
+//               console.log('onchange');
+//               //this.eventBus.emit( 'onSelectItem', this.props);
+//             },
+//           },
+//        }),
       })
     };
   

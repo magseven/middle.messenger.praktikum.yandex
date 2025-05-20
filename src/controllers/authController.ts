@@ -66,6 +66,7 @@ export class AuthController {
             const user = await this._authApi.getUser();
             if (user) {
                 this._store.set('user', user);
+                console.log('user', user);
             };
             return user;
         } catch (error) {

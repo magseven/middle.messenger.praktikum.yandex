@@ -1,20 +1,19 @@
-// chat-api.js
-  import {HTTPTransport} from '../modules/httpRequest';
-  import {BaseAPI} from './base-api';
+import {HTTPTransport} from '../modules/httpRequest';
 
-  const chatAPIInstance = new HTTPTransport(/*'api/v1/chats'*/);
+export default class ChatAPI {
+    private _httpTransport: HTTPTransport;
 
-  class ChatAPI extends BaseAPI {
-      create() {
-          // Здесь уже не нужно писать полный путь /api/v1/chats/
-//          return chatAPIInstance.post('/', {title: 'string'});
-          return chatAPIInstance.post('/', { headers: {title: 'string'}, data: {title: 'string'}});
-      }
+    constructor() {
+        this._httpTransport = new HTTPTransport();
+    };
 
-      request() {
-          // Здесь уже не нужно писать полный путь /api/v1/chats/
-          return chatAPIInstance.get('/full');
-      }
-  }
+//   offset:
+//   limit:
+//   title:
 
-  
+    async getChats() {
+        const response = await this._httpTransport.get('/chats', {});
+        if ( response.status >= 400)
+            throw new Error( JSON.parse(response.responseText).reason);
+    };
+};

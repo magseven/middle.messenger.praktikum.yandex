@@ -68,7 +68,35 @@ export const blockData: Record<string, BlockEntry> = {
             attrs: {class: 'a-login-container'},
             form: {
                 proto: 'Form',
-                avatar: { proto: 'Avatar', type: "submit", name: 'avatar', text: 'Сохранить'},
+                avatar: { 
+                    proto: 'Avatar', 
+                    image: {
+                        proto: 'Img',
+                        attrs: {
+                            src: 'imgAvatar',
+                            alt: "Аватар",
+                        },          
+                    }, 
+                    input: {
+                        proto: 'Input',
+                        attrs: {
+                            type: 'file',
+                            accept: 'image/*',
+                            name: 'avatar',
+                            width: '200px',
+                            height: '200px',
+                //            hidden: true,
+                        },
+                        events: {
+                            OnChange: (e: Event) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log('onchange');                                
+                                window.eventBus.emit( stdEvents.changeAvatar);
+                            },
+                        },
+                    },
+                },
                 first_name: { proto: 'Input_F', type: "text", name: 'first_name', placeholder: 'Имя'},
                 second_name: { proto: 'Input_F', type: "text", name: 'second_name', placeholder: 'Фамилия'}, 
                 display_name: { proto: 'Input_F', type: "text", name: 'display_name', placeholder: 'Псевдоним'}, 
@@ -86,11 +114,11 @@ export const blockData: Record<string, BlockEntry> = {
                     },
                 },
             },
-                logout: { proto: 'Button', attrs: {type: "submit", class: 'a-button'}, text: 'Logout', events: {
-                        OnClick: () => {
-                                window.eventBus.emit( stdEvents.logout);
-                        }
-                    },},
+            logout: { proto: 'Button', attrs: {type: "submit", class: 'a-button'}, text: 'Logout', events: {
+                    OnClick: () => {
+                            window.eventBus.emit( stdEvents.logout);
+                    }
+                },},
         },
     }, 
     signup: {

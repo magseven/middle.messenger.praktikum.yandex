@@ -1,5 +1,6 @@
 import { Block, BlockProps } from "../../modules/block";
 import { Input_F } from "../../components/input/input";
+import  Avatar from "../../components/avatar/avatar";
 import Form from "../../components/form/form";
 import {AuthController} from "../../controllers/authController";
 import {userController} from "../../controllers/userController";
@@ -17,6 +18,7 @@ export default class Page extends Block {
     dispatchComponentDidUnMount() {
         console.log('dispatchComponentDidUnMount');
         if ( this.props.name === 'Profile') {
+            window.eventBus.off( stdEvents.changeAvatar, this.onChangeAvatar.bind( this));         
             window.eventBus.off( stdEvents.updateProfile, this.onUpdateProfile.bind( this));         
             window.eventBus.off( stdEvents.logout, this.onLogout.bind( this));         
         }else if ( this.props.name === 'SignIn')
@@ -59,12 +61,17 @@ export default class Page extends Block {
             }
         
             Object.entries(this.children.form.children).forEach(([key, value]) => {
-            if ( value instanceof Input_F){
-                const property_name = value.children.input._element.getAttribute( 'name');
-                if ( property_name && property_name in user.user!) {                        
-                    value.setProps({text: user.user![property_name]});
+                if ( value instanceof Input_F){
+                    const property_name = value.children.input._element.getAttribute( 'name');
+                    if ( property_name && property_name in user) {                        
+                        value.setProps({text: user[property_name]});
+                    }
+                }else if ( value instanceof Avatar) {
+                    const property_name = value.children.input._element.getAttribute( 'name');
+                    if ( property_name && property_name in user) {                        
+                        value.children.input.setProps({file: user[property_name]});
+                    }
                 }
-            }
             });
             console.log('onPopState name exit', this.props.name);
         }
@@ -94,8 +101,13 @@ export default class Page extends Block {
         //     if ( validateForm(this.children.form.element as HTMLFormElement))
         //         (this.children.form as Form).printFormData();
         // }
-
-        new userController().update( this.children.form.getFormData() as Record<string, string>)
+        const form = new FormData(this.children.form.element as HTMLFormElement);
+        const avatar: HTMLInputElement  = this.children.form.children.avatar.children.input.element as HTMLInputElement;
+        if ( avatar && avatar.files?.length && avatar.files[0]) {
+            console.log('avatar', avatar.files[0], this.children.form.children.avatar.children.input);
+            form.append('avatar', avatar.files[0]);
+            new userController().update( this.children.form.getFormData() as Record<string, string>, form)
+        }
     }
 
     onLogin( name: string, data: Record<string, string>) {
@@ -106,6 +118,16 @@ export default class Page extends Block {
     // }
 
         new AuthController().signIn( data)
+    }
+
+    onChangeAvatar() {
+        console.log('onChangeAvatar', this.props.name);
+
+        // if ( this.props.name === 'SignIn' || this.props.name === 'SignUp' || this.props.name === 'Profile') {
+        //     if ( validateForm(this.children.form.element as HTMLFormElement))
+        //         (this.children.form as Form).printFormData();
+        // }
+        this.children.image.element.setAttribute('src', "t.png");
     }
 
     onLogout() {
