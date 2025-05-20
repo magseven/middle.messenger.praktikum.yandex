@@ -127,7 +127,7 @@ export default class Page extends Block {
         //     if ( validateForm(this.children.form.element as HTMLFormElement))
         //         (this.children.form as Form).printFormData();
         // }
-        this.children.image.element.setAttribute('src', "t.png");
+        this.children.image.setProps({src: 't.png'});
     }
 
     onLogout() {
