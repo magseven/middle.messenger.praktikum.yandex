@@ -6,7 +6,7 @@ import error_page from '../components/pages/templates/error_page.tmpl'
 import chats from '../components/pages/templates/chat.tmpl'
 import {stdEvents} from '../modules/types'
 import {router, stdRoutes} from '../modules/router'
-
+import imgAvatar from '../static/images/avatar.svg'
 import { BlockEntry } from "../modules/types"
 
 
@@ -69,23 +69,23 @@ export const blockData: Record<string, BlockEntry> = {
             form: {
                 proto: 'Form',
                 avatar: { 
-                    proto: 'Avatar', 
-                    image: {
+                    proto: 'Avatar',
+                    attrs : { class: 'a-avatar'}, 
+                    a_image: {
                         proto: 'Img',
                         attrs: {
-                            src: 'imgAvatar',
+                            src: imgAvatar,
                             alt: "Аватар",
                         },          
                     }, 
-                    input: {
+                    a_input: {
                         proto: 'Input',
                         attrs: {
                             type: 'file',
                             accept: 'image/*',
-                            name: 'avatar',
-                            width: '200px',
-                            height: '200px',
-                //            hidden: true,
+                            // width: '200px',
+                            // height: '200px',
+                            hidden: 'true',
                         },
                         events: {
                             OnChange: (e: Event) => {
@@ -202,21 +202,23 @@ export const blockData: Record<string, BlockEntry> = {
                         proto: 'ChatBar',
                         btitle: { 
                             proto: 'ChatBarTitle',
+                            chat: {
+                                proto: 'Div',                             
+                                attrs: { class: 'a-chat-bar-title-link'}, 
+                                content: 'Создать чат&nbsp;&nbsp;>',
+                                events: { 
+                                    OnClick: () => { window.eventBus.emit( stdEvents.createChat);}
+                                }
+                            },
                             link: {
-                                proto: 'Div', 
-                                    attrs: { class: 'a-chat-bar-title-link'}, content: 'Профиль&nbsp;&nbsp;>'},
-                                    events: { OnClick: () => {router.go( stdRoutes.Profile)}
-                            }
-                            // link: { 
-                            // proto: 'Link', 
-                            //         attrs: { class: 'a-chat-bar-title-link', href: '/profile'}, text: 'Профиль&nbsp;&nbsp;>'},
-                            //         events: { OnClick: () => {router.go( stdRoutes.Profile)}
-                            // },
+                                proto: 'Div',                             
+                                attrs: { class: 'a-chat-bar-title-link'}, 
+                                content: 'Профиль&nbsp;&nbsp;>',
+                                events: { 
+                                    OnClick: () => {router.go( stdRoutes.Profile)}
+                                }
+                            },
                         },
-
-
-                            // link: { proto: 'Link', attrs: { class: 'a-chat-bar-title-link', href: '#'}, text: 'Профиль&nbsp;&nbsp;>'}
-
 
                         bsearch: { 
                             proto: 'ChatBarSearch', 

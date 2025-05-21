@@ -6,10 +6,13 @@ import Img from '../img/img';
 import {Input} from '../input/input';
 import imgBlankCircle from '../../static/images/blank_circle.png';
 import {chatBarListItem, chatContent, chatContentItem, chatContentItems, chatContentHeader, chatContentFooter} from '../pages/templates/chat.tmpl'
+import Store, {StoreEvents} from '../../modules/store'
 
 import { validateField } from "../../modules/utils/validation";
 import imgArrowRight from '../../static/images/arrow-right.png';
 import imgClip  from '../../static/images/clip.png';
+
+import {chatController} from '../../controllers/chatController'
 
 export class Chat extends Block {
     constructor(props: BlockProps) {
@@ -67,7 +70,7 @@ export class ChatBarTitle extends Block {
   }
 
   render() : DocumentFragment {
-    return this.compile( '{{{ link }}}', this.props);
+    return this.compile( '{{{ chat }}} {{{ link }}}', this.props);
   }
 }
 
@@ -94,12 +97,10 @@ export class ChatBarList extends Block {
       attrs: {
         class: 'a-chat-bar-list',
       },
-      ...props.data!.map( 
-            ditem => [ditem.id,  new ChatBarListItem( ditem)] as [string, ChatBarListItem])
-            .reduce(( acc, [id, obj])=>({  ...acc, [`i${id}`]: obj}), {})
+      
     });
 
-    const onSelectItem = (props: BlockProps) => {
+      const onSelectItem = (props: BlockProps) => {
       if ( this.props.selectedItem !== 0  )
         this.children[`i${this.props.selectedItem}`].setProps({ selected: 0});
       
@@ -115,9 +116,25 @@ export class ChatBarList extends Block {
     });
   }
 
+  componentDidMount(): void {
+    const onStoreUpdate = () => {
+      console.log('onStoreUpdate');
+
+      this.children = {...Store.getState().chats!.map( 
+            ditem => [ditem.id,  new ChatBarListItem( ditem)] as [number, ChatBarListItem])
+            .reduce(( acc, [id, obj])=>({  ...acc, [`i${id}`]: obj}), {})};
+      this.setProps( { data:Store.getState().chats,})
+    }
+
+    onStoreUpdate();
+//    Store.on( StoreEvents.Updated, onStoreUpdate);          
+  }
+
   render() : DocumentFragment {
+    console.log(this.props.data!.reduce(( acc, {id}) => `${acc}{{{i${id}}}}`, ''));
     return this.compile( this.props.data!.reduce(( acc, {id}) => `${acc}{{{i${id}}}}`, ''), this.props);
   }
+
 }
 
 export class ChatBarListItem extends Block {

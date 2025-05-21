@@ -126,8 +126,8 @@ export class Block {
       this.eventBus.emit(Block.EVENTS.FLOW_RENDER);
     }
   
-    _componentDidMount() {
-      this.componentDidMount();
+    async _componentDidMount() {
+      await this.componentDidMount();
 
       Object.values(this.children).forEach(child => {
         child.dispatchComponentDidMount();

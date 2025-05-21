@@ -2,7 +2,7 @@ import AuthAPI from '../api/auth-api';
 import {Router, stdRoutes} from '../modules/router';
 import { router } from '../modules/router';
 import Store from '../modules/store';
-import {stdReasons} from '../modules/types';
+import {baseResourceUrl} from '../modules/httpRequest';
 
 export class AuthController {
     private _authApi: AuthAPI;
@@ -65,6 +65,7 @@ export class AuthController {
         try {
             const user = await this._authApi.getUser();
             if (user) {
+                user.avatar = baseResourceUrl + user.avatar;
                 this._store.set('user', user);
                 console.log('user', user);
             };

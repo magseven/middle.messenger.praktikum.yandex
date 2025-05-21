@@ -1,8 +1,5 @@
 import { Block, BlockProps } from "../../modules/block";
-import Img from "../img/img";
-import {Input} from "../input/input";
 import tmplAvatar from './avatar.tmpl';
-import imgAvatar from '../../static/images/avatar.svg';
 
 class Avatar extends Block {
     constructor(props: BlockProps) {

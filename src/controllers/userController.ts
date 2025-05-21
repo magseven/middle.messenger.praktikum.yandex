@@ -1,4 +1,5 @@
 import userAPI from '../api/user-api';
+import { baseResourceUrl } from '../modules/httpRequest';
 import {Router, stdRoutes} from '../modules/router';
 import { router } from '../modules/router';
 import Store from '../modules/store';
@@ -16,12 +17,11 @@ export class userController {
 
     async update(data: Record<string, string>, form?: FormData) {
         try {
-            const response = await this._userApi.update(data);
-            console.log('update', response.status, response.responseText);
+            let response = await this._userApi.update(data);
             if ( response.status !== 200) {
                 console.log(response.responseText);
+                return false;
             }else{
-                console.log('password:', data.oldPassword, data.newPassword);                
                 if ( data.oldPassword && data.newPassword) {
                     const response = await this._userApi.changePassword({ oldPassword: data.oldPassword, newPassword: data.newPassword});
                     if ( response.status !== 200) {
@@ -29,17 +29,21 @@ export class userController {
                     }
                 }
                 if ( form) {
-                    console.log('update avatar:', form);                
-                    const response = await this._userApi.updateAvatar(form);
-                    console.log(response);
+                    response = await this._userApi.updateAvatar(form);
                     if ( response.status !== 200) {
                         console.log(response.responseText);
+                        return false;
                     }
                 }
+
+                const user = JSON.parse(response.responseText);
+                user.avatar = baseResourceUrl + user.avatar;
+                Store.set( 'user', user);
+                return true;                
             }
         } catch (error) {
             console.error('Update profile error:', error);
-            throw error;
+           return false;
         }
     }
     // async get() {

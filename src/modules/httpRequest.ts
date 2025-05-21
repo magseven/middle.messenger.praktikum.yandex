@@ -21,11 +21,12 @@ function queryStringify(data: Record<string, string | Blob>) {
 type transportOptions = {
   headers?: Record<string, string>;         
   method?: METHOD;          
-  data?: Record<string, string | Blob> | FormData; 
+  data?: Record<string, string | Blob | number> | FormData; 
   timeout?:number; 
  }
 
 const baseApiUrl: string = 'https://ya-praktikum.tech/api/v2';
+export const baseResourceUrl: string = 'https://ya-praktikum.tech/api/v2/resources';
 
 //  interface RequestOptions {
 //   headers?: Record<string, string>;

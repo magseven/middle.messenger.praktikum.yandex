@@ -64,9 +64,30 @@ export enum stdEvents {
     popstate = 'PopState',
     login = 'Login',
     changeAvatar = 'changeAvatar',
+    createChat = 'createChat'
 }
 
 export const stdReasons: Record<number, string> = {
     400: 'User already in system',
     401: 'Login or password is incorrect'
+}
+
+export type defChat = {
+    id: number,
+    title: string,
+    avatar: string,
+    unread_count: number,
+    created_by: number,
+    last_message: {
+      user: {
+        first_name: string,
+        second_name: string,
+        avatar: string,
+        email: string,
+        login: string,
+        phone: string
+      },
+      time: string,
+      content: string
+    }
 }

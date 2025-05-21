@@ -18,11 +18,7 @@ class userAPI {
     };
 
     async updateAvatar(formData: FormData) {
-        const response = await this._httpTransport.put('/user/profile/avatar', {data: formData});
-        if ( response.status >= 400)
-            throw new Error( JSON.parse(response.responseText).reason);
-        
-        return JSON.parse(response.responseText);
+        return await this._httpTransport.put('/user/profile/avatar', {data: formData});
     };
 
     async search(data: Record<string, string>) {

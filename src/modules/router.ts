@@ -1,5 +1,7 @@
 //import {Chat} from '../../components/chat/chat'
 import Page from '../components/pages/page'
+import Profile from '../components/pages/profile'
+import Chat from '../components/pages/chat'
 import { blockData } from '../models/page_data';
 import {Block, BlockProps} from './block'
 import Route from './route'
@@ -95,9 +97,9 @@ window.eventBus = new EventBus();
 router
   .use( stdRoutes.Index, Page, blockData.index)
   .use( stdRoutes.Login, Page, blockData.login)
-  .use( stdRoutes.Profile, Page, blockData.profile)
+  .use( stdRoutes.Profile, Profile, blockData.profile)
   .use( stdRoutes.SignUp, Page, blockData.signup)
-  .use( stdRoutes.Chat, Page, blockData.chats)
+  .use( stdRoutes.Chat, Chat, blockData.chats)
   .use( stdRoutes.Error404, Page, blockData.page_404)
   .use( stdRoutes.Error500, Page, blockData.page_500)
   .start()
