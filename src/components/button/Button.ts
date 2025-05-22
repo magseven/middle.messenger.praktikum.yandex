@@ -27,6 +27,7 @@ export class ButtonMenu extends Block {
       menuItem1: new Button({ 
         num: 1,
         attrs: { 
+          popovertarget: 'user_dialog',
           class: "dropdown-item"
         },
         events: {
