@@ -186,7 +186,6 @@ export class Block {
       Object.assign(this.events, nextEvent);
       this._removeEvents();
       this._addEvents();
-      //console.log( this.events);
     };
   
     get element() {
@@ -218,7 +217,7 @@ export class Block {
       if (!this.events) return;
   
       Object.entries(this.events).forEach(([eventName, handler]) => {
-        console.log( eventName);
+//        console.log( eventName);
         this._element.addEventListener(defEventList[eventName as keyof typeof defEventList], handler as EventListener);
       });
     }

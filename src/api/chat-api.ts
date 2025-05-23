@@ -40,4 +40,41 @@ export default class ChatAPI {
             return;
         }
     };
+
+    async addUsersToChat( chatId: number, userId: number) {
+        try {
+            const response = await this._httpTransport.put('/chats/users', { data: { chatId, users: [userId] }});
+
+            if ( response.status !== 200) {
+                console.log( 'addUsersToChat error:', response.status);
+                return false;
+            }
+            return true;
+
+        }catch(error) {
+            console.log( 'addUsersToChat error:', error);
+            return false;
+        }
+    };
+
+    async removeUserFromChat(chatId: number, userId: number) {
+        await this._httpTransport.delete('/chats/users', { data: { chatId, users: [userId] } });
+    };
+
+    async getChatToken(chatId: number) {
+        try {
+            const response = await this._httpTransport.post(`/chats/token/${chatId}`, {});
+            if ( response.status !== 200) {
+                console.log( 'getChatToken error:', response.status);
+                return;
+            }
+            console.log(JSON.parse( response.responseText));
+            return JSON.parse( response.responseText).token;
+
+        }catch(error) {
+            console.log( 'getChatToken error:', error);
+            return;
+        }
+    };
+
 };

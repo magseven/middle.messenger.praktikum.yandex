@@ -91,12 +91,12 @@ export const blockData: Record<string, BlockEntry> = {
                             OnChange: (e: Event) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                console.log('onchange');                                
                                 window.eventBus.emit( stdEvents.changeAvatar);
                             },
                         },
                     },
                 },
+
                 first_name: { proto: 'Input_F', type: "text", name: 'first_name', placeholder: 'Имя'},
                 second_name: { proto: 'Input_F', type: "text", name: 'second_name', placeholder: 'Фамилия'}, 
                 display_name: { proto: 'Input_F', type: "text", name: 'display_name', placeholder: 'Псевдоним'}, 
@@ -116,7 +116,7 @@ export const blockData: Record<string, BlockEntry> = {
             },
             logout: { proto: 'Button', attrs: {type: "submit", class: 'a-button'}, text: 'Logout', events: {
                     OnClick: () => {
-                            window.eventBus.emit( stdEvents.logout);
+                        window.eventBus.emit( stdEvents.logout);
                     }
                 },},
         },
@@ -139,7 +139,20 @@ export const blockData: Record<string, BlockEntry> = {
                 email: { proto: 'Input_F', type: "text", name: 'email', placeholder: 'email'}, 
                 password: { proto: 'Input_F', type: "password", name: 'password', placeholder: 'Пароль'}, 
                 phone: { proto: 'Input_F', type: "text", name: 'phone', placeholder: 'Телефон'}, 
-                button: { proto: 'Button', attrs: { type: "submit", class: 'a-button'},text: 'Зарегистрировать'}, 
+                button: { 
+                    proto: 'Button', 
+                    attrs: { 
+                        type: "submit", 
+                        class: 'a-button'
+                    },
+                    text: 'Зарегистрировать',
+                    events: {
+                        OnClick: () => {
+                            console.log('Зарегистрировать');
+                            window.eventBus.emit( stdEvents.signup);
+                        }
+                    },
+                }, 
                 button1: { 
                     proto: 'Button', 
                     attrs: { class: 'a-button'},  

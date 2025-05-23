@@ -1,5 +1,4 @@
 import ChatAPI from '../api/chat-api';
-import { baseResourceUrl } from '../modules/httpRequest';
 import {Router, stdRoutes} from '../modules/router';
 import { router } from '../modules/router';
 import Store from '../modules/store';
@@ -22,5 +21,15 @@ export class chatController {
     async createChat(data: Record<string, string>) {
         return await this._chatApi.createChat(data);
     }
+
+    async addUsersToChat( chatId: number, userId: number) {
+        return await this._chatApi.addUsersToChat( chatId, userId);
+    }
+
+    async getChatToken( chatId: number) {
+        return await this._chatApi.getChatToken( chatId)
+    }
+
+    
 
 };

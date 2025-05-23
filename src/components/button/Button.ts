@@ -1,7 +1,7 @@
 import { Block, BlockProps } from "../../modules/block";
+import { stdEvents } from "../../modules/types";
 import buttonTemplate from './button.tmpl';
 import {menuButton} from './button.tmpl';
-
 class Button extends Block {
     constructor(props: BlockProps) {
       super("button", {
@@ -27,26 +27,33 @@ export class ButtonMenu extends Block {
       menuItem1: new Button({ 
         num: 1,
         attrs: { 
-          popovertarget: 'user_dialog',
-          class: "dropdown-item"
+          // popovertarget: 'user_dialog',
+          class: "dropdown-item",
         },
         events: {
           OnClick: () => {
             console.log('Создать пользователя');
+            window.eventBus.emit( stdEvents.addUserChat)
           }
         },
-        text: 'Создать'}),
+        text: 'Добавить пользователя',
+      }),
       menuItem2: new Button({ 
         num: 2, 
         attrs: { 
-          class: "dropdown-item"
+          // popovertarget: 'user_dialog',
+          class: "dropdown-item",
         }, 
         events: {
           OnClick: () => {
             console.log('Удалить пользователя');
           }
         },
-        text: 'Удалить'}),
+        text: 'Удалить пользователя'}),
+        button: new Button({ 
+          text: 'Cоздать',
+        })
+
     });
   }
 

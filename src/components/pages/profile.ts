@@ -8,10 +8,11 @@ import Store from "../../modules/store";
 import {router, stdRoutes} from "../../modules/router";
 import {validateForm} from '../../modules/utils/validation';
 import {baseResourceUrl} from '../../modules/httpRequest';
+import Page from "../../components/pages/page";
 
-export default class Profile extends Block {
+export default class Profile extends Page {
     constructor(props: BlockProps) {
-        super("section", props);    
+        super(props);    
                                     
     }
 
@@ -118,11 +119,8 @@ export default class Profile extends Block {
 
         const a_input = avatar.children.a_input.element as HTMLInputElement
         const a_image = avatar.children.a_image.element as HTMLImageElement
-        console.log('a_input', a_input);
-        console.log('a_image', a_image);
 
         if ( a_input && a_input.files && a_input.files[0]) {
-            console.log('a_image', a_input.files[0].name);
             a_image.setAttribute( 'src', '../../static/images/' + a_input.files[0].name);
         }
     }

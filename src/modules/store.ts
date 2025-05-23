@@ -1,5 +1,6 @@
 import {EventBus} from './event_bus'
 import {defChat} from './types'
+import {Block} from './block'
 
 export enum StoreEvents {
   Updated = 'updated',
@@ -8,18 +9,20 @@ export enum StoreEvents {
 export type storeState = {
   user: Record<string, string> | null;
   chats: defChat[];
+  selectedItem: Block|null;
+  token: string;
 }
 
 
 class Store extends EventBus {
-  private _state = { user: null, chats: []};
+  private _state = { user: null, chats: [], selectedItem: null, token: ''};
   
   public getState() : storeState {
     return this._state;
   }
   
   public set(path: string, value: unknown) {
-    console.log( 'store set:', path, value);
+//    console.log( 'store set:', path, value);
     this._state = { ...this._state, [path]: value}
     this.emit(StoreEvents.Updated);
   };

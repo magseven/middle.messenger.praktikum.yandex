@@ -7,7 +7,7 @@ const METHODS = {
 
 type METHOD = typeof METHODS[keyof typeof METHODS];
 
-function queryStringify(data: Record<string, string | Blob>) {
+function queryStringify(data: Record<string|number, string | Blob | number | number[]> ) {
   if (typeof data !== 'object') {
     throw new Error('Data must be object');
   }
@@ -21,7 +21,7 @@ function queryStringify(data: Record<string, string | Blob>) {
 type transportOptions = {
   headers?: Record<string, string>;         
   method?: METHOD;          
-  data?: Record<string, string | Blob | number> | FormData; 
+  data?: Record<string|number, string | Blob | number | number[]> | FormData; 
   timeout?:number; 
  }
 

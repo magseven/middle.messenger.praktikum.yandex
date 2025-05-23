@@ -63,8 +63,13 @@ export enum stdEvents {
     logout = 'Logout',
     popstate = 'PopState',
     login = 'Login',
+    signup = 'SignUp',
     changeAvatar = 'changeAvatar',
-    createChat = 'createChat'
+    createChat = 'createChat',
+    addUserChat = 'addUserChat',
+    delUserChat = 'delUserChat',
+    selectItem = 'selectItem',
+    sendMessage = 'sendMessage'
 }
 
 export const stdReasons: Record<number, string> = {

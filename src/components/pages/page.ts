@@ -31,6 +31,7 @@ export default class Page extends Block {
             window.eventBus.on( stdEvents.logout, this.onLogout.bind( this));         
         }else if ( this.props.name === 'SignIn'){
             const user = await new AuthController().fetchUser();
+            console.log( 'SignIn', user, Store.getState().user);
             if ( user) {
                 router.go( stdRoutes.Chat);
                 return;

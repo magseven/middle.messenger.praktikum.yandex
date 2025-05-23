@@ -13,6 +13,7 @@ import imgArrowRight from '../../static/images/arrow-right.png';
 import imgClip  from '../../static/images/clip.png';
 
 import {chatController} from '../../controllers/chatController'
+import {sendMessage} from '../../modules/utils/websocket'
 
 export class Chat extends Block {
     constructor(props: BlockProps) {
@@ -94,26 +95,30 @@ export class ChatBarList extends Block {
     super("div", { 
       ...props,
       selectedItem: 0,
+      parent: null,
       attrs: {
         class: 'a-chat-bar-list',
       },
       
     });
 
-      const onSelectItem = (props: BlockProps) => {
-      if ( this.props.selectedItem !== 0  )
-        this.children[`i${this.props.selectedItem}`].setProps({ selected: 0});
+    //   const onSelectItem = (props: BlockProps) => {
+    //   if ( this.props.selectedItem !== 0  )
+    //     this.children[`i${this.props.selectedItem}`].setProps({ selected: 0});
       
-      if ( props.id !== 0  )
-        this.children[`i${props.id}`].setProps({ selected: 1});  
+    //   if ( props.id !== 0  )
+    //     this.children[`i${props.id}`].setProps({ selected: 1});  
       
-      this.props.selectedItem = props.id;
-    };    
+    //   this.props.selectedItem = props.id;
+    // };    
 
-    Object.values(this.children).forEach(( value) => {
-      if ( value instanceof ChatBarListItem)
-        value.eventBus.on( 'onSelectItem', onSelectItem)
-    });
+    // Object.values(this.children).forEach(( value) => {
+    //     console.log(ChatBarListItem);
+    //   if ( value instanceof ChatBarListItem) {
+    //         value.setProps( {"parent": this});
+    //     value.eventBus.on( 'onSelectItem', onSelectItem)
+    //   }
+    //});
   }
 
   componentDidMount(): void {
@@ -123,7 +128,7 @@ export class ChatBarList extends Block {
       this.children = {...Store.getState().chats!.map( 
             ditem => [ditem.id,  new ChatBarListItem( ditem)] as [number, ChatBarListItem])
             .reduce(( acc, [id, obj])=>({  ...acc, [`i${id}`]: obj}), {})};
-      this.setProps( { data:Store.getState().chats,})
+      this.setProps( { data:Store.getState().chats,} )
     }
 
     onStoreUpdate();
@@ -147,10 +152,17 @@ export class ChatBarListItem extends Block {
       },
       events: {
         OnClick: (e: Event) => {
+          console.log('onselect', this.props);
           e.preventDefault();
           e.stopPropagation();
-          this.eventBus.emit( 'onSelectItem', this.props);
-        },
+          
+          const currentSelected = Store.getState().selectedItem;
+          if ( currentSelected && currentSelected !== this)
+            currentSelected.setProps({ selected: 0})
+          
+          this.setProps( {selected: !currentSelected || currentSelected && currentSelected === this? true : !this.props.selected});
+          Store.set( "selectedItem", this);
+          },
       },
       avatar: new Img({
         attrs: {
@@ -259,18 +271,23 @@ export class ChatContentFooter extends Block {
           OnClick: (e: Event) => {
             e.preventDefault();
             e.stopPropagation();
-            window.eventBus.emit( 'onSendMessage', this.props);
+            window.eventBus.emit( stdEvents.sendMessage);
           }
         },
         }),
     });
     
-    const onSendMessage = () => {
-      if ( validateField(this.children.message.element as HTMLInputElement))
-        console.log( 'Сообщение:', (this.children.message as Input).getText(), 'отправлено.');
-    }
+    // const onSendMessage = () => {
+    //   if ( validateField(this.children.message.element as HTMLInputElement)) {
+    //     console.log( 'Сообщение:', (this.children.message as Input).getText(), 'отправлено.');
+    //     console.log('user:', Store.getState().user!.id, 'chat_id:', Store.getState().selectedItem?.props.id, 'token:', Store.getState().token);
+    //     const res = sendMessage( Store.getState().user!.id,  Store.getState().selectedItem!.props!.id as number, Store.getState().token)
+    //     console.log('res', res);
 
-    window.eventBus.on( 'onSendMessage', onSendMessage); 
+    //   }
+    // }
+
+    //window.eventBus.on( 'onSendMessage', onSendMessage); 
   }
 
   render() : DocumentFragment {
@@ -306,6 +323,7 @@ export class ChatContentItem extends Block {
 }
 
 import Handlebars from 'handlebars';
+import { stdEvents } from "../../modules/types";
 
 Handlebars.registerHelper('processContentItem', function(item) {
   return processContentItem(item);
