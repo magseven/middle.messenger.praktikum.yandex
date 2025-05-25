@@ -4,6 +4,7 @@
 @use './usefull';
 @use './variables' as vars;
 @use '../components/chat/chats.scss';
+@use '../components/button/menu.scss';
 
 body, html {
   height: 100%;

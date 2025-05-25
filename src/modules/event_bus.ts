@@ -11,8 +11,9 @@ export class EventBus {
   on( event: string, callback: Function): void { 
     if ( !this.__object.has( event)) {
       this.__object.set( event, [callback]);
-      }else
+    }else
       this.__object.set( event, [...this.__object.get(event)!, callback]);
+    
     return;
   }
   
@@ -21,10 +22,18 @@ export class EventBus {
     if ( !this.__object.has( event)) 
       return;
     
-    this.__object.set( event, this.__object.get( event)!.filter((cb) => cb != callback));
+    this.__object.set( event, this.__object.get( event)!.filter((cb) => cb !== callback));
+    console.log('off', this.__object.get(event)!.length, event);
   }
-                                                           
-  emit(event: string, ...args: Record<string, unknown>[]) {
+
+  // offAll( event: string): void {
+  //   if ( !this.__object.has( event)) 
+  //     return;
+    
+  //   this.__object.set( event, []);
+  // }
+
+  emit(event: string, ...args: unknown[]) {
     if ( !this.__object.has( event))
         return;
 

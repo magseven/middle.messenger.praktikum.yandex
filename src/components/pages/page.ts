@@ -1,34 +1,67 @@
-import {getCurrentPage} from '../../modules/utils/common'
-import {pageData} from '../../modules/utils/form_funcs';
-
 import { Block, BlockProps } from "../../modules/block";
+import {AuthController} from "../../controllers/authController";
+import { stdEvents } from "../../modules/types";
+import Store from "../../modules/store";
+import {router, stdRoutes} from "../../modules/router";
 
-import { blockData } from '../../models/page_data'
-import {EventBus} from '../../modules/event_bus'
-
-class Page extends Block {
+export default class Page extends Block {
     constructor(props: BlockProps) {
-        super("section", {...props,
-                        }); 
+        super("section", props);    
+                                    
+    }
+
+    componentDidUnMount() {
+        console.log('dispatchComponentDidUnMount');
+        if ( this.props.name === 'SignIn')
+            window.eventBus.off( stdEvents.login, this.onLogin);                 
+    }
+
+    async componentDidMount() {
+        if ( this.props.name === 'SignIn'){
+            const user = await new AuthController().fetchUser();
+            console.log( 'SignIn', user, Store.getState().user);
+            if ( user) {
+                router.go( stdRoutes.Chat);
+                return;
+            }
+
+            this.children.form.children.button.setEvents({
+                        OnClick: (e: Event) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log('button onClick');
+                            window.eventBus.emit( stdEvents.login, this.props.name, this.children.form.getFormData());
+                        }});
+            window.eventBus.on( stdEvents.login, this.onLogin);                 
+        }
+
+    }
+
+    onFormSubmit() {
+        console.log('onFormSubmit', this.props.name);
+
+        // if ( this.props.name === 'SignIn' || this.props.name === 'SignUp' || this.props.name === 'Profile') {
+        //     if ( validateForm(this.children.form.element as HTMLFormElement))
+        //         (this.children.form as Form).printFormData();
+        // }
+
+        if ( this.props.name != undefined) {
+            if ( this.props.name === 'SignIn')
+                new AuthController().signIn( this.children.form.getFormData() as Record<string, string>)
+        }
+    }
+
+    onLogin( name: string, data: Record<string, string>) {
+        console.log('onLogin', name);
+
+    //     if ( validateForm(this.children.form.element as HTMLFormElement))
+    //         (this.children.form as Form).printFormData();
+    // }
+
+        new AuthController().signIn( data)
     }
 
     render() : DocumentFragment {
-        const page = blockData[getCurrentPage()] || blockData.index;
-        return this.compile( page.template, {...this.props});
+        return this.compile( this.props.template as string, this.props);
     }
 }
-    
-function render(query: string, block: Page) {
-      const root = document.querySelector(query);
-      root!.replaceWith(block.getContent());
-      return root;
-}
-
-if (!window.eventBus) {
-    window.eventBus = new EventBus();
-}
-
-const data = blockData[getCurrentPage()] || blockData.index;
-const page = new Page( pageData( data.context) as BlockProps);   
-
-render(".app", page);

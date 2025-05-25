@@ -45,10 +45,10 @@ const classRegistry: Record<string, BlockClass> = {
       ChatContentFooter,
 }; 
   
-export const pageData = ( item: defContentRecord): BlockProps | string | Block | BlockProps[] => {
+const pageData = ( item: defContentRecord): BlockProps | string | Block | BlockProps[] => {
       const result: BlockProps = {};
 
-      if ( typeof item === 'string' || Array.isArray(item))
+      if ( typeof item === 'string' || Array.isArray(item) || typeof item === 'function')
             return item;
 
       if ( Object.hasOwn( item, 'proto') && ( typeof item.proto === 'string'))
@@ -63,3 +63,5 @@ export const pageData = ( item: defContentRecord): BlockProps | string | Block |
       })
       return result;
 }
+
+export default pageData;
