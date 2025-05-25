@@ -103,20 +103,3 @@ router
   .use( stdRoutes.Error404, Page, blockData.page_404)
   .use( stdRoutes.Error500, Page, blockData.page_500)
   .start()
-
-// Через секунду контент изменится сам, достаточно дёрнуть переход
-// setTimeout(() => {
-//   router.go("/login");
-// }, 1000);
-
-// А можно и назад
-// setTimeout(() => {
-//   router.back();
-// }, 3000);
-
-// // И снова вперёд
-// setTimeout(() => {
-//   router.forward();
-// }, 5000);
-
-  
