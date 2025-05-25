@@ -1,7 +1,6 @@
 import { Block, BlockProps } from "../../modules/block";
 import inputFTemplate from './input.tmpl';
 import {inputTemplate} from './input.tmpl';
-import {validateField} from '../../modules/utils/validation'
 
 export class Input_F extends Block {
     constructor(props: BlockProps) {

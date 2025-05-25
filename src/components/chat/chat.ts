@@ -6,14 +6,12 @@ import Img from '../img/img';
 import {Input} from '../input/input';
 import imgBlankCircle from '../../static/images/blank_circle.png';
 import {chatBarListItem, chatContent, chatContentItem, chatContentItems, chatContentHeader, chatContentFooter} from '../pages/templates/chat.tmpl'
-import Store, {StoreEvents} from '../../modules/store'
+import Store, {StoreEvents, storeState, initialStoreState} from '../../modules/store'
+import { getLastMessages } from "../../modules/utils/websocket";
+import { chatController } from "../../controllers/chatController";
 
-import { validateField } from "../../modules/utils/validation";
 import imgArrowRight from '../../static/images/arrow-right.png';
 import imgClip  from '../../static/images/clip.png';
-
-import {chatController} from '../../controllers/chatController'
-import {sendMessage} from '../../modules/utils/websocket'
 
 export class Chat extends Block {
     constructor(props: BlockProps) {
@@ -91,6 +89,7 @@ export class ChatBarSearch extends Block {
 }
 
 export class ChatBarList extends Block {
+  _bindOnStoreUpdate = this.onStoreUpdate.bind( this);
   constructor(props: BlockProps) {
     super("div", { 
       ...props,
@@ -102,47 +101,35 @@ export class ChatBarList extends Block {
       
     });
 
-    //   const onSelectItem = (props: BlockProps) => {
-    //   if ( this.props.selectedItem !== 0  )
-    //     this.children[`i${this.props.selectedItem}`].setProps({ selected: 0});
-      
-    //   if ( props.id !== 0  )
-    //     this.children[`i${props.id}`].setProps({ selected: 1});  
-      
-    //   this.props.selectedItem = props.id;
-    // };    
+  }
 
-    // Object.values(this.children).forEach(( value) => {
-    //     console.log(ChatBarListItem);
-    //   if ( value instanceof ChatBarListItem) {
-    //         value.setProps( {"parent": this});
-    //     value.eventBus.on( 'onSelectItem', onSelectItem)
-    //   }
-    //});
+  onStoreUpdate( oldState: storeState, newState: storeState): void {
+    if ( oldState.chats === newState.chats)
+      return;
+
+    this.children = {...newState.chats!.map( 
+          ditem => [ditem.id,  new ChatBarListItem( ditem)] as [number, ChatBarListItem])
+          .reduce(( acc, [id, obj])=>({  ...acc, [`i${id}`]: obj}), {})};
+    this.setProps( { data:newState.chats} )
   }
 
   componentDidMount(): void {
-    const onStoreUpdate = () => {
-      console.log('onStoreUpdate');
+    this._bindOnStoreUpdate( initialStoreState, Store.getState());
+    Store.on( StoreEvents.Updated, this._bindOnStoreUpdate);          
+  }
 
-      this.children = {...Store.getState().chats!.map( 
-            ditem => [ditem.id,  new ChatBarListItem( ditem)] as [number, ChatBarListItem])
-            .reduce(( acc, [id, obj])=>({  ...acc, [`i${id}`]: obj}), {})};
-      this.setProps( { data:Store.getState().chats,} )
-    }
-
-    onStoreUpdate();
-//    Store.on( StoreEvents.Updated, onStoreUpdate);          
+  componentDidUnMount(): void {
+    Store.off( StoreEvents.Updated, this._bindOnStoreUpdate);          
   }
 
   render() : DocumentFragment {
-    console.log(this.props.data!.reduce(( acc, {id}) => `${acc}{{{i${id}}}}`, ''));
     return this.compile( this.props.data!.reduce(( acc, {id}) => `${acc}{{{i${id}}}}`, ''), this.props);
   }
 
 }
 
 export class ChatBarListItem extends Block {
+  _bindOnStoreUpdate = this.onStoreUpdate.bind( this);
   constructor(props: BlockProps) {
     super("div", { 
       ...props,
@@ -151,18 +138,15 @@ export class ChatBarListItem extends Block {
         class: 'a-chat-bar-list-item',
       },
       events: {
-        OnClick: (e: Event) => {
-          console.log('onselect', this.props);
+        OnClick: async (e: Event) => {
           e.preventDefault();
           e.stopPropagation();
           
-          const currentSelected = Store.getState().selectedItem;
-          if ( currentSelected && currentSelected !== this)
-            currentSelected.setProps({ selected: 0})
-          
-          this.setProps( {selected: !currentSelected || currentSelected && currentSelected === this? true : !this.props.selected});
-          Store.set( "selectedItem", this);
-          },
+          Store.set( "selectedItem", this.props.id);
+          const user = Store.getState().user; 
+          const token = await new chatController().getChatToken( Number(this.props.id));
+          getLastMessages( user!.id, Number(this.props.id), token);
+        },
       },
       avatar: new Img({
         attrs: {
@@ -174,20 +158,25 @@ export class ChatBarListItem extends Block {
     });
   }
 
-  componentDidUpdate( oldProps: Record<string, unknown>,
-                      newProps: Record<string, unknown>): boolean {
-                       
-    if ( oldProps.selected !== newProps.selected) {
-      if ( newProps.selected) {
-        this.setProps({ attrs: {class: 'a-chat-bar-list-item a-chat-bar-list-item-selected'}});
-      }else{
-        this.setProps({ attrs: {class: 'a-chat-bar-list-item'}});
-      }
-    }
+  componentDidMount() {
+    Store.on( StoreEvents.Updated, this._bindOnStoreUpdate);
+  }
 
-    return true;
+  componentDidUnMount() {
+    Store.off( StoreEvents.Updated, this._bindOnStoreUpdate);
+  }
+
+ onStoreUpdate( oldState: storeState, newState: storeState): void {
+  if ( oldState.selectedItem === newState.selectedItem)
+    return;
+
+  const selected = newState.selectedItem === this.props.id;
+  this.setProps({
+    selected,
+    attrs: { class: `a-chat-bar-list-item${selected ? ' a-chat-bar-list-item-selected': ''}`}
+  })
 }
- 
+
 render() : DocumentFragment {
     return this.compile( chatBarListItem, this.props);
   }
@@ -206,21 +195,38 @@ export class ChatContent extends Block {
 }
 
 export class ChatContentHeader extends Block {
-  constructor(props: BlockProps) {
-    super("div", { 
-      ...props, attrs: {class: 'a-chat-content-header'},
-      button: new ButtonMenu({
-        text: ':',
-      }),
-      avatar: new Img({
-        attrs: {
-          class: "a-chat-content-header-avatar-image no-outline",
-          src: imgBlankCircle,
-          alt: 'Аватар',
-          width: '48px',
-        }
-      }) 
-    });
+    _bindOnStoreUpdate = this.onStoreUpdate.bind( this);
+
+    constructor(props: BlockProps) {
+      super("div", { 
+        ...props, attrs: {class: 'a-chat-content-header'},
+        button: new ButtonMenu({
+          text: ':',
+        }),
+        avatar: new Img({
+          attrs: {
+            class: "a-chat-content-header-avatar-image no-outline",
+            src: imgBlankCircle,
+            alt: 'Аватар',
+            width: '48px',
+          }
+        }) 
+      });
+  }
+
+  componentDidMount() {
+    Store.on( StoreEvents.Updated, this._bindOnStoreUpdate);
+  }
+
+  componentDidUnMount() {
+    Store.off( StoreEvents.Updated, this._bindOnStoreUpdate);
+  }
+
+  onStoreUpdate( oldState: storeState, newState: storeState): void {
+    if ( oldState.selectedItem === newState.selectedItem)
+        return;
+
+    this.setProps({ title: newState.chats.find(( item) => { return item.id === newState.selectedItem})?.title})
   }
 
   render() : DocumentFragment {
@@ -276,18 +282,6 @@ export class ChatContentFooter extends Block {
         },
         }),
     });
-    
-    // const onSendMessage = () => {
-    //   if ( validateField(this.children.message.element as HTMLInputElement)) {
-    //     console.log( 'Сообщение:', (this.children.message as Input).getText(), 'отправлено.');
-    //     console.log('user:', Store.getState().user!.id, 'chat_id:', Store.getState().selectedItem?.props.id, 'token:', Store.getState().token);
-    //     const res = sendMessage( Store.getState().user!.id,  Store.getState().selectedItem!.props!.id as number, Store.getState().token)
-    //     console.log('res', res);
-
-    //   }
-    // }
-
-    //window.eventBus.on( 'onSendMessage', onSendMessage); 
   }
 
   render() : DocumentFragment {
@@ -296,10 +290,34 @@ export class ChatContentFooter extends Block {
 }
 
 export class ChatContentItems extends Block {
+  _bindOnStoreUpdate = this.onStoreUpdate.bind(this);
   constructor(props: BlockProps) {
     super("div", { 
       ...props, attrs: {class: 'a-chat-content-items f-inter'},
     });
+  }
+
+componentDidMount() {
+    Store.on( StoreEvents.Updated, this._bindOnStoreUpdate);
+  }
+
+  componentDidUnMount() {
+    Store.off( StoreEvents.Updated, this._bindOnStoreUpdate);
+  }
+
+ onStoreUpdate( oldState: storeState, newState: storeState): void {
+    if ( oldState.messages === newState.messages)
+      return;
+
+    this.setProps( { 
+      data: newState.messages.map((item)=>{
+        return { dir: item.user_id === Number(newState.user!.id) ? '0' : '1', 
+                 message: item.content, 
+                 time: item.time,
+                 user_id: item.user_id}
+
+      })
+    })
   }
 
   render() : DocumentFragment {

@@ -21,18 +21,17 @@ export class AuthController {
             console.log( response.responseText, response.status, Store.getState().user);
             if (( response.status === 400) || ( response.status === 200)) {
                 if ( !Store.getState().user){
-                    const user = await this.fetchUser();
+                    await this.fetchUser();
                 }
                 this._router.go(stdRoutes.Chat);
             }
         } catch (error) {
             console.error('Sign in error:', error);
-            // @ts-ignore
+            //@ts-expect-error will contain response text
             if ( JSON.parse(error.responseText)['reason'] === 'User already in system') 
                 router.go( stdRoutes.Chat);
             
             console.error('Sign in error:', error);
-            throw error;
         }
     }
 
@@ -41,12 +40,10 @@ export class AuthController {
             await this._authApi.signUp(data);
             const user = await this.fetchUser();
             console.log( 'valid user:', user);    
-            if (user) {
-                this._router.go(stdRoutes.Chat);
-            }
+            if (user)
+                this._router.go(stdRoutes.Chat);        
         } catch (error) {
             console.error('Sign up error:', error);
-            throw error;
         }
     }
 
@@ -54,10 +51,8 @@ export class AuthController {
         try {
             await this._authApi.logout();
             this._store.set('user', null);
-            this._router.go(stdRoutes.Login);
         } catch (error) {
             console.error('Logout error:', error);
-            throw error;
         };
     };
 
@@ -67,15 +62,14 @@ export class AuthController {
             if (user) {
                 user.avatar = baseResourceUrl + user.avatar;
                 this._store.set('user', user);
-                console.log('user', user);
             };
+            
             return user;
         } catch (error) {
-            // @ts-ignore            
+            // @ts-expect error will contain error text
             console.error('Fetch user error:', error);
             this._store.set('user', null);
 
-            //router.go( stdRoutes.Index);
             return null;
         };
     };

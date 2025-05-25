@@ -28,7 +28,7 @@ export const chatContentHeader = `
         {{{ avatar }}}
     </div>
     <div class="a-chat-content-header-title">
-        <h3 class="a-chat-content-header-title-text f-inter">Вадим{{title}}</h3>
+        <h3 class="a-chat-content-header-title-text f-inter">{{title}}</h3>
     </div>
     <div class="a-chat-content-header-menu">
     {{{ button }}}
@@ -51,6 +51,4 @@ export const chatContentFooter = `
  `;
 
  export const chatContentItems = `{{#each data}}{{{processContentItem this}}}{{/each}}`;
- export const chatContentItem = `
-     {{{ message }}} {{{ image}}}
- `;
+ export const chatContentItem = `Дата: {{{time}}} {{{ message }}} Пользователь: {{{ user_id}}}`;

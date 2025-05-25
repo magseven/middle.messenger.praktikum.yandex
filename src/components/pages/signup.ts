@@ -1,44 +1,41 @@
-import { Block, BlockProps } from "../../modules/block";
-import { Input_F } from "../../components/input/input";
-import  Avatar from "../../components/avatar/avatar";
+import { BlockProps } from "../../modules/block";
 import Form from "../../components/form/form";
 import {AuthController} from "../../controllers/authController";
-import {userController} from "../../controllers/userController";
 import { stdEvents } from "../../modules/types";
-import Store from "../../modules/store";
-import {router, stdRoutes} from "../../modules/router";
 import {validateForm} from '../../modules/utils/validation';
 import Page from "../../components/pages/page";
 
 export default class SignUp extends Page {
+    _bindSignUp = this.onSignUp.bind( this);
+
     constructor(props: BlockProps) {
-        super(props);    
-                                    
+        super(props);                                        
     }
 
-    dispatchComponentDidUnMount() {
+    componentDidUnMount() {
         console.log('dispatchComponentDidUnMount');
-        window.eventBus.offAll( stdEvents.signup);         
+        window.eventBus.off( stdEvents.signup, this._bindSignUp);         
     }
 
     async componentDidMount() {
         console.log('ComponentDidMount');
-        window.eventBus.on( stdEvents.signup, this.onSignUp.bind( this));         
+        window.eventBus.on( stdEvents.signup, this._bindSignUp);         
     }
 
-    onSignUp() {
-        console.log('OnSignUp', this.props.name);
+    async onSignUp() {
+        console.log('OnSignUp');
 
-        // if ( this.props.name === 'SignIn' || this.props.name === 'SignUp' || this.props.name === 'Profile') {
-        //     if ( validateForm(this.children.form.element as HTMLFormElement))
-        //         (this.children.form as Form).printFormData();
-        // }
+        if ( !validateForm(this.children.form.element as HTMLFormElement)) {
+            console.log( 'validation error');
+            return;
+        }
 
-        const res = new AuthController().signUp( this.children.form.getFormData() as Record<string, string>)
-        console.log('result', res);
-        router.go(stdRoutes.Login);
+        (this.children.form as Form).printFormData();
+
+        await new AuthController().logout();
+        await new AuthController().signUp( this.children.form.getFormData() as Record<string, string>)
+
     }
-
 
     render() : DocumentFragment {
         return this.compile( this.props.template as string, this.props);

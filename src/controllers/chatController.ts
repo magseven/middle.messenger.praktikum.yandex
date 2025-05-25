@@ -1,17 +1,10 @@
 import ChatAPI from '../api/chat-api';
-import {Router, stdRoutes} from '../modules/router';
-import { router } from '../modules/router';
-import Store from '../modules/store';
 
 export class chatController {
     private _chatApi: ChatAPI;
-    private _store: typeof Store;
-    private _router: Router;
 
     constructor() {
         this._chatApi = new ChatAPI;
-        this._store = Store;
-        this._router = router;
     };                  
 
     async chats(data: Record<string, string | number>) {
@@ -23,13 +16,14 @@ export class chatController {
     }
 
     async addUsersToChat( chatId: number, userId: number) {
-        return await this._chatApi.addUsersToChat( chatId, userId);
+        return await this._chatApi.addUserToChat( chatId, userId);
+    }
+
+    async delUsersFromChat( chatId: number, userId: number) {
+        return await this._chatApi.delUserFromChat( chatId, userId);
     }
 
     async getChatToken( chatId: number) {
         return await this._chatApi.getChatToken( chatId)
     }
-
-    
-
 };

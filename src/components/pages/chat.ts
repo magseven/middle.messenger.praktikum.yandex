@@ -1,46 +1,59 @@
-import { Block, BlockProps } from "../../modules/block";
-import { Input_F } from "../input/input";
-import  Avatar from "../avatar/avatar";
+import { BlockProps } from "../../modules/block";
 import {chatController} from "../../controllers/chatController";
+import {AuthController} from "../../controllers/authController";
 import Store from "../../modules/store";
-import {validateForm} from '../../modules/utils/validation';
-import {baseResourceUrl} from '../../modules/httpRequest';
 import {stdEvents} from '../../modules/types'
 import {validateField} from '../../modules/utils/validation'
 import {sendMessage} from '../../modules/utils/websocket'
+import {Page} from '../../components/pages'
+import { router, stdRoutes } from "../../modules/router";
 
-export default class Chat extends Block {
+export default class Chat extends Page {
+    _bindOnCreateChat = this.onCreateChat.bind( this);
+    _bindOnAddUserChat = this.onAddUserChat.bind( this);
+    _bindOnDelUserChat = this.onDelUserChat.bind( this);
+    _bindSendMessage = this.onSendMessage.bind( this);
+
     constructor(props: BlockProps) {
-        super("section", props);    
-                                    
+        super( props);                          
     }
 
-    dispatchComponentDidUnMount() {
-        console.log('dispatchComponentDidUnMount');
-        window.eventBus.offAll( stdEvents.createChat);         
-        window.eventBus.offAll( stdEvents.addUserChat);         
-        window.eventBus.offAll( stdEvents.sendMessage);         
+    componentDidUnMount() {
+        console.log('chat: componentDidUnMount');
+        window.eventBus.off( stdEvents.createChat, this._bindOnCreateChat);         
+        window.eventBus.off( stdEvents.addUserChat, this._bindOnAddUserChat);         
+        window.eventBus.off( stdEvents.delUserChat, this._bindOnDelUserChat);         
+        window.eventBus.off( stdEvents.sendMessage, this._bindSendMessage);         
     }
 
     async componentDidMount() {
-        console.log('dispatchComponentDidMount');
-        window.eventBus.on( stdEvents.createChat, this.onCreateChat.bind( this));         
-        window.eventBus.on( stdEvents.addUserChat, this.onAddUserChat.bind( this));         
-        window.eventBus.on( stdEvents.sendMessage, this.onSendMessage.bind( this));
+        console.log('chat: componentDidMount');
+
+        const user = await new AuthController().fetchUser();
+        if ( !user) {
+            router.go( stdRoutes.Login);
+            return;
+        }
+
+        window.eventBus.on( stdEvents.createChat, this._bindOnCreateChat);         
+        window.eventBus.on( stdEvents.addUserChat, this._bindOnAddUserChat);         
+        window.eventBus.on( stdEvents.delUserChat, this._bindOnDelUserChat);         
+        window.eventBus.on( stdEvents.sendMessage, this._bindSendMessage);
+
         await this._get();
     }
-
+     
     async _get() {
         const chats = await new chatController().chats( { offset: 0, limit: 20})
         Store.set('chats', chats);
-        console.log('_get');
+        console.log('chat: _get');
     }
 
     async onCreateChat() {
-        console.log('create chat')
         const chat_id = await new chatController().createChat( { title: 'Мой первый чат' + Store.getState().chats.length})
-        if ( chat_id)
-           this._get();
+        if ( chat_id) {
+           await this._get();
+        }
     }
 
     async onSendMessage() {
@@ -60,58 +73,28 @@ export default class Chat extends Block {
     }
 
     async onAddUserChat() {
-        const user = Store.getState().user;
-        const chats = Store.getState().chats;
-
-        console.log('onAddUserChat chat:', chats[0].id, Number(user!.id));
+        const {user, selectedItem} = Store.getState();
+        console.log('onAddUserChat chat:', selectedItem, Number(user!.id));
 
 
-        if ( !user || !chats || ( chats && !chats.length))
+        if ( !user || !selectedItem)
             return;
 
-        const ok = await new chatController().addUsersToChat( chats[0].id, Number( user.id));
-        // if ( ok) {
-        //     console.log('User ${user.login} was connected to chat ${chats[0].Id}');
-        //     const tokens = await new chatController().getChatToken( chats[0].id);
-        //     if ( tokens) {
-        //         console.log('token:', tokens);
-        //         Store.set( 'token', tokens);
-        //     }
-        // }        
+        await new chatController().addUsersToChat( Number(selectedItem), Number( user.id));
     }
 
-    // onSelectItem(item: Block) {
-    //   item.setProps( {selected: true});
-    //   console.log('onSelectItem', item);              
-    // //   if ( this.props.selectedItem !== 0  )
-    // //     this.children[`i${this.props.selectedItem}`].setProps({ selected: 0});
-      
-    // //   if ( props.id !== 0  )
-    // //     this.children[`i${props.id}`].setProps({ selected: 1});  
-      
-    // //   this.props.selectedItem = props.id;
-    // };    
+    async onDelUserChat() {
+        const {user, selectedItem} = Store.getState();
+        console.log('onDelUserChat chat:', selectedItem, Number(user!.id));
+
+        if ( !user || !selectedItem)
+            return;
+
+        await new chatController().delUsersFromChat( Number(selectedItem), Number( user.id));
+    }
 
     render() : DocumentFragment {
         console.log('render');
         return this.compile( this.props.template as string, this.props);
     }
 }
-/*
-tramp
-T1eritoeitoip
-function render(query: string, block: Page) {
-      const root = document.querySelector(query);
-      root!.replaceWith(block.getContent());
-      return root;
-}
-
-if (!window.eventBus) {
-    window.eventBus = new EventBus();
-}
-
-const data = blockData[getCurrentPage()] || blockData.index;
-const page = new Page( pageData( data.context) as BlockProps);   
-
-render(".app", page);
-*/

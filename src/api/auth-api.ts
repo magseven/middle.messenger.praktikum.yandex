@@ -14,6 +14,9 @@ export default class AuthAPI {
 
     async signUp(data: Record<string, string>) {
         const response = await this._httpTransport.post('/auth/signup', {data});
+        if ( response.status >= 400)
+            throw new Error( JSON.parse(response.responseText).reason);
+
         return JSON.parse(response.responseText);
     };
 

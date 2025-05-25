@@ -41,7 +41,7 @@ export default class ChatAPI {
         }
     };
 
-    async addUsersToChat( chatId: number, userId: number) {
+    async addUserToChat( chatId: number, userId: number) {
         try {
             const response = await this._httpTransport.put('/chats/users', { data: { chatId, users: [userId] }});
 
@@ -57,8 +57,20 @@ export default class ChatAPI {
         }
     };
 
-    async removeUserFromChat(chatId: number, userId: number) {
-        await this._httpTransport.delete('/chats/users', { data: { chatId, users: [userId] } });
+    async delUserFromChat(chatId: number, userId: number) {
+        try {
+            const response = await this._httpTransport.delete('/chats/users', { data: { chatId, users: [userId] } });
+
+            if ( response.status !== 200) {
+                console.log( 'delUsersToChat error:', response.status);
+                return false;
+            }
+            return true;
+
+        }catch(error) {
+            console.log( 'delUsersToChat error:', error);
+            return false;
+        }
     };
 
     async getChatToken(chatId: number) {

@@ -147,21 +147,14 @@ export const blockData: Record<string, BlockEntry> = {
                     },
                     text: 'Зарегистрировать',
                     events: {
-                        OnClick: () => {
+                        OnClick: ( e:Event) => {
                             console.log('Зарегистрировать');
+                            e.preventDefault();
+                            e.stopPropagation();
+
                             window.eventBus.emit( stdEvents.signup);
                         }
                     },
-                }, 
-                button1: { 
-                    proto: 'Button', 
-                    attrs: { class: 'a-button'},  
-                    events: {
-                        OnClick: () => {
-                            console.log('Создать пользователя');
-                        }
-                    },
-                    text: 'Войти'
                 }, 
             },
         },
@@ -199,11 +192,7 @@ export const blockData: Record<string, BlockEntry> = {
                         },
                         content: { 
                             proto: 'ChatContentItems',
-                            data: [
-                                { dir: '0', message: 'У меня есть предложение'},    
-                                { dir: '1', message: 'Огромное количество'},    
-                                { dir: '0', message: 'Оптовая продажа пылесосов и микроволновых печей'}
-                            ],    
+                            data: [],    
                         },
                         footer: { 
                             proto: 'ChatContentFooter',
@@ -243,11 +232,7 @@ export const blockData: Record<string, BlockEntry> = {
                         },
                         blist: { 
                             proto: 'ChatBarList',
-                            data: [
-                                { id: '1', title: 'Игорь', date:  '15.04.25', message: 'У меня есть предложение', unread: '18'},    
-                                { id: '2', title: 'Светлана', date:  '25.03.25', message: 'Огромное количество', unread: '28'},    
-                                { id: '3', title: 'Василий', date:  '25.03.25', message: 'Оптовая продажа пылесосов и микроволновых печей', unread: '28'},
-                            ],    
+                            data: [],    
                         },            
                     },
                 },

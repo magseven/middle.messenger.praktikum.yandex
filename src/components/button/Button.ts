@@ -47,6 +47,7 @@ export class ButtonMenu extends Block {
         events: {
           OnClick: () => {
             console.log('Удалить пользователя');
+            window.eventBus.emit( stdEvents.delUserChat)
           }
         },
         text: 'Удалить пользователя'}),

@@ -8,14 +8,13 @@ import {Block, BlockProps} from './block'
 import Route from './route'
 import {BlockEntry, stdEvents} from './types'
 import { EventBus } from './event_bus';
-import store from './store';
 
 export enum stdRoutes {
     Index = '/',
     Login = '/login',
-    Profile = '/profile',
-    SignUp = '/signup',
-    Chat = '/chats',
+    Profile = '/settings',
+    SignUp = '/sign-up',
+    Chat = '/messenger',
     Error404 = '/404',
     Error500 = '/500',
     // EditProfile = '/settings/edit',

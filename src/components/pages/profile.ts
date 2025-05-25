@@ -1,4 +1,4 @@
-import { Block, BlockProps } from "../../modules/block";
+import { BlockProps } from "../../modules/block";
 import { Input_F } from "../input/input";
 import  Avatar from "../avatar/avatar";
 import {AuthController} from "../../controllers/authController";
@@ -7,7 +7,6 @@ import { stdEvents } from "../../modules/types";
 import Store from "../../modules/store";
 import {router, stdRoutes} from "../../modules/router";
 import {validateForm} from '../../modules/utils/validation';
-import {baseResourceUrl} from '../../modules/httpRequest';
 import Page from "../../components/pages/page";
 
 export default class Profile extends Page {
@@ -16,7 +15,7 @@ export default class Profile extends Page {
                                     
     }
 
-    dispatchComponentDidUnMount() {
+    componentDidUnMount() {
         console.log('dispatchComponentDidUnMount');
         window.eventBus.off( stdEvents.changeAvatar, this.onChangeAvatar.bind( this));         
         window.eventBus.off( stdEvents.updateProfile, this.onUpdateProfile.bind( this));         
@@ -46,7 +45,7 @@ export default class Profile extends Page {
         if ( !user)
             return;
 
-        Object.entries(this.children.form.children).forEach(([key, value]) => {
+        Object.values(this.children.form.children).forEach((value) => {
             if ( value instanceof Input_F){
                 const property_name = value.children.input._element.getAttribute( 'name');
                 if ( property_name && property_name in user) {                        
@@ -55,8 +54,6 @@ export default class Profile extends Page {
             }else if ( value instanceof Avatar) {
                 const a_input = value.children.a_input.element as HTMLInputElement
                 const a_image = value.children.a_image.element as HTMLImageElement
-                //const a_input_name = a_input.getAttribute( 'name');
-                //console.log('get', a_input, a_image);
                 if ( a_input ) {                        
                     console.log('get', user['avatar']);
                     if ( user['avatar'])
@@ -69,10 +66,10 @@ export default class Profile extends Page {
     onFormSubmit() {
         console.log('onFormSubmit', this.props.name);
 
-        // if ( this.props.name === 'SignIn' || this.props.name === 'SignUp' || this.props.name === 'Profile') {
-        //     if ( validateForm(this.children.form.element as HTMLFormElement))
-        //         (this.children.form as Form).printFormData();
-        // }
+        if ( !validateForm(this.children.form.element as HTMLFormElement)) {
+            console.log( 'validation error');
+            return;
+        }
 
         if ( this.props.name != undefined) {
             new userController().update( this.children.form.getFormData() as Record<string, string>)
@@ -82,14 +79,15 @@ export default class Profile extends Page {
     async onUpdateProfile() {
         console.log('onUpdateProfile', this.props.name);
 
-        //     if ( validateForm(this.children.form.element as HTMLFormElement))
-        //         (this.children.form as Form).printFormData();
-        // }
+        if ( !validateForm(this.children.form.element as HTMLFormElement)) {
+            console.log( 'validation error');
+            return;
+        }
+
         const form = new FormData(this.children.form.element as HTMLFormElement);
         const avatar = this.children.form.children.avatar;
         if ( avatar) {
             const a_input = avatar.children.a_input.element as HTMLInputElement
-            const a_image = avatar.children.a_image.element as HTMLImageElement
 
             if ( a_input && a_input.files) {
                 form.append('avatar', a_input.files[0]);
@@ -108,10 +106,10 @@ export default class Profile extends Page {
     onChangeAvatar() {
         console.log('onChangeAvatar', this.props.name);
 
-        // if ( this.props.name === 'SignIn' || this.props.name === 'SignUp' || this.props.name === 'Profile') {
-        //     if ( validateForm(this.children.form.element as HTMLFormElement))
-        //         (this.children.form as Form).printFormData();
-        // }
+        if ( !validateForm(this.children.form.element as HTMLFormElement)) {
+            console.log( 'validation error');
+            return;
+        }
 
         const avatar = this.children.form.children.avatar;
         if ( !avatar)
@@ -125,9 +123,10 @@ export default class Profile extends Page {
         }
     }
 
-    onLogout() {
+    async onLogout() {
         console.log( 'onLogout');
-        new AuthController().logout();
+        await new AuthController().logout();
+        router.go(stdRoutes.Login);
     }
 
     render() : DocumentFragment {

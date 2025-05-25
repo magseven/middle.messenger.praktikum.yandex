@@ -14,6 +14,9 @@ Chats -     https://www.figma.com/design/hkvazc0efpXGmAwfFvoVXg/Chats?node-id=0-
   Stylelint - анализатор стилей
   EsLint - анализатор кода
   EventBus - реализация архитектурного шаблона
+  Добавлены Routes, Контроллеры
+  Используется API 
+  Реализована работа с Websocket
 
 для сборки и запуска проекта выполните: start
 
