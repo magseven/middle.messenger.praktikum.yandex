@@ -17,8 +17,6 @@ export enum stdRoutes {
     Chat = '/messenger',
     Error404 = '/404',
     Error500 = '/500',
-    // EditProfile = '/settings/edit',
-    // PasswordProfile = '/settings/password'
 }
 
 export class Router {
@@ -47,7 +45,6 @@ export class Router {
 
     start() {
         window.onpopstate = ((event: PopStateEvent) => {
-            //console.log('onpopstate');
             if (event /*&& event.state*/) {
                 this._onRoute(window.location.pathname);
             }        
@@ -89,10 +86,8 @@ export class Router {
     }
 }
   
-
 export const router = new Router(".app");
 window.eventBus = new EventBus();
-//window.onload = () => { console.log('onload');window.eventBus.emit( stdEvents.pageLoad);}
 
 router
   .use( stdRoutes.Index, Page, blockData.index)
