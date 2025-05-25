@@ -1,8 +1,8 @@
 import Store from "../store"
+const baseUrl = 'wss://ya-praktikum.tech/ws/chats/'
 export function sendMessage( user_id: string, chat_id: number, token: string, message: string) {
-  //const socket = new WebSocket('wss://ya-praktikum.tech/ws/chats/1/1/fd23a974ce050d56d969b3c4ca1b2cc951ef4110:1600530634');
 
-  const socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${user_id}/${chat_id}/${token}`);
+  const socket = new WebSocket(`${baseUrl}${user_id}/${chat_id}/${token}`);
 
   socket.addEventListener('open', () => {
     console.log('Соединение установлено');
@@ -33,9 +33,7 @@ export function sendMessage( user_id: string, chat_id: number, token: string, me
 }
 
 export function getLastMessages( user_id: string, chat_id: number, token: string) {
-  //const socket = new WebSocket('wss://ya-praktikum.tech/ws/chats/1/1/fd23a974ce050d56d969b3c4ca1b2cc951ef4110:1600530634');
-
-  const socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${user_id}/${chat_id}/${token}`);
+  const socket = new WebSocket(`${baseUrl}${user_id}/${chat_id}/${token}`);
 
   socket.addEventListener('open', () => {
     console.log('Соединение установлено');

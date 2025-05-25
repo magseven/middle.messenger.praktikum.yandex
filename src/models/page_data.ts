@@ -22,12 +22,12 @@ export const blockData: Record<string, BlockEntry> = {
                 },
                 menu:
                 [
-                    [ 'login', 'Авторизация'], 
-                    [ 'profile', 'Профиль'], 
-                    [ 'signup', 'Регистрация'], 
-                    [ 'chats', 'Список чатов'],
-                    [ 'page_404', 'Страница 404'],
-                    [ 'page_500', 'Страница 500'],
+                    [ '/login', 'Авторизация'], 
+                    [ '/settings', 'Профиль'], 
+                    [ '/sign-up', 'Регистрация'], 
+                    [ '/messenger', 'Список чатов'],
+                    [ '/404', 'Страница 404'],
+                    [ '/404', 'Страница 500'],
                 ],
                 heading: { proto: 'Heading', text: 'Sprint_2'},
             },    
