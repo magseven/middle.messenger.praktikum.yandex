@@ -9,6 +9,7 @@ import {chatBarListItem, chatContent, chatContentItem, chatContentItems, chatCon
 import Store, {StoreEvents, storeState, initialStoreState} from '../../modules/store'
 import { getLastMessages } from "../../modules/utils/websocket";
 import { chatController } from "../../controllers/chatController";
+import { template } from "./template";
 
 import imgArrowRight from '../../static/images/arrow-right.png';
 import imgClip  from '../../static/images/clip.png';
@@ -37,7 +38,7 @@ export class Chat extends Block {
         },
       });
     }
-  
+
     render() : DocumentFragment {
       return this.compile( `{{{ bar }}}{{{ content }}}`, this.props);
     }
@@ -69,7 +70,7 @@ export class ChatBarTitle extends Block {
   }
 
   render() : DocumentFragment {
-    return this.compile( '{{{ chat }}} {{{ link }}}', this.props);
+    return this.compile( template, this.props);
   }
 }
 

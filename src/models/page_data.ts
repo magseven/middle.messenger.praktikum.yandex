@@ -205,16 +205,29 @@ export const blockData: Record<string, BlockEntry> = {
                         btitle: { 
                             proto: 'ChatBarTitle',
                             chat: {
-                                proto: 'Div',                             
-                                attrs: { class: 'a-chat-bar-title-link'}, 
-                                content: 'Создать чат&nbsp;&nbsp;>',
+                                proto: 'ButtonMenu',                             
+                                attrs: { 
+                                    //class: 'a-chat-bar-title-link',
+                                    popovertarget: 'user_dialog',
+                                }, 
+                                text: 'Создать чат&nbsp;&nbsp;>',
                                 events: { 
-                                    OnClick: () => { window.eventBus.emit( stdEvents.createChat);}
-                                }
+                                    OnClick: () => {
+                                        console.log('создать чат'); 
+                                        //window.eventBus.emit( stdEvents.createChat);
+                                    }
+                                },
                             },
+            //   <div id="user_dialog" popover class="a-dialog">
+
+            // <label for="a_user_name">Пользователь</label>
+            // <input name="a_user_name"></input>
+            // <button name="a_user_name">jfngfjlgjhfsal</button>
+
                             link: {
                                 proto: 'Div',                             
                                 attrs: { class: 'a-chat-bar-title-link'}, 
+
                                 content: 'Профиль&nbsp;&nbsp;>',
                                 events: { 
                                     OnClick: () => {router.go( stdRoutes.Profile)}
