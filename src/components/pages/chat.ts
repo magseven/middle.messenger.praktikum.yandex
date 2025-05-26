@@ -49,8 +49,11 @@ export default class Chat extends Page {
         console.log('chat: _get');
     }
 
-    async onCreateChat() {
-        const chat_id = await new chatController().createChat( { title: 'Мой первый чат' + Store.getState().chats.length})
+    async onCreateChat( value: string) {
+        if ( !value)
+            return;
+
+        const chat_id = await new chatController().createChat( { title: value})
         if ( chat_id) {
            await this._get();
         }
@@ -68,7 +71,7 @@ export default class Chat extends Page {
             const token = await new chatController().getChatToken( chat_id);
             const res = sendMessage( user.id, chat_id, token, element.value);
             console.log('res', res);
-            console.log('user:', user.id, 'chat_id:', chat_id, 'token:', token, 'message:', element.value);
+//            console.log('user:', user.id, 'chat_id:', chat_id, 'token:', token, 'message:', element.value);
         }
     }
 

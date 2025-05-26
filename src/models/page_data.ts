@@ -198,37 +198,37 @@ export const blockData: Record<string, BlockEntry> = {
                             proto: 'ChatContentFooter',
                         },
                     },
-
-
                     bar: { 
                         proto: 'ChatBar',
                         btitle: { 
                             proto: 'ChatBarTitle',
                             chat: {
-                                proto: 'ButtonMenu',                             
-                                attrs: { 
-                                    //class: 'a-chat-bar-title-link',
-                                    popovertarget: 'user_dialog',
+                                proto: 'Button',                             
+                                text: 'Создать чат',
+                                attrs: {
+                                    class: 'a-chat-bar-title-link',
+                                    popovertarget: 'a_btitle_dialog',
                                 }, 
-                                text: 'Создать чат&nbsp;&nbsp;>',
+                            },
+                            dialog: {                                
+                                proto: 'Dialog',
+                                attrs: {
+                                    id: "a_btitle_dialog",
+                                    popover: "auto",
+                                    class: "a-dialog",
+                                },
+                                label: 'Укажите наименование чата',
                                 events: { 
                                     OnClick: () => {
-                                        console.log('создать чат'); 
-                                        //window.eventBus.emit( stdEvents.createChat);
+                                        window.eventBus.emit( stdEvents.createChat);
                                     }
                                 },
                             },
-            //   <div id="user_dialog" popover class="a-dialog">
-
-            // <label for="a_user_name">Пользователь</label>
-            // <input name="a_user_name"></input>
-            // <button name="a_user_name">jfngfjlgjhfsal</button>
-
                             link: {
                                 proto: 'Div',                             
                                 attrs: { class: 'a-chat-bar-title-link'}, 
 
-                                content: 'Профиль&nbsp;&nbsp;>',
+                                content: 'Профиль&nbsp;&nbsp;',
                                 events: { 
                                     OnClick: () => {router.go( stdRoutes.Profile)}
                                 }

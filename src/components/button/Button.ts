@@ -2,6 +2,7 @@ import { Block, BlockProps } from "../../modules/block";
 import { stdEvents } from "../../modules/types";
 import buttonTemplate from './button.tmpl';
 import {menuButton} from './button.tmpl';
+import Dialog from '../dialog/dialog';
 class Button extends Block {
     constructor(props: BlockProps) {
       super("button", {
@@ -23,25 +24,35 @@ export class ButtonMenu extends Block {
       attrs: {
         popovertarget: 'popMenu',
       },
+      dialog: new Dialog({
+        attrs: {
+          id: 'a_dialog1',
+          popover: "auto",
+          class: 'a-dialog',
+          label: 'Укажите id пользователя',
+        },
+        events: { 
+            OnClick: () => {
+              window.eventBus.emit( stdEvents.addUserChat)
+            }
+        },
+      }),
+
+
       menu: ['menuItem1', 'menuItem2'],
       menuItem1: new Button({ 
         num: 1,
         attrs: { 
-          // popovertarget: 'user_dialog',
+          popovertarget: 'a_dialog1',
           class: "dropdown-item",
-        },
-        events: {
-          OnClick: () => {
-            console.log('Создать пользователя');
-            window.eventBus.emit( stdEvents.addUserChat)
-          }
         },
         text: 'Добавить пользователя',
       }),
+
       menuItem2: new Button({ 
         num: 2, 
         attrs: { 
-          // popovertarget: 'user_dialog',
+          popovertarget: 'a_dialog2',
           class: "dropdown-item",
         }, 
         events: {

@@ -108,10 +108,19 @@ export class ChatBarList extends Block {
     if ( oldState.chats === newState.chats)
       return;
 
+    Object.values( this.children).forEach(element => {
+        element.dispatchComponentDidUnMount();      
+    });
+
     this.children = {...newState.chats!.map( 
-          ditem => [ditem.id,  new ChatBarListItem( ditem)] as [number, ChatBarListItem])
-          .reduce(( acc, [id, obj])=>({  ...acc, [`i${id}`]: obj}), {})};
-    this.setProps( { data:newState.chats} )
+      ditem => [ditem.id,  new ChatBarListItem( ditem)] as [number, ChatBarListItem])
+      .reduce(( acc, [id, obj])=>({  ...acc, [`i${id}`]: obj}), {})};
+
+
+      Object.values( this.children).forEach(element => {
+          element.dispatchComponentDidMount();      
+      });
+      this.setProps( { data:newState.chats} )
   }
 
   componentDidMount(): void {
@@ -134,8 +143,9 @@ export class ChatBarListItem extends Block {
   constructor(props: BlockProps) {
     super("div", { 
       ...props,
-      selected: 0,
+//      selected: 0,
       attrs: {
+        id: props.id,
         class: 'a-chat-bar-list-item',
       },
       events: {
@@ -172,9 +182,8 @@ export class ChatBarListItem extends Block {
     return;
 
   const selected = newState.selectedItem === this.props.id;
-  this.setProps({
-    selected,
-    attrs: { class: `a-chat-bar-list-item${selected ? ' a-chat-bar-list-item-selected': ''}`}
+   this.setProps({
+    attrs: { id: this.props.id, class: `a-chat-bar-list-item${selected ? ' a-chat-bar-list-item-selected': ''}`}
   })
 }
 
@@ -307,16 +316,23 @@ componentDidMount() {
   }
 
  onStoreUpdate( oldState: storeState, newState: storeState): void {
+    console.log( 'oldState.messages:', oldState.messages, 'newState.messages:', newState.messages, oldState.messages === newState.messages);
     if ( oldState.messages === newState.messages)
       return;
 
     this.setProps( { 
       data: newState.messages.map((item)=>{
         return { dir: item.user_id === Number(newState.user!.id) ? '0' : '1', 
-                 message: item.content, 
-                 time: item.time,
-                 user_id: item.user_id}
-
+                message: item.content, 
+                time: new Date( item.time).toLocaleString('ru-RU', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: false
+                        }).replace(',', ''),
+                user_id: item.user_id}
       })
     })
   }
