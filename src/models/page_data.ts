@@ -207,20 +207,31 @@ export const blockData: Record<string, BlockEntry> = {
                                 text: 'Создать чат',
                                 attrs: {
                                     class: 'a-chat-bar-title-link',
-                                    popovertarget: 'a_btitle_dialog',
+                                    popovertarget: 'a-dialog-create-chat',
                                 }, 
                             },
                             dialog: {                                
                                 proto: 'Dialog',
                                 attrs: {
-                                    id: "a_btitle_dialog",
+                                    id: 'a-dialog-create-chat',
                                     popover: "auto",
-                                    class: "a-dialog",
+                                    class: "a-dialog a-dialog-create-chat",
                                 },
-                                label: 'Укажите наименование чата',
-                                events: { 
+                                label: 'Наименование чата',
+                                button_text: 'Создать',
+                                button_events: { 
                                     OnClick: () => {
-                                        window.eventBus.emit( stdEvents.createChat);
+                                        const inputValue: HTMLInputElement | null = document.querySelector('#a-dialog-create-chat [name="input"]');
+                                        if ( !inputValue || !inputValue.value)
+                                            return;
+
+                                        window.eventBus.emit( stdEvents.createChat, inputValue.value);                                        
+
+                                        const element: HTMLElement | null = document.querySelector( '#a-dialog-create-chat');
+                                        if ( element && element.popover)
+                                            element.hidePopover();
+
+                                        return;
                                     }
                                 },
                             },

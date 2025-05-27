@@ -10,8 +10,8 @@ import { router, stdRoutes } from "../../modules/router";
 
 export default class Chat extends Page {
     _bindOnCreateChat = this.onCreateChat.bind( this);
-    _bindOnAddUserChat = this.onAddUserChat.bind( this);
-    _bindOnDelUserChat = this.onDelUserChat.bind( this);
+    _bindOnAddUserChat = this.onAddUserToChat.bind( this);
+    _bindOnDelUserChat = this.onDelUserFromChat.bind( this);
     _bindSendMessage = this.onSendMessage.bind( this);
 
     constructor(props: BlockProps) {
@@ -21,8 +21,8 @@ export default class Chat extends Page {
     componentDidUnMount() {
         console.log('chat: componentDidUnMount');
         window.eventBus.off( stdEvents.createChat, this._bindOnCreateChat);         
-        window.eventBus.off( stdEvents.addUserChat, this._bindOnAddUserChat);         
-        window.eventBus.off( stdEvents.delUserChat, this._bindOnDelUserChat);         
+        window.eventBus.off( stdEvents.addUserToChat, this._bindOnAddUserChat);         
+        window.eventBus.off( stdEvents.delUserFromChat, this._bindOnDelUserChat);         
         window.eventBus.off( stdEvents.sendMessage, this._bindSendMessage);         
     }
 
@@ -36,8 +36,8 @@ export default class Chat extends Page {
         }
 
         window.eventBus.on( stdEvents.createChat, this._bindOnCreateChat);         
-        window.eventBus.on( stdEvents.addUserChat, this._bindOnAddUserChat);         
-        window.eventBus.on( stdEvents.delUserChat, this._bindOnDelUserChat);         
+        window.eventBus.on( stdEvents.addUserToChat, this._bindOnAddUserChat);         
+        window.eventBus.on( stdEvents.delUserFromChat, this._bindOnDelUserChat);         
         window.eventBus.on( stdEvents.sendMessage, this._bindSendMessage);
 
         await this._get();
@@ -49,13 +49,14 @@ export default class Chat extends Page {
         console.log('chat: _get');
     }
 
-    async onCreateChat( value: string) {
+    async onCreateChat( value: 'string') {
         if ( !value)
             return;
 
         const chat_id = await new chatController().createChat( { title: value})
         if ( chat_id) {
-           await this._get();
+            await this._get();
+            Store.set( "selectedItem", chat_id);
         }
     }
 
@@ -75,18 +76,20 @@ export default class Chat extends Page {
         }
     }
 
-    async onAddUserChat() {
-        const {user, selectedItem} = Store.getState();
-        console.log('onAddUserChat chat:', selectedItem, Number(user!.id));
+    async onAddUserToChat( user_id: string) {
+        const { selectedItem} = Store.getState();
+        console.log('onAddUserChat chat:', selectedItem, Number(user_id));
 
 
-        if ( !user || !selectedItem)
+        if ( !user_id || !selectedItem) {
+            console.log( 'Чат не выбран!');
             return;
+        }
 
-        await new chatController().addUsersToChat( Number(selectedItem), Number( user.id));
+        await new chatController().addUsersToChat( Number(selectedItem), Number( user_id));
     }
 
-    async onDelUserChat() {
+    async onDelUserFromChat() {
         const {user, selectedItem} = Store.getState();
         console.log('onDelUserChat chat:', selectedItem, Number(user!.id));
 

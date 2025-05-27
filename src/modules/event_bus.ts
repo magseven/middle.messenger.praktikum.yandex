@@ -23,7 +23,7 @@ export class EventBus {
       return;
     
     this.__object.set( event, this.__object.get( event)!.filter((cb) => cb !== callback));
-    console.log('off', this.__object.get(event)!.length, event);
+    //console.log('off', this.__object.get(event)!.length, event);
   }
 
   // offAll( event: string): void {

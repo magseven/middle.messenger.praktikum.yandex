@@ -143,7 +143,6 @@ export class ChatBarListItem extends Block {
   constructor(props: BlockProps) {
     super("div", { 
       ...props,
-//      selected: 0,
       attrs: {
         id: props.id,
         class: 'a-chat-bar-list-item',

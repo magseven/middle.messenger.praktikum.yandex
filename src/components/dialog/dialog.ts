@@ -1,4 +1,4 @@
-import { Block, BlockProps } from "../../modules/block";
+import { Events, Block, BlockProps } from "../../modules/block";
 import template from './template';
 import {Input} from '../input/input';
 import Button from '../button/Button';
@@ -11,27 +11,24 @@ class Dialog extends Block {
         input: new Input({
           attrs: {
             placeholder: props.label,
-            required: "true",
+            required: 'true',
+            class: "input-field input-field:focus",
+            name: 'input',
+            type: "text",
+            list: props.list,
+            id: props.input_id,
           },
-          type: 'text',
-          name: 'input',
-          label: 'Наименование:', 
+          label: props.label, 
         }),
         button: new Button({
-          text: 'Создать',
-          events: { 
-            OnClick: () => {
-              const value = ( this.children.input.element as HTMLInputElement).value;
-              if ( value) {
-                this.element.hidePopover();
-                ( this.children.input.element as HTMLInputElement).value = "";
-                window.eventBus.emit( stdEvents.createChat, value);
-              }
-            }   
-        },
-
+          text: props.button_text,
+          attrs: {
+            class: "submit-button submit-button:hover",
+          },
+          events: props.button_events as Events,
         }),
       });
+      console.log('events', this.events);
     }
   
     render() : DocumentFragment {

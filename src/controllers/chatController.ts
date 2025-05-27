@@ -26,4 +26,8 @@ export class chatController {
     async getChatToken( chatId: number) {
         return await this._chatApi.getChatToken( chatId)
     }
+
+    async getChatUsers( chatId: number, offset: number, limit: number) {
+        return await this._chatApi.getChatUsers( chatId, offset, limit)
+    }
 };

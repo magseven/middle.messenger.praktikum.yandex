@@ -24,7 +24,7 @@ export type Children = {
   [key: string]: Block;
 };
 
-type Events = {
+export type Events = {
    [eventName: string]: (e: Event) => void;
  };
 

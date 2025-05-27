@@ -4,7 +4,8 @@ export const defEventList = {
     OnSubmit: 'submit',
     OnLoad: 'load',
     OnChange: 'change',
-    OnContentLoaded: 'DOMContentLoaded'
+    OnContentLoaded: 'DOMContentLoaded',
+    OnBeforeToggle: 'beforetoggle',
 } as const;
 
 export type ContextHeader = Record<string, string>;  
@@ -66,8 +67,8 @@ export enum stdEvents {
     signup = 'SignUp',
     changeAvatar = 'changeAvatar',
     createChat = 'createChat',
-    addUserChat = 'addUserChat',
-    delUserChat = 'delUserChat',
+    addUserToChat = 'addUserChat',
+    delUserFromChat = 'delUserChat',
     selectItem = 'selectItem',
     sendMessage = 'sendMessage'
 }

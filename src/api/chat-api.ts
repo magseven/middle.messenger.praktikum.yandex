@@ -7,10 +7,6 @@ export default class ChatAPI {
         this._httpTransport = new HTTPTransport();
     };
 
-//   offset:
-//   limit:
-//   title:
-
     async getChats(data: Record<string, string|number>) {
         try {
             const response = await this._httpTransport.get('/chats', {data});
@@ -43,6 +39,7 @@ export default class ChatAPI {
 
     async addUserToChat( chatId: number, userId: number) {
         try {
+            console.log( 'addUserChat', { chatId, users: [userId] });
             const response = await this._httpTransport.put('/chats/users', { data: { chatId, users: [userId] }});
 
             if ( response.status !== 200) {
@@ -89,4 +86,24 @@ export default class ChatAPI {
         }
     };
 
-};
+    async getChatUsers( chatId: number, offset: number, limit: number) {
+        try {
+            console.log( 'getChatUsers', chatId, offset, limit);
+            if ( !chatId)
+                return [];
+
+            const response = await this._httpTransport.get(`/chats/${chatId}/users`, { data: { offset, limit }});
+
+            if ( response.status !== 200) {
+                console.log( 'getChatUsers error:', response.status);
+                return [];
+            }
+            console.log( JSON.parse( response.responseText));
+            return JSON.parse( response.responseText);
+
+        }catch(error) {
+            console.log( 'getChatUsers error:', error);
+            return [];
+        }
+    }
+}
