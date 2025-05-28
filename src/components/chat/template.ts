@@ -1,1 +1,1 @@
-export const template = `{{{ chat }}}{{{ dialog}}} {{{ link }}}`
+export const template = `{{{ chat }}}{{{chat_del}}}{{{ dialog}}} {{{ link }}}`

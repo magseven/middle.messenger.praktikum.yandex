@@ -15,6 +15,10 @@ export class chatController {
         return await this._chatApi.createChat(data);
     }
 
+    async deleteChat( chatId: number) {
+        return await this._chatApi.deleteChat(chatId);
+    }
+
     async addUsersToChat( chatId: number, userId: number) {
         return await this._chatApi.addUserToChat( chatId, userId);
     }

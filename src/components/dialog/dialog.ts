@@ -2,7 +2,6 @@ import { Events, Block, BlockProps } from "../../modules/block";
 import template from './template';
 import {Input} from '../input/input';
 import Button from '../button/Button';
-import {stdEvents} from '../../modules/types'
 
 class Dialog extends Block {
     constructor(props: BlockProps) {
@@ -17,7 +16,9 @@ class Dialog extends Block {
             type: "text",
             list: props.list,
             id: props.input_id,
+            autocomplete: "off"
           },
+          events: props.input_events as Events,
           label: props.label, 
         }),
         button: new Button({

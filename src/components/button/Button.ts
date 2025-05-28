@@ -4,6 +4,7 @@ import buttonTemplate from './button.tmpl';
 import {menuButton} from './button.tmpl';
 import Dialog from '../dialog/dialog';
 import { chatController } from "../../controllers/chatController";
+import { userController } from "../../controllers/userController";
 import Store from "../../modules/store";
 
 class Button extends Block {
@@ -35,24 +36,24 @@ export class ButtonMenu extends Block {
         },
         label: 'Укажите id пользователя',
         type: "text",
+        input_id: "add_user",
+        list: "add_users",
+        input_events: {
+          OnInput: () => {
+                console.log('OnInput');
+                window.eventBus.emit( stdEvents.searchUser); 
+          },
+        },
         button_text: 'Добавить',
         button_events: { 
             OnClick: () => {
-
-        //events: {
-        //   OnClick: () => {
-        //     console.log('Удалить пользователя');
-        //     window.eventBus.emit( stdEvents.delUserFromChat)
-        //   }
-        // },
-
               console.log('addChatUser', this.children);
               if ( !this.children.dialog.children.input)
                 return;
 
               const user_id = ( this.children.dialog.children.input.element as HTMLInputElement).value;
               if ( !user_id) {
-                console.log('Отсутсвует user_id');
+                console.log('Отсутствует user_id');
                 return;
               }
 
@@ -68,9 +69,7 @@ export class ButtonMenu extends Block {
               const menu: HTMLElement | null = document.querySelector( '#popMenu');
               if ( menu && menu.popover)
                   menu.hidePopover();   
-                
-              
-            }
+            },
         },
       }),
 
@@ -81,27 +80,24 @@ export class ButtonMenu extends Block {
           class: 'a-dialog a-dialog-add-chat-user',
         },
         events: { 
-            OnBeforeToggle: () => {
-                  console.log('Окошко скоро откроется');
+            OnBeforeToggle: async() => {
                   const datalist: HTMLInputElement = document.getElementById('users') as HTMLInputElement;
-
                   const chat_id = Store.getState().selectedItem;
                   if ( !chat_id)
                     return;
 
-                  const users = new chatController().getChatUsers( chat_id, 0, 10);
-                  console.log(users);
+                  const users: Record<string, string|number>[] = await new chatController().getChatUsers( chat_id, 0, 10);
+                  console.log('users', users);
 
-                  // if ( datalist) {
-                  //   console.log('datalist exists');
-                  //   users.forEach(element => {
-                  //     const option = document.createElement('option');
-                  //     option.value = element.id;
-                  //     datalist.appendChild(option);                     
-                  //   });
-                  // }
-  
-                  //window.eventBus.emit( stdEvents.delUserFromChat)
+                  if ( datalist) {
+                    datalist.innerHTML = '';
+                    console.log('datalist exists');
+                    users.forEach(element => {
+                      const option = document.createElement('option');
+                      option.value = `${String(element.id)}-${element.login}`;
+                      datalist.appendChild(option);                     
+                    });
+                  }                  
                 }
         },
         label: 'Укажите id пользователя',
@@ -112,17 +108,22 @@ export class ButtonMenu extends Block {
         button_events: { 
             OnClick: () => {
                   console.log('Удалить пользователя');
-                  //window.eventBus.emit( stdEvents.delUserFromChat)
+                  const value = (this.children.dialog_del.children.input.element as HTMLInputElement).value;
+                  
+                  window.eventBus.emit( stdEvents.delUserFromChat, { chat_id: Store.getState().selectedItem, user_id: value.split('-')[0]});
+
+                  ( this.children.dialog.children.input.element as HTMLInputElement).value = "";
+
+                  const element: HTMLElement | null = document.querySelector( '#a-dialog-del-chat-user');
+                  if ( element && element.popover)
+                      element.hidePopover();   
+
+                  const menu: HTMLElement | null = document.querySelector( '#popMenu');
+                  if ( menu && menu.popover)
+                      menu.hidePopover();   
                 }
         },
       }),
-
-
-
-
-
-
-
 
       menu: ['menuItem1', 'menuItem2'],
       menuItem1: new Button({ 
@@ -147,5 +148,50 @@ export class ButtonMenu extends Block {
 
   render() : DocumentFragment {
     return this.compile( menuButton( this.props.menu!.reduce(( acc, item)=>`${acc}{{{${item}}}}`,'') ), {...this.props, ...this.children});
+  }
+
+  componentDidUnMount() {
+    console.log('dispatchComponentDidUnMount');
+    window.eventBus.off( stdEvents.searchUser, this.onSearchUser.bind( this));         
+  }
+
+  async componentDidMount() {
+    window.eventBus.on( stdEvents.searchUser, this.onSearchUser.bind( this));         
+  }
+
+  async onSearchUser() {
+    console.log('onSearchUser');
+    const el_input = ( this.children.dialog.children.input.element as HTMLInputElement);
+    const searchText = el_input.value.trim();
+
+    if (searchText.length < 2)
+      return;
+
+    try {
+      const users: string[] = await new userController().search( searchText);
+      this.showResults(users);
+    }catch (error) {
+      console.error('Ошибка поиска:', error);
+    }
+  }
+
+  showResults( users: string[]) {
+    console.log('showResults');
+    const datalist: HTMLInputElement = document.getElementById('users') as HTMLInputElement;
+    document.getElementById('add_user')?.click();
+    if ( datalist) {
+      datalist.id = 'add_users';
+      datalist.innerHTML = '';
+      users.forEach(element => {
+        console.log( element);
+        const option = document.createElement('option');
+        option.value = element;
+        datalist.appendChild(option);                     
+      });
+      datalist.style.display = 'block';
+      datalist.style.position = 'absolute';
+      datalist.style.zIndex = '1000';
+    }                  
+
   }
 }

@@ -155,7 +155,7 @@ export class ChatBarListItem extends Block {
           Store.set( "selectedItem", this.props.id);
           const user = Store.getState().user; 
           const token = await new chatController().getChatToken( Number(this.props.id));
-          getLastMessages( user!.id, Number(this.props.id), token);
+          await getLastMessages( user!.id, Number(this.props.id), token);
         },
       },
       avatar: new Img({

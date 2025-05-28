@@ -36,10 +36,14 @@ export class userController {
                 return true;                
             }
         } catch (error) {
-            console.error('Update profile error:', error);
+            console.log('Update profile error:', error);
            return false;
         }
     }
    
+    async search( searchText: string) {
+        const users = [ 'user1', 'user2', 'user3', 'user4', 'user5'];
+        return users;
+    }
 
 };

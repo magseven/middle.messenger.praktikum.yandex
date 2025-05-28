@@ -37,8 +37,28 @@ export default class ChatAPI {
         }
     };
 
+    async deleteChat( chat_id: number) {
+        try {
+            const response = await this._httpTransport.delete('/chats', { data: { chatId: chat_id}});
+            if ( response.status !== 200) {
+                console.log( 'deleteChat error:', response.status);
+                return false;
+            }
+            return true;
+
+        }catch(error) {
+            console.log( 'deleteChat error:', error);
+            return false;
+        }
+    };
+
     async addUserToChat( chatId: number, userId: number) {
         try {
+            if ( isNaN(userId)) {
+                console.log('userId is not number');
+                return false;
+            }
+
             console.log( 'addUserChat', { chatId, users: [userId] });
             const response = await this._httpTransport.put('/chats/users', { data: { chatId, users: [userId] }});
 
@@ -56,6 +76,11 @@ export default class ChatAPI {
 
     async delUserFromChat(chatId: number, userId: number) {
         try {
+            if ( isNaN(userId)) {
+                console.log('userId is not number');
+                return false;
+            }
+
             const response = await this._httpTransport.delete('/chats/users', { data: { chatId, users: [userId] } });
 
             if ( response.status !== 200) {
@@ -98,7 +123,6 @@ export default class ChatAPI {
                 console.log( 'getChatUsers error:', response.status);
                 return [];
             }
-            console.log( JSON.parse( response.responseText));
             return JSON.parse( response.responseText);
 
         }catch(error) {

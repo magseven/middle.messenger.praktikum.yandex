@@ -26,12 +26,11 @@ export class AuthController {
                 this._router.go(stdRoutes.Chat);
             }
         } catch (error) {
-            console.error('Sign in error:', error);
+            console.log('Sign in error:', error);
             //@ts-expect-error will contain response text
             if ( JSON.parse(error.responseText)['reason'] === 'User already in system') 
                 router.go( stdRoutes.Chat);
             
-            console.error('Sign in error:', error);
         }
     }
 
@@ -43,7 +42,7 @@ export class AuthController {
             if (user)
                 this._router.go(stdRoutes.Chat);        
         } catch (error) {
-            console.error('Sign up error:', error);
+            console.log('Sign up error:', error);
         }
     }
 
@@ -52,7 +51,7 @@ export class AuthController {
             await this._authApi.logout();
             this._store.set('user', null);
         } catch (error) {
-            console.error('Logout error:', error);
+            console.log('Logout error:', error);
         };
     };
 
@@ -67,7 +66,7 @@ export class AuthController {
             return user;
         } catch (error) {
             // @ts-expect error will contain error text
-            console.error('Fetch user error:', error);
+            console.log('Fetch user error:', error);
             this._store.set('user', null);
 
             return null;

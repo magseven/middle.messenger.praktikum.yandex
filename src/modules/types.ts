@@ -6,6 +6,7 @@ export const defEventList = {
     OnChange: 'change',
     OnContentLoaded: 'DOMContentLoaded',
     OnBeforeToggle: 'beforetoggle',
+    OnInput: 'input',
 } as const;
 
 export type ContextHeader = Record<string, string>;  
@@ -67,10 +68,12 @@ export enum stdEvents {
     signup = 'SignUp',
     changeAvatar = 'changeAvatar',
     createChat = 'createChat',
+    deleteChat = 'deleteChat',
     addUserToChat = 'addUserChat',
     delUserFromChat = 'delUserChat',
     selectItem = 'selectItem',
-    sendMessage = 'sendMessage'
+    sendMessage = 'sendMessage',
+    searchUser = 'searchUser'
 }
 
 export const stdReasons: Record<number, string> = {

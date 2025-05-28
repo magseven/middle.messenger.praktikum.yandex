@@ -146,5 +146,10 @@ body, html {
   }  
 }
 
-
+.a-link-button {
+    background: white;
+    color: vars.$theme-grey;
+    border: none;
+    cursor: pointer; 
+  }
 

@@ -206,9 +206,20 @@ export const blockData: Record<string, BlockEntry> = {
                                 proto: 'Button',                             
                                 text: 'Создать чат',
                                 attrs: {
-                                    class: 'a-chat-bar-title-link',
+                                    class: 'a-link-button f-inter',
                                     popovertarget: 'a-dialog-create-chat',
                                 }, 
+                            },
+                            chat_del: {
+                                proto: 'Div',                             
+                                attrs: { class: 'a-chat-bar-title-link f-inter'}, 
+
+                                content: 'Удалить чат',
+                                events: { 
+                                    OnClick: () => {
+                                        window.eventBus.emit( stdEvents.deleteChat);                                        
+                                    }
+                                }
                             },
                             dialog: {                                
                                 proto: 'Dialog',
@@ -237,9 +248,9 @@ export const blockData: Record<string, BlockEntry> = {
                             },
                             link: {
                                 proto: 'Div',                             
-                                attrs: { class: 'a-chat-bar-title-link'}, 
+                                attrs: { class: 'a-chat-bar-title-link f-inter'}, 
 
-                                content: 'Профиль&nbsp;&nbsp;',
+                                content: 'Профиль',
                                 events: { 
                                     OnClick: () => {router.go( stdRoutes.Profile)}
                                 }
