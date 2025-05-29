@@ -42,8 +42,18 @@ export class userController {
     }
    
     async search( searchText: string) {
-        const users = [ 'user1', 'user2', 'user3', 'user4', 'user5'];
-        return users;
+       try {
+            const response = await this._userApi.search( { login: searchText });
+            if ( response.status !== 200) {
+                console.log( 'search error:', response.status);
+                return [];
+            }
+            return JSON.parse(response.responseText);
+
+        }catch(error) {
+            console.log( 'delUsersToChat error:', error);
+            return [];
+        }    
     }
 
 };

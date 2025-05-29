@@ -21,9 +21,8 @@ class userAPI {
         return await this._httpTransport.put('/user/profile/avatar', {data: formData});
     };
 
-    async search(data: Record<string, string>) {
-        const response = await this._httpTransport.get('/user/search', { data });
-        return JSON.parse(response.responseText);
+    async search(data: { login: string}) {
+        return  await this._httpTransport.post('/user/search', { data });
     };
 };
 

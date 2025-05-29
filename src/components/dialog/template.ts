@@ -1,1 +1,1 @@
-export default `{{{ input }}} {{{ button }}}`
+export default `{{{ input }}} {{{ combobox }}} {{{ button }}}`

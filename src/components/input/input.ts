@@ -44,22 +44,18 @@ export class Input extends Block {
       attrs: {
         ...props.attrs || {},
       },
-      // events: {
-      //   OnBlur: (e:Event) => {
-      //     e.preventDefault();
-      //     e.stopPropagation();
-      //     if ( !validateField(e.target as HTMLInputElement)) {
-      //       this.element.focus();
-      //       return false;
-      //     }
-
-      //     return true;
-      //   },        
-      // }
     });
   }
 
   getText(): string { return (this._element as HTMLInputElement).value};
+
+  get value() {
+    return (this.element as HTMLInputElement).value;
+  }
+
+  set value( newValue) {
+    (this.element as HTMLInputElement).value = newValue;  
+  }
   
   render() : DocumentFragment {
     return this.compile( inputTemplate, this.props);
