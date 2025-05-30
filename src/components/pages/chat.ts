@@ -5,7 +5,7 @@ import Store from "../../modules/store";
 import {stdEvents} from '../../modules/types'
 import {validateField} from '../../modules/utils/validation'
 import {sendMessage} from '../../modules/utils/websocket'
-import {Page} from '../../components/pages'
+import {Page} from '../pages'
 import { router, stdRoutes } from "../../modules/router";
 import { getLastMessages } from "../../modules/utils/websocket";
 
@@ -77,6 +77,7 @@ export default class Chat extends Page {
 
         if ( await new chatController().deleteChat( selectedItem)) {
             Store.set( 'selectedItem', 0);
+            Store.set( "messages", []);
             await this._get();
         }
     }
@@ -92,15 +93,13 @@ export default class Chat extends Page {
 
             const token = await new chatController().getChatToken( chat_id);
             await sendMessage( user.id, chat_id, token, element.value);
+            element.value = '';
         }
     }
 
-    async onAddUserToChat( user_id: string) {
+    async onAddUserToChat( user_id: string)  {
         const { selectedItem} = Store.getState();
-        console.log('onAddUserChat chat:', selectedItem, user_id);
-
-
-        if ( !user_id || !selectedItem) {
+        if ( !selectedItem) {
             console.log( 'Чат не выбран!');
             return;
         }

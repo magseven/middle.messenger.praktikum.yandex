@@ -237,6 +237,7 @@ export const blockData: Record<string, BlockEntry> = {
                                             return;
 
                                         window.eventBus.emit( stdEvents.createChat, inputValue.value);                                        
+                                        inputValue.value = '';
 
                                         const element: HTMLElement | null = document.querySelector( '#a-dialog-create-chat');
                                         if ( element && element.popover)

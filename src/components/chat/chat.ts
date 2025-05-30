@@ -315,7 +315,7 @@ componentDidMount() {
   }
 
  onStoreUpdate( oldState: storeState, newState: storeState): void {
-    console.log( 'oldState.messages:', oldState.messages, 'newState.messages:', newState.messages, oldState.messages === newState.messages);
+    //console.log( 'oldState.messages:', oldState.messages, 'newState.messages:', newState.messages, oldState.messages === newState.messages);
     if ( oldState.messages === newState.messages)
       return;
 

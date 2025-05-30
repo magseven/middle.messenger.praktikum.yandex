@@ -53,6 +53,7 @@ export default class ChatAPI {
     };
 
     async addUserToChat( chatId: number, userId: number) {
+        console.log( 'addUserChat1', chatId, userId );
         try {
             if ( isNaN(userId)) {
                 console.log('userId is not number');

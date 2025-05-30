@@ -8,22 +8,23 @@ class Dialog extends Block {
     constructor(props: BlockProps) {
       super( "div", {
         ...props, 
-        // combobox: 
-        //   props.select ? 
-        //     new ComboBox({
-        //       options: props.combo_options,
-        //       attrs: {
-        //        placeholder: props.label,
-        //        required: 'true',
-        //         class: "input-field input-field:focus",
-        //        name: 'input',
-        //        id: props.input_id,
-        //        autocomplete: "off"
-        //       },
-        //     events: props.combobox_events as Events,
-        //     }) : 
+        combobox: 
+          props.select ? 
+            new ComboBox({
+              attrs: {
+                placeholder: props.label,
+                required: 'true',
+                class: "input-field input-field:focus",
+                name: 'combobox',
+                id: props.combobox_id,
+                autocomplete: "off",
+                autofocus: props.combobox_autofocus,
+              },
+              events: props.combobox_events as Events,
+            }) : 
             
-        //     null,
+            null,
+
         input: !props.select ? new Input({
           attrs: {
             placeholder: props.label,
@@ -31,9 +32,10 @@ class Dialog extends Block {
             class: "input-field input-field:focus",
             name: 'input',
             type: "text",
-            list: props.list,
+            list: props.input_datalist,
             id: props.input_id,
-            autocomplete: "off"
+            autocomplete: "off",
+            autofocus: props.input_autofocus,
           },
           events: props.input_events as Events,
           label: props.label, 
@@ -46,7 +48,6 @@ class Dialog extends Block {
           events: props.button_events as Events,
         }),
       });
-      console.log('events', this.events);
     }
   
     hidePopOver() {

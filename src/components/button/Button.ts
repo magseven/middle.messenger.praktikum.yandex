@@ -4,10 +4,10 @@ import buttonTemplate from './button.tmpl';
 import {menuButton} from './button.tmpl';
 import Dialog from '../dialog/dialog';
 import {Input} from '../input/input';
+import ComboBox from '../combobox/combobox';
 import { chatController } from "../../controllers/chatController";
 import { userController } from "../../controllers/userController";
 import Store from "../../modules/store";
-
 class Button extends Block {
     constructor(props: BlockProps) {
       super("button", {
@@ -35,30 +35,58 @@ export class ButtonMenu extends Block {
           popover: "auto",
           class: 'a-dialog a-dialog-add-chat-user',
         },
+        events: { 
+            OnBeforeToggle: (event: Event ) => {
+              if ( (event as ToggleEvent).newState != 'open')
+                return;
+              
+              const chat_id = Store.getState().selectedItem;
+              if ( !chat_id) {
+                console.log('Чат не выбран!');
+                event.preventDefault();
+                return;
+              }
+
+              const user = this.children.dialog.children.input as Input;
+              const datalist = user.datalist;
+              if ( datalist)
+                datalist.textContent = '';
+              
+              return;            
+            },
+        },
         label: 'Укажите id пользователя',
         type: "text",
         input_id: "add_user",
-        list: "users",
-        events: { 
-            OnBeforeToggle: async() => {
-              //window.eventBus.emit( stdEvents.);
-            }
-        },
+        input_autofocus: true,
+        input_datalist: "users",
         input_events: {
           OnInput: () => {
-                console.log('OnInput');
                 window.eventBus.emit( stdEvents.searchUser); 
           },
-          onChange: ((e: Event) => {
-            //const selectedValue = e.target.element;
-            //this.children.dialog.children.input
-            console.log('Выбрано значение:', selectedValue);
-          })
         },
         button_text: 'Добавить',
         button_events: { 
-            OnClick: () => {
-              this.addChatUser();
+            OnClick: () => {              
+              const user = this.children.dialog.children.input as Input;
+              if ( !user || !user.value) {
+                  console.log('Пользователь не выбран!');
+                  return;
+              }
+  
+              const user_id = user.selectedOption();
+              if ( !user_id) {
+                  console.log('Отсутствует id пользователя');
+                  return;
+              }                          
+              
+              window.eventBus.emit( stdEvents.addUserToChat, user_id); 
+              user.value = '';
+              const datalist = user.datalist;
+              if ( datalist)
+                datalist.textContent = '';
+
+              this.hidePopOverMenu();
             },
         },
       }),
@@ -70,47 +98,28 @@ export class ButtonMenu extends Block {
           class: 'a-dialog a-dialog-add-chat-user',
         },
         events: { 
-            OnBeforeToggle: async() => {
-              const datalist: HTMLInputElement = document.getElementById('users') as HTMLInputElement;
-              const chat_id = Store.getState().selectedItem;
-              if ( !chat_id)
-                return;
-
-              const users: Record<string, string|number>[] = await new chatController().getChatUsers( chat_id, 0, 10);
-              console.log('users', users);
-
-              if ( datalist) {
-                datalist.innerHTML = '';
-                console.log('datalist exists');
-                users.forEach(element => {
-                  const option = document.createElement('option');
-                  option.value = `${String(element.id)}-${element.login}`;
-                  datalist.appendChild(option);                     
-                });
-              }                  
-                }
+            OnBeforeToggle: (event: Event ) => {
+              this.onBeforeToggle(event as ToggleEvent);
+            }
         },
-        label: 'Укажите id пользователя',
-        type: "text",
-        list: "users",
-        input_id: "userlist",
+        select: true,
         button_text: 'Удалить',
         button_events: { 
             OnClick: () => {
                   console.log('Удалить пользователя');
-                  const value = (this.children.dialog_del.children.input.element as HTMLInputElement).value;
-                  
-                  window.eventBus.emit( stdEvents.delUserFromChat, { chat_id: Store.getState().selectedItem, user_id: value.split('-')[0]});
+                  const combobox = this.children.dialog_del.children.combobox as ComboBox;                  
+                  if ( !combobox)
+                    return;
 
-                  ( this.children.dialog.children.input.element as HTMLInputElement).value = "";
+                  if ( combobox.selectedId == -1) {
+                    console.log('Пользователь не выбран!');
+                    return;
+                  }
 
-                  const element: HTMLElement | null = document.querySelector( '#a-dialog-del-chat-user');
-                  if ( element && element.popover)
-                      element.hidePopover();   
+                  window.eventBus.emit( stdEvents.delUserFromChat, { chat_id: Store.getState().selectedItem, user_id: combobox.selectedId});
 
-                  const menu: HTMLElement | null = document.querySelector( '#popMenu');
-                  if ( menu && menu.popover)
-                      menu.hidePopover();   
+                  combobox.element.textContent = "";
+                  this.hidePopOverMenu();
                 }
         },
       }),
@@ -140,31 +149,15 @@ export class ButtonMenu extends Block {
     return this.compile( menuButton( this.props.menu!.reduce(( acc, item)=>`${acc}{{{${item}}}}`,'') ), {...this.props, ...this.children});
   }
 
-  addChatUser() {
-      const userField = this.children.dialog.children.input as Input;
-      if ( !userField || !userField.value) {
-        console.log('Отсутствует user_id');
-        return;
-      }
-
-      console.log('addChatUser', userField.value);
-      window.eventBus.emit( stdEvents.addUserToChat, userField.value);
-
-      userField.value = '';
-      (this.props.dialog as Dialog).hidePopOver();
-      
-      this.hidePopOverMenu();
-  }
-
   hidePopOverMenu() {
-    console.log('hidePopOverMenu', this.props.popovertarget);
-    const menu: HTMLElement | null = document.querySelector( `#${this.props.popovertarget}`);
+    const target = this.element.getAttribute( 'popovertarget');
+
+    const menu: HTMLElement | null = document.querySelector( `#${target}`);
     if ( menu && menu.popover)
         menu.hidePopover();   
   }
 
   componentDidUnMount() {
-    console.log('dispatchComponentDidUnMount');
     window.eventBus.off( stdEvents.searchUser, this.onSearchUser.bind( this));         
   }
 
@@ -173,7 +166,6 @@ export class ButtonMenu extends Block {
   }
 
   async onSearchUser() {
-    console.log('onSearchUser');
     const el_input = ( this.children.dialog.children.input.element as HTMLInputElement);
     const searchText = el_input.value.trim();
 
@@ -185,25 +177,49 @@ export class ButtonMenu extends Block {
   }
 
   showResults( users: Record<string, string|number>[]) {
-    console.log('showResults found', users);
+    const input: Input = this.children.dialog.children.input as Input;
+    if ( !input)
+      return;
 
-    const datalist: HTMLInputElement = document.getElementById('users') as HTMLInputElement;
-
-    document.getElementById('add_user')?.click();
+    const datalist = input.datalist;
+    console.log(datalist, users);
 
     if ( datalist) {
       datalist.id = 'users';
       datalist.innerHTML = '';
       users.forEach(element => {
-        console.log( 'element', element);
         const option = document.createElement('option');
         option.dataset.id = String(element.id);
         option.value = String(element.login);
         datalist.appendChild(option);                     
       });
+
       datalist.style.display = 'block';
       datalist.style.position = 'absolute';
       datalist.style.zIndex = '1000';
     }                  
   }
+
+  async onBeforeToggle( event: ToggleEvent ) {
+    if ( event.newState != 'open')
+      return;
+
+    const user = this.children.dialog_del.children.combobox as ComboBox;
+    if ( !user)
+      return;
+
+    const chat_id = Store.getState().selectedItem;
+    if ( !chat_id) {
+      console.log('Чат не выбран!');
+      event.preventDefault();
+      return;
+    }
+
+    user.selectedIndex = -1;
+
+    const users: Record<string, string|number>[] = await new chatController().getChatUsers( chat_id, 0, 10);
+    user.element.textContent = "";
+    user.options = users;
+  }
 }
+
