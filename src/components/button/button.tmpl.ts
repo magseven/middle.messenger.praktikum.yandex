@@ -7,5 +7,3 @@ export const menuButton = (buttonList: string) =>
          {{{dialog}}} {{{dialog_del}}}
             ${buttonList}
 `;
-
-       
