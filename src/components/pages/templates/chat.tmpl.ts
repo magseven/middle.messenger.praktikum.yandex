@@ -51,4 +51,4 @@ export const chatContentFooter = `
  `;
 
  export const chatContentItems = `{{#each data}}{{{processContentItem this}}}{{/each}}`;
- export const chatContentItem = `Дата: {{{time}}} {{{ message }}} Пользователь: {{{ user_id}}}`;
+ export const chatContentItem = `{{{time}}} {{{ message }}} ({{{ user_id}}})`;

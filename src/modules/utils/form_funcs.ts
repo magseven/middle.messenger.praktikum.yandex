@@ -5,17 +5,19 @@ import Header from '../../components/header/header';
 import Form from '../../components/form/form';
 import {Input_F, Input} from '../../components/input/input';
 import Button from '../../components/button/Button';
+import ButtonMenu from '../../components/button/Button';
 import Avatar from '../../components/avatar/avatar';
 import Heading from '../../components/heading/heading';
 import Link from '../../components/link/link';
 import Div from '../../components/div/div';
 import Img from '../../components/img/img';
 import Paragraph from '../../components/paragraph/paragraph';
+import Dialog from '../../components/dialog/dialog';
 import {Chat, ChatFrame, ChatBar, ChatBarTitle, ChatBarSearch, ChatBarList, ChatBarListItem, 
         ChatContent, ChatContentItems, ChatContentHeader, ChatContentFooter} from '../../components/chat/chat';
 
-type BlockClass = typeof Div | typeof Input | typeof Input_F | typeof Button | typeof Avatar | typeof Paragraph | typeof Heading | 
-                  typeof Link | typeof Nav | typeof Header | typeof Form | typeof Chat | typeof ChatFrame | typeof ChatBar |
+type BlockClass = typeof Div | typeof Input | typeof Input_F | typeof Button | typeof ButtonMenu | typeof Avatar | typeof Paragraph | typeof Heading | 
+                  typeof Link | typeof Nav | typeof Header | typeof Form | typeof Chat | typeof ChatFrame | typeof ChatBar | typeof Dialog |
                   typeof ChatBarTitle | typeof ChatBarSearch | typeof ChatBarList | typeof ChatBarListItem  | typeof ChatContent | 
                   typeof ChatContentItems | typeof ChatContentHeader | typeof ChatContentFooter | typeof Img;
                   
@@ -25,6 +27,8 @@ const classRegistry: Record<string, BlockClass> = {
       Input,
       Input_F,
       Button,
+      ButtonMenu,
+      Dialog,
       Avatar,
       Heading,
       Paragraph,

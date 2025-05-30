@@ -4,7 +4,9 @@ export const defEventList = {
     OnSubmit: 'submit',
     OnLoad: 'load',
     OnChange: 'change',
-    OnContentLoaded: 'DOMContentLoaded'
+    OnContentLoaded: 'DOMContentLoaded',
+    OnBeforeToggle: 'beforetoggle',
+    OnInput: 'input',
 } as const;
 
 export type ContextHeader = Record<string, string>;  
@@ -30,7 +32,7 @@ type ExcludeProtoKeys = Exclude<string, 'proto'>;
 
 
 export type defProto = 'Button' | 'Link' | 'Paragraph' | 'Heading' | 'Nav' | 'Header' | 'Form' | 'Nav' | 'Chat' | 'Events' | 'Avatar' |
-                        'ChatFrame' | 'ChatBar' | 'ChatBarTitle' | 'ChatBarSearch' | 'ChatBarList' | 'ChatBarListItem' |
+                        'ChatFrame' | 'ChatBar' | 'ChatBarTitle' | 'ChatBarSearch' | 'ChatBarList' | 'ChatBarListItem' | 'ButtonMenu' | 'Dialog' |
                         'ChatContent' | 'ChatContentItems' | 'ChatContentHeader' | 'ChatContentHeader' |'Input' | 'Input_F' | 'Div' | 'Img';
 
 type Events = {
@@ -66,10 +68,12 @@ export enum stdEvents {
     signup = 'SignUp',
     changeAvatar = 'changeAvatar',
     createChat = 'createChat',
-    addUserChat = 'addUserChat',
-    delUserChat = 'delUserChat',
+    deleteChat = 'deleteChat',
+    addUserToChat = 'addUserChat',
+    delUserFromChat = 'delUserChat',
     selectItem = 'selectItem',
-    sendMessage = 'sendMessage'
+    sendMessage = 'sendMessage',
+    searchUser = 'searchUser'
 }
 
 export const stdReasons: Record<number, string> = {

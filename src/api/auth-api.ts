@@ -31,7 +31,7 @@ export default class AuthAPI {
     async getUser() {
         const response = await this._httpTransport.get('/auth/user', {});
         if ( response.status >= 400)
-            throw new Error( JSON.parse(response.responseText).reason);
+             throw new Error( JSON.parse(response.responseText).reason);
         
         return JSON.parse(response.responseText);
     };

@@ -15,6 +15,10 @@ export class chatController {
         return await this._chatApi.createChat(data);
     }
 
+    async deleteChat( chatId: number) {
+        return await this._chatApi.deleteChat(chatId);
+    }
+
     async addUsersToChat( chatId: number, userId: number) {
         return await this._chatApi.addUserToChat( chatId, userId);
     }
@@ -25,5 +29,9 @@ export class chatController {
 
     async getChatToken( chatId: number) {
         return await this._chatApi.getChatToken( chatId)
+    }
+
+    async getChatUsers( chatId: number, offset: number, limit: number) {
+        return await this._chatApi.getChatUsers( chatId, offset, limit)
     }
 };

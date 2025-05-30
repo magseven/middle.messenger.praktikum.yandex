@@ -198,24 +198,60 @@ export const blockData: Record<string, BlockEntry> = {
                             proto: 'ChatContentFooter',
                         },
                     },
-
-
                     bar: { 
                         proto: 'ChatBar',
                         btitle: { 
                             proto: 'ChatBarTitle',
                             chat: {
+                                proto: 'Button',                             
+                                text: 'Создать чат',
+                                attrs: {
+                                    class: 'a-link-button f-inter',
+                                    popovertarget: 'a-dialog-create-chat',
+                                }, 
+                            },
+                            chat_del: {
                                 proto: 'Div',                             
-                                attrs: { class: 'a-chat-bar-title-link'}, 
-                                content: 'Создать чат&nbsp;&nbsp;>',
+                                attrs: { class: 'a-chat-bar-title-link f-inter'}, 
+
+                                content: 'Удалить чат',
                                 events: { 
-                                    OnClick: () => { window.eventBus.emit( stdEvents.createChat);}
+                                    OnClick: () => {
+                                        window.eventBus.emit( stdEvents.deleteChat);                                        
+                                    }
                                 }
+                            },
+                            dialog: {                                
+                                proto: 'Dialog',
+                                attrs: {
+                                    id: 'a-dialog-create-chat',
+                                    popover: "auto",
+                                    class: "a-dialog a-dialog-create-chat",
+                                },
+                                label: 'Наименование чата',
+                                button_text: 'Создать',
+                                button_events: { 
+                                    OnClick: () => {
+                                        const inputValue: HTMLInputElement | null = document.querySelector('#a-dialog-create-chat [name="input"]');
+                                        if ( !inputValue || !inputValue.value)
+                                            return;
+
+                                        window.eventBus.emit( stdEvents.createChat, inputValue.value);                                        
+                                        inputValue.value = '';
+
+                                        const element: HTMLElement | null = document.querySelector( '#a-dialog-create-chat');
+                                        if ( element && element.popover)
+                                            element.hidePopover();
+
+                                        return;
+                                    }
+                                },
                             },
                             link: {
                                 proto: 'Div',                             
-                                attrs: { class: 'a-chat-bar-title-link'}, 
-                                content: 'Профиль&nbsp;&nbsp;>',
+                                attrs: { class: 'a-chat-bar-title-link f-inter'}, 
+
+                                content: 'Профиль',
                                 events: { 
                                     OnClick: () => {router.go( stdRoutes.Profile)}
                                 }

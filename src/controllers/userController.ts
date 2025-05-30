@@ -36,10 +36,24 @@ export class userController {
                 return true;                
             }
         } catch (error) {
-            console.error('Update profile error:', error);
+            console.log('Update profile error:', error);
            return false;
         }
     }
    
+    async search( searchText: string) {
+       try {
+            const response = await this._userApi.search( { login: searchText });
+            if ( response.status !== 200) {
+                console.log( 'search error:', response.status);
+                return [];
+            }
+            return JSON.parse(response.responseText);
+
+        }catch(error) {
+            console.log( 'delUsersToChat error:', error);
+            return [];
+        }    
+    }
 
 };

@@ -7,10 +7,6 @@ export default class ChatAPI {
         this._httpTransport = new HTTPTransport();
     };
 
-//   offset:
-//   limit:
-//   title:
-
     async getChats(data: Record<string, string|number>) {
         try {
             const response = await this._httpTransport.get('/chats', {data});
@@ -41,8 +37,30 @@ export default class ChatAPI {
         }
     };
 
-    async addUserToChat( chatId: number, userId: number) {
+    async deleteChat( chat_id: number) {
         try {
+            const response = await this._httpTransport.delete('/chats', { data: { chatId: chat_id}});
+            if ( response.status !== 200) {
+                console.log( 'deleteChat error:', response.status);
+                return false;
+            }
+            return true;
+
+        }catch(error) {
+            console.log( 'deleteChat error:', error);
+            return false;
+        }
+    };
+
+    async addUserToChat( chatId: number, userId: number) {
+        console.log( 'addUserChat1', chatId, userId );
+        try {
+            if ( isNaN(userId)) {
+                console.log('userId is not number');
+                return false;
+            }
+
+            console.log( 'addUserChat', { chatId, users: [userId] });
             const response = await this._httpTransport.put('/chats/users', { data: { chatId, users: [userId] }});
 
             if ( response.status !== 200) {
@@ -59,6 +77,11 @@ export default class ChatAPI {
 
     async delUserFromChat(chatId: number, userId: number) {
         try {
+            if ( isNaN(userId)) {
+                console.log('userId is not number');
+                return false;
+            }
+
             const response = await this._httpTransport.delete('/chats/users', { data: { chatId, users: [userId] } });
 
             if ( response.status !== 200) {
@@ -89,4 +112,23 @@ export default class ChatAPI {
         }
     };
 
-};
+    async getChatUsers( chatId: number, offset: number, limit: number) {
+        try {
+            console.log( 'getChatUsers', chatId, offset, limit);
+            if ( !chatId)
+                return [];
+
+            const response = await this._httpTransport.get(`/chats/${chatId}/users`, { data: { offset, limit }});
+
+            if ( response.status !== 200) {
+                console.log( 'getChatUsers error:', response.status);
+                return [];
+            }
+            return JSON.parse( response.responseText);
+
+        }catch(error) {
+            console.log( 'getChatUsers error:', error);
+            return [];
+        }
+    }
+}
