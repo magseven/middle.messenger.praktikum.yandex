@@ -1,0 +1,29 @@
+import {getCurrentPage} from '../../modules/utils/common'
+import {pageData} from '../../modules/utils/form_funcs';
+import { Block, BlockProps } from "../../modules/block";
+import { blockData } from '../../models/page_data'
+
+class Index extends Block {
+    constructor(props: BlockProps) {
+        super("section", {...props,
+            class: 'a-login-container',
+        }); 
+    }
+
+    render() : DocumentFragment {
+        const page = blockData[getCurrentPage()] || blockData.index;
+        return this.compile( page.template, {/*menu: data.context.menu*/});
+    }
+}
+  
+function render(query: string, block: Index) {
+    const root = document.querySelector(query);
+    root!.replaceWith( block.getContent());
+    return root;
+}
+
+const data = blockData[getCurrentPage()] || blockData.index;
+
+const page = new Index( pageData(data.context));       
+render(".app", page);
+
