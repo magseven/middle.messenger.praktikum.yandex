@@ -4,6 +4,7 @@
 @use './usefull';
 @use './variables' as vars;
 @use '../components/chat/chats.scss';
+@use '../components/dialog/dialog.scss';
 
 body, html {
   height: 100%;
@@ -145,5 +146,10 @@ body, html {
   }  
 }
 
-
+.a-link-button {
+    background: white;
+    color: vars.$theme-grey;
+    border: none;
+    cursor: pointer; 
+  }
 

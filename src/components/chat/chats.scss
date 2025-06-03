@@ -38,6 +38,7 @@
           vertical-align: center;
           text-decoration: none;
           color: vars.$theme-grey;
+          cursor: pointer;
         }
       } 
       &-search {
@@ -59,6 +60,8 @@
         }
       } 
       &-list {
+        overflow-y: auto;
+        max-height: 100%;
         &-item {
           display: flex;
           margin-bottom: 2px;
@@ -216,6 +219,7 @@
           .show {
             display: block;
           }         
+
         } 
       }
       &-items {
