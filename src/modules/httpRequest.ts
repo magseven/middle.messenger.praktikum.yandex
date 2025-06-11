@@ -7,7 +7,7 @@ export const METHODS = {
 
 export type METHOD = typeof METHODS[keyof typeof METHODS];
 
-function queryStringify(data: Record<string|number, string | Blob | number | number[]> ) {
+export function queryStringify(data: Record<string|number, string | Blob | number | number[]> ) {
   if (typeof data !== 'object') {
     throw new Error('Data must be object');
   }
@@ -25,7 +25,7 @@ type transportOptions = {
   timeout?:number; 
  }
 
-const baseApiUrl: string = 'https://ya-praktikum.tech/api/v2';
+export const baseApiUrl: string = 'https://ya-praktikum.tech/api/v2';
 export const baseResourceUrl: string = 'https://ya-praktikum.tech/api/v2/resources';
 
 export class HTTPTransport { 

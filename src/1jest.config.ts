@@ -23,7 +23,7 @@ const config: Config.InitialOptions = {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     
     // Для статических файлов
-    '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.ts',
+    '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/mocks/fileMock.ts',
     
     // Алиасы из tsconfig (если используете)
     '^@/(.*)$': '<rootDir>/src/$1'

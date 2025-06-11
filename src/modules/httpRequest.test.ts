@@ -1,90 +1,98 @@
-import { HTTPTransport, METHODS} from './httpRequest';
+import { HTTPTransport, METHODS, baseApiUrl} from './httpRequest';
+class MockXMLHttpRequest {
+  open = jest.fn();
+//  send = jest.fn();
 
-//jest.mock('../../api/fetchData');
+  send = jest.fn(function(this: any) {
+      this.status = 401;
+      this.response = { reason: 'Unauthorized' };
+      if (this.onload) this.onload();
+    });
+  
+  setRequestHeader = jest.fn();
+  onload = jest.fn();
+  onerror = jest.fn();
+  status = 200;
+  response = {};
+
+  static mockInstances: MockXMLHttpRequest[] = [];
+
+  constructor() {
+    MockXMLHttpRequest.mockInstances.push(this);
+  }
+}
+
+const mockOptions = {
+  data: { key1: 'value1', key2: 15, key3: [1, 2, 3] },
+  headers: { 'Content-Type': 'application/json' }
+};
 
 describe('HTTPTransport', () => {
-  let http:  HTTPTransport;
-  const mockRequest = jest.fn();
+  let http: HTTPTransport;
 
-  // Моковые данные
-  const testUrl = '/test-url';
-  const testOptions = {
-    data: { key: 'value' },
-    headers: { 'Content-Type': 'application/json' },
-    timeout: 5000
-  };
+  beforeAll(() => {
+    global.XMLHttpRequest = MockXMLHttpRequest as any;
+  });
 
   beforeEach(() => {
+    MockXMLHttpRequest.mockInstances = [];
     http = new HTTPTransport();
-    // Мокаем метод request, так как мы тестируем только get
-    http.request = mockRequest.mockImplementation(() => Promise.resolve({}));
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
+  it('should track instances', () => {
+    new HTTPTransport().get('/test', {});
+    const xhr = MockXMLHttpRequest.mockInstances[0];
+    expect(xhr.open).toHaveBeenCalledWith('GET', expect.any(String));
   });
 
-  it('should stringify simple query object with strings and numbers', () => {
-    const baseUrl = '/api';
-    const queryParams = {
-      name: 'John',
-      age: 30,
-      page: 1,
-      active: 'true'
-    };
+  it('GET запрос должен корректно вызывать open с правильными параметрами', () => {
+    http.get('/test', {});
 
-    http.get(baseUrl, { data: queryParams });
-
-    const expectedUrl = `${baseUrl}?name=John&age=30&page=1&active=true`;
-    
-    expect(mockRequest).toHaveBeenCalledWith(
-      expectedUrl,
-      expect.objectContaining({
-        method: METHODS.GET,
-        data: queryParams
-      }),
-      undefined
+    const xhr = MockXMLHttpRequest.mockInstances[0];
+    expect(xhr.open).toHaveBeenCalledWith(
+      METHODS.GET,
+      `${baseApiUrl}/test`
     );
   });
+
+  it('GET запрос должен вызывать send без тела', () => {
+    http.get('/test', {});
+
+    const xhr = MockXMLHttpRequest.mockInstances[0];
+    expect(xhr.send).toHaveBeenCalledWith();
+  });
+
+  it('POST запрос должен отправлять данные в теле запроса', () => {
+    const testData = { name: 'John' };
+    http.post('/test', { data: testData });
+
+    const xhr = MockXMLHttpRequest.mockInstances[0];
+    expect(xhr.send).toHaveBeenCalledWith(JSON.stringify(testData));
+  });
+
+  it('должен устанавливать переданные заголовки', () => {
+    const headers = { 'Content-Type': 'application/json' };
+    http.get('/test', { headers });
+
+    const xhr = MockXMLHttpRequest.mockInstances[0];
+    expect(xhr.setRequestHeader).toHaveBeenCalledWith(
+      'Content-Type',
+      'application/json'
+    );
+  });
+
+  it('Модуль корректно составляет запрос с query параметрами', () => {
+    http.get('/test', mockOptions);
+    const xhr = MockXMLHttpRequest.mockInstances[0];   
+
+    expect(xhr.open).toHaveBeenCalledWith(
+      METHODS.GET, 
+      `${baseApiUrl}/test?key1=value1&key2=15&key3=1,2,3`
+    );
+  });
+
+it('Корректный ответ на действия анонима', async () => {
+    const response = await http.get('/auth/user', {});   
+    expect(response.status).toBe(401);
+  });
 });
-
-// describe( 'httpRequest', () => {
-//     use(sinonChai);
-//     const sandbox = createSandbox();
-//     let http: HTTPTransport;
-//     let request: SinonStub<any>;
-
-//     beforeEach(() => {
-//         http = new HTTPTransport();
-//         request = sandbox.stub( http, 'request').callsFake( () => Promise.resolve({} as XMLHttpRequest));
-//     })
-
-//     afterEach(()=> {
-//         sandbox.restore();
-//     })
-    
-//     it('should stringify query object for Get request where all parameters are strings', async () => {
-//         http.get('', { data: { a: '1', b: '2' }});
-//         expect(request).calledWithMatch('?a=1&b=2', 'GET');
-//     });
-
-//     it('should stringify query object for Get request where all parameters are strings and numbers', async () => {
-//         http.get('', { data: { a: 1, b: 'string' }});
-//         expect(request).calledWithMatch('?a=1&b=string', 'GET');
-//     });
-
-//     it('should encode characters for query', async () => {
-//         http.get('', { data: { a: '1+2', b: '2 2' }});
-//         expect(request).calledWithMatch('?a=1%2B2&b=2%202', 'GET');
-//     });
-
-//     it('should encode characters for query', async () => {
-//         http.get('', { data: { a: '1=2&1' }});
-//         expect(request).calledWithMatch('?a=1%3D2%261', 'GET');
-//     });
-
-//     it('should encode characters for query', async () => {
-//         http.get('', { data: { 'a=x&4': 'q=w&e' }});
-//         expect(request).calledWithMatch('?a%3Dx%264=q%3Dw%26e', 'GET');
-//     });
-// });

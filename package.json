@@ -15,10 +15,12 @@
     "test": "jest"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.27.2",
     "@babel/preset-typescript": "^7.27.1",
     "@eslint/js": "^9.24.0",
     "@jest/globals": "^30.0.0-beta.3",
     "@jest/types": "^29.6.3",
+    "@testing-library/jest-dom": "^6.6.3",
     "@types/chai": "^5.2.2",
     "@types/handlebars": "^4.0.40",
     "@types/jest": "^29.5.14",
@@ -30,7 +32,12 @@
     "husky": "^9.1.7",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.0.0",
+    "jest-node-exports-resolver": "^1.1.6",
+    "jest-transform-stub": "^2.0.0",
+    "jsdom": "^26.1.0",
     "mocha": "^11.5.0",
+    "nock": "^14.0.5",
     "sass": "^1.86.3",
     "sass-embedded": "^1.86.3",
     "sinon": "^20.0.0",
@@ -44,11 +51,9 @@
     "vite-plugin-handlebars": "^2.0.0"
   },
   "dependencies": {
-    "@babel/preset-env": "^7.27.2",
     "@types/node": "^22.15.30",
     "handlebars": "^4.7.8",
     "hbs": "^4.2.0",
-    "jsdom": "^26.1.0",
     "stylelint-scss": "^6.12.0",
     "ts-node": "^10.9.2",
     "uuid": "^11.1.0",
