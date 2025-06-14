@@ -12,7 +12,8 @@
     "eslint": "eslint .",
     "stylelint": "stylelint **/*.scss",
     "lint": "tsc --noEmit && eslint . && stylelint **/*.scss",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.27.2",
@@ -76,10 +77,6 @@
   "bugs": {
     "url": "https://github.com/magseven/middle.messenger.praktikum.yandex/issues"
   },
-  "homepage": "https://github.com/magseven/middle.messenger.praktikum.yandex#readme",
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm-run-all test lint"
-    }
-  }
+  "homepage": "https://github.com/magseven/middle.messenger.praktikum.yandex#readme"
+
 }

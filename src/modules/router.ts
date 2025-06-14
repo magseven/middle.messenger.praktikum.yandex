@@ -85,7 +85,7 @@ export class Router {
         return this.routes.find(route => route.match(pathname));
     }
 }
-  
+
 export const router = new Router(".app");
 window.eventBus = new EventBus();
 

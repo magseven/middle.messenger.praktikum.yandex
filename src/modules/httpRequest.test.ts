@@ -1,26 +1,4 @@
 import { HTTPTransport, METHODS, baseApiUrl} from './httpRequest';
-class MockXMLHttpRequest {
-  open = jest.fn();
-//  send = jest.fn();
-
-  send = jest.fn(function(this: any) {
-      this.status = 401;
-      this.response = { reason: 'Unauthorized' };
-      if (this.onload) this.onload();
-    });
-  
-  setRequestHeader = jest.fn();
-  onload = jest.fn();
-  onerror = jest.fn();
-  status = 200;
-  response = {};
-
-  static mockInstances: MockXMLHttpRequest[] = [];
-
-  constructor() {
-    MockXMLHttpRequest.mockInstances.push(this);
-  }
-}
 
 const mockOptions = {
   data: { key1: 'value1', key2: 15, key3: [1, 2, 3] },
@@ -30,35 +8,37 @@ const mockOptions = {
 describe('HTTPTransport', () => {
   let http: HTTPTransport;
 
-  afterEach(() => {
-    global.XMLHttpRequest = XMLHttpRequest;
-  });
+  const xhrMock: Partial<XMLHttpRequest> = {
+      open: jest.fn(),
+      send: jest.fn(),
+      setRequestHeader: jest.fn(),
+      readyState: 4,
+      status: 200,
+      response: 'Hello World!'
+    };    
 
   beforeEach(() => {
-    MockXMLHttpRequest.mockInstances = [];
+    jest.restoreAllMocks();    
     http = new HTTPTransport();
   });
 
   it('Модуль должен устанавливать переданные заголовки', () => {
-    global.XMLHttpRequest = MockXMLHttpRequest as any;
 
+    jest.spyOn( window, 'XMLHttpRequest').mockImplementation(() => xhrMock as XMLHttpRequest);
     const headers = { 'Content-Type': 'application/json' };
     http.get('/test', { headers });
 
-    const xhr = MockXMLHttpRequest.mockInstances[0];
-    expect(xhr.setRequestHeader).toHaveBeenCalledWith(
+    expect(xhrMock.setRequestHeader).toHaveBeenCalledWith(
       'Content-Type',
       'application/json'
     );
   });
 
   it('Модуль должен корректно составлять запрос', () => {
-    global.XMLHttpRequest = MockXMLHttpRequest as any;
-
+    jest.spyOn( window, 'XMLHttpRequest').mockImplementation(() => xhrMock as XMLHttpRequest);
     http.get('/test', mockOptions);
 
-    const xhr = MockXMLHttpRequest.mockInstances[0];   
-    expect(xhr.open).toHaveBeenCalledWith(
+    expect(xhrMock.open).toHaveBeenCalledWith(
       METHODS.GET, 
       `${baseApiUrl}/test?key1=value1&key2=15&key3=1,2,3`
     );
@@ -70,8 +50,10 @@ describe('HTTPTransport', () => {
   });
 
   it('Модуль должен давать Корректный ответ на неверные данные авторизации', async () => {
-    const result = await http.post(`${baseApiUrl}/auth/signin`, { data: {login: 'test', password: 'test'}})
+    const result = await http.post('/auth/signin', { data: {login: 'test', password: 'test'}})
     expect(result.status).toBe(401);
-    expect(result.response.reason).toBe('Unauthorized');
+    expect( JSON.parse( result.response).reason).toBe('Login or password is incorrect');
   });
+
+
 });
