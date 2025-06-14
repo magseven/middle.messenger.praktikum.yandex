@@ -75,4 +75,5 @@ describe('Route Navigation (Forward/Backward)', () => {
     }))
     expect(router['_currentRoute']!.pathname()).toBe(path2);      
   });
+
 });
