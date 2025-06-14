@@ -17,7 +17,10 @@ Chats -     https://www.figma.com/design/hkvazc0efpXGmAwfFvoVXg/Chats?node-id=0-
   Добавлены Routes, Контроллеры
   Используется API 
   Реализована работа с Websocket
+  Реализованы тесты с использованием jest 
 
-для сборки и запуска проекта выполните: start
+для сборки и запуска проекта выполните: npm run start
+для тестирования выполните: npm run test
 
 deploy: https://effulgent-cascaron-098aa9.netlify.app
+
