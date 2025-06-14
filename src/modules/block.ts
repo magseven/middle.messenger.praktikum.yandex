@@ -105,7 +105,6 @@ export class Block {
             stub!.replaceWith(child.getContent());
           }
       });
-      //console.log(fragment.innerHTML);      
       return fragment.content;      
     }
 
@@ -254,7 +253,7 @@ export class Block {
 
       _createDocumentElement(tagName: string) {
           return document.createElement(tagName);
-    }
+      }
 
     public getFormData(): Record<string, string | Blob> {
       if (!this._element) return {};

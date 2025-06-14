@@ -46,7 +46,7 @@ export class Router {
     start() {
         window.onpopstate = ((event: PopStateEvent) => {
             if (event /*&& event.state*/) {
-                this._onRoute(window.location.pathname);
+                this._onRoute(event.state.route);
             }        
         }).bind(this);
 
@@ -85,7 +85,7 @@ export class Router {
         return this.routes.find(route => route.match(pathname));
     }
 }
-  
+
 export const router = new Router(".app");
 window.eventBus = new EventBus();
 
