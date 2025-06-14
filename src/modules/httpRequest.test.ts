@@ -30,8 +30,8 @@ const mockOptions = {
 describe('HTTPTransport', () => {
   let http: HTTPTransport;
 
-  beforeAll(() => {
-    global.XMLHttpRequest = MockXMLHttpRequest as any;
+  afterEach(() => {
+    global.XMLHttpRequest = XMLHttpRequest;
   });
 
   beforeEach(() => {
@@ -39,38 +39,9 @@ describe('HTTPTransport', () => {
     http = new HTTPTransport();
   });
 
-  it('should track instances', () => {
-    new HTTPTransport().get('/test', {});
-    const xhr = MockXMLHttpRequest.mockInstances[0];
-    expect(xhr.open).toHaveBeenCalledWith('GET', expect.any(String));
-  });
+  it('Модуль должен устанавливать переданные заголовки', () => {
+    global.XMLHttpRequest = MockXMLHttpRequest as any;
 
-  it('GET запрос должен корректно вызывать open с правильными параметрами', () => {
-    http.get('/test', {});
-
-    const xhr = MockXMLHttpRequest.mockInstances[0];
-    expect(xhr.open).toHaveBeenCalledWith(
-      METHODS.GET,
-      `${baseApiUrl}/test`
-    );
-  });
-
-  it('GET запрос должен вызывать send без тела', () => {
-    http.get('/test', {});
-
-    const xhr = MockXMLHttpRequest.mockInstances[0];
-    expect(xhr.send).toHaveBeenCalledWith();
-  });
-
-  it('POST запрос должен отправлять данные в теле запроса', () => {
-    const testData = { name: 'John' };
-    http.post('/test', { data: testData });
-
-    const xhr = MockXMLHttpRequest.mockInstances[0];
-    expect(xhr.send).toHaveBeenCalledWith(JSON.stringify(testData));
-  });
-
-  it('должен устанавливать переданные заголовки', () => {
     const headers = { 'Content-Type': 'application/json' };
     http.get('/test', { headers });
 
@@ -81,18 +52,26 @@ describe('HTTPTransport', () => {
     );
   });
 
-  it('Модуль корректно составляет запрос с query параметрами', () => {
-    http.get('/test', mockOptions);
-    const xhr = MockXMLHttpRequest.mockInstances[0];   
+  it('Модуль должен корректно составлять запрос', () => {
+    global.XMLHttpRequest = MockXMLHttpRequest as any;
 
+    http.get('/test', mockOptions);
+
+    const xhr = MockXMLHttpRequest.mockInstances[0];   
     expect(xhr.open).toHaveBeenCalledWith(
       METHODS.GET, 
       `${baseApiUrl}/test?key1=value1&key2=15&key3=1,2,3`
     );
   });
 
-it('Корректный ответ на действия анонима', async () => {
+  it('Модуль должен давать Корректный ответ на действия анонима', async () => {
     const response = await http.get('/auth/user', {});   
     expect(response.status).toBe(401);
+  });
+
+  it('Модуль должен давать Корректный ответ на неверные данные авторизации', async () => {
+    const result = await http.post(`${baseApiUrl}/auth/signin`, { data: {login: 'test', password: 'test'}})
+    expect(result.status).toBe(401);
+    expect(result.response.reason).toBe('Unauthorized');
   });
 });

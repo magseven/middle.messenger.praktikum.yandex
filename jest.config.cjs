@@ -9,5 +9,5 @@ module.exports = {
     '^.+\\.(ts|tsx)$': 'ts-jest'
   },
   // Добавьте это для правильного разрешения путей
-  resolver: 'jest-node-exports-resolver'
+  // resolver: 'jest-node-exports-resolver'
 }
